@@ -65,7 +65,7 @@ interface Spreadsheet {
     firstName: string;
     lastName: string;
     email: string;
-  }
+  };
   sheets: Array<{
     id: string;
     name: string;
@@ -78,12 +78,12 @@ interface Spreadsheet {
       firstName: string;
       lastName: string;
       email: string;
-    }
+    };
   }>;
   _count: {
     sheets: number;
     versions: number;
-  }
+  };
 }
 
 const templateTypes = [
@@ -143,7 +143,7 @@ export default function SpreadsheetsPage() {
   useEffect(() => {
     const fetchSpreadsheets = async () => {
       try {
-        const response = await fetch('/api/spreadsheets')
+        const response = await fetch('/api/spreadsheets');
         const data = await response.json();
 
         if (data.success) {
@@ -155,14 +155,14 @@ export default function SpreadsheetsPage() {
       } finally {
         setLoading(false);
       }
-    }
+    };
 
     fetchSpreadsheets();
   }, []);
 
   // Filter and search spreadsheets
   useEffect(() => {
-    let filtered = spreadsheets
+    let filtered = spreadsheets;
 
     // Apply search filter
     if (searchTerm) {
@@ -170,12 +170,12 @@ export default function SpreadsheetsPage() {
         (s) =>
           s.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
           s.description.toLowerCase().includes(searchTerm.toLowerCase())
-      )
+      );
     }
 
     // Apply type filter
     if (filterType !== 'all') {
-      filtered = filtered.filter((s) => s.templateType === filterType)
+      filtered = filtered.filter((s) => s.templateType === filterType);
     }
 
     setFilteredSpreadsheets(filtered);
@@ -197,7 +197,7 @@ export default function SpreadsheetsPage() {
         setIsCreateDialogOpen(false);
         setNewSpreadsheet({ name: '', description: '', templateType: 'RCSA_ASSESSMENT' });
         // Refresh spreadsheets list
-        const refreshResponse = await fetch('/api/spreadsheets')
+        const refreshResponse = await fetch('/api/spreadsheets');
         const refreshData = await refreshResponse.json();
         if (refreshData.success) {
           setSpreadsheets(refreshData.data);
@@ -206,12 +206,12 @@ export default function SpreadsheetsPage() {
     } catch (error) {
       // console.error('Failed to create spreadsheet:', error)
     }
-  }
+  };
 
   const getTemplateTypeLabel = (_type: string) => {
     const template = templateTypes.find((t) => t.value === type);
     return template?.label || type;
-  }
+  };
 
   const getTemplateTypeBadgeColor = (_type: string) => {
     const colors: { [key: string]: string } = {
@@ -222,9 +222,9 @@ export default function SpreadsheetsPage() {
       VENDOR_ASSESSMENT: 'bg-orange-100 text-orange-800',
       AUDIT_FINDINGS: 'bg-yellow-100 text-yellow-800',
       CUSTOM: 'bg-gray-100 text-gray-800',
-    }
+    };
     return colors[type] || 'bg-gray-100 text-gray-800';
-  }
+  };
 
   const formatDate = (date: Date) => {
     return new Date(date).toLocaleDateString('en-US', {
@@ -232,7 +232,7 @@ export default function SpreadsheetsPage() {
       month: 'short',
       day: 'numeric',
     });
-  }
+  };
 
   const SpreadsheetCard = ({ spreadsheet }: { spreadsheet: Spreadsheet }) => {
     return (
@@ -298,7 +298,7 @@ export default function SpreadsheetsPage() {
         </DaisyCardBody>
       </DaisyCard>
     );
-  }
+  };
 
   const SpreadsheetListItem = ({ spreadsheet }: { spreadsheet: Spreadsheet }) => {
     return (
@@ -353,7 +353,7 @@ export default function SpreadsheetsPage() {
         </DaisyDropdownMenu>
       </div>
     );
-  }
+  };
 
   if (loading) {
     return (
@@ -405,8 +405,9 @@ export default function SpreadsheetsPage() {
                       placeholder="Enter spreadsheet name"
                       value={newSpreadsheet.name}
                       onChange={(e) =>
-setNewSpreadsheet({ ...newSpreadsheet, name: e.target.value })
-                      } />
+                        setNewSpreadsheet({ ...newSpreadsheet, name: e.target.value })
+                      }
+                    />
                   </div>
                   <div className="space-y-2">
                     <DaisyLabel htmlFor="description">Description</DaisyLabel>
@@ -415,8 +416,9 @@ setNewSpreadsheet({ ...newSpreadsheet, name: e.target.value })
                       placeholder="Enter a brief description"
                       value={newSpreadsheet.description}
                       onChange={(e) =>
-setNewSpreadsheet({ ...newSpreadsheet, description: e.target.value })
-                      } />
+                        setNewSpreadsheet({ ...newSpreadsheet, description: e.target.value })
+                      }
+                    />
                   </div>
                   <div className="space-y-2">
                     <DaisyLabel htmlFor="templateType">Template Type</DaisyLabel>
@@ -428,6 +430,7 @@ setNewSpreadsheet({ ...newSpreadsheet, description: e.target.value })
                     >
                       <DaisySelectTrigger>
                         <DaisySelectValue placeholder="Select a template type" />
+                      </DaisySelectTrigger>
                       <DaisySelectContent>
                         {templateTypes.map((template) => (
                           <DaisySelectItem key={template.value} value={template.value}>
@@ -442,15 +445,12 @@ setNewSpreadsheet({ ...newSpreadsheet, description: e.target.value })
                   </div>
                 </div>
                 <DaisyDialogFooter>
-                  <DaisyButton variant="outline" onClick={() =>
-          setIsCreateDialogOpen(false)}>
+                  <DaisyButton variant="outline" onClick={() => setIsCreateDialogOpen(false)}>
                     Cancel
-                  
-        </DaisyButton>
+                  </DaisyButton>
                   <DaisyButton onClick={handleCreateSpreadsheet} disabled={!newSpreadsheet.name}>
-          Create Spreadsheet
-                  
-        </DaisyButton>
+                    Create Spreadsheet
+                  </DaisyButton>
                 </DaisyDialogFooter>
               </DaisyDialogContent>
             </DaisyDialog>
@@ -463,15 +463,16 @@ setNewSpreadsheet({ ...newSpreadsheet, description: e.target.value })
               <DaisyInput
                 placeholder="Search spreadsheets..."
                 value={searchTerm}
-                onChange={(e) =>
-setSearchTerm(e.target.value)}
-                className="pl-10" />
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="pl-10"
+              />
             </div>
             <div className="flex items-center gap-2">
               <DaisySelect value={filterType} onValueChange={setFilterType}>
                 <DaisySelectTrigger className="w-48">
                   <Filter className="h-4 w-4 mr-2" />
                   <DaisySelectValue placeholder="Filter by type" />
+                </DaisySelectTrigger>
                 <DaisySelectContent>
                   <DaisySelectItem value="all">All Types</DaisySelectItem>
                   {templateTypes.map((template) => (

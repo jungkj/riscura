@@ -8,12 +8,12 @@ export default function TestDirectDashboard() {
 
   useEffect(() => {
     // console.log('[TestDirect] Auth state:', {
-      isAuthenticated,
-      isLoading,
-      isInitialized,
-      hasUser: !!user,
-      userEmail: user?.email,
-    })
+    //   isAuthenticated,
+    //   isLoading,
+    //   isInitialized,
+    //   hasUser: !!user,
+    //   userEmail: user?.email,
+    // })
   }, [isAuthenticated, isLoading, isInitialized, user]);
 
   return (

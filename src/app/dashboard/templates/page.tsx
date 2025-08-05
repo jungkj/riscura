@@ -6,7 +6,7 @@ import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 import { toast } from '@/hooks/use-toast';
 import { DaisyCardTitle } from '@/components/ui/daisy-components';
-// import {
+import {
   FileSpreadsheet,
   Download,
   Shield,
@@ -95,10 +95,10 @@ export default function TemplatesPage() {
       }
 
       // Get the blob from the response
-      const blob = await response.blob()
+      const blob = await response.blob();
 
       // Create a download link
-      const url = window.URL.createObjectURL(blob)
+      const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
       a.download = `riscura-${templateType}-template.xlsx`;
@@ -121,7 +121,7 @@ export default function TemplatesPage() {
     } finally {
       setDownloading(null);
     }
-  }
+  };
 
   return (
     <div className="p-6 max-w-7xl mx-auto">

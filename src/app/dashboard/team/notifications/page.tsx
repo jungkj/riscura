@@ -6,8 +6,8 @@ import { MainContentArea } from '@/components/layout/MainContentArea';
 import { DaisyButton } from '@/components/ui/DaisyButton';
 import { DaisyBadge } from '@/components/ui/DaisyBadge';
 // import { DaisyCard, DaisyCardBody, DaisyCardTitle } from '@/components/ui/DaisyCard';
-import {
 import { DaisyCardTitle, DaisyCardDescription } from '@/components/ui/daisy-components';
+import {
   DaisyTabs,
   DaisyTabsContent,
   DaisyTabsList,
@@ -29,7 +29,7 @@ import { DaisySeparator } from '@/components/ui/DaisySeparator';
 import { DaisyAlert } from '@/components/ui/DaisyAlert';
 import { cn } from '@/lib/utils';
 import toast from 'react-hot-toast';
-// import {
+import {
   Bell,
   BellRing,
   Settings,
@@ -564,8 +564,8 @@ setSearchQuery(e.target.value)}
                               {notification.sender && (
                                 <div className="flex items-center space-x-1">
                                   <DaisyAvatar className="h-4 w-4">
-                                    <DaisyAvatarImage src={notification.sender.avatar} >
-                                      <DaisyAvatarFallback className="text-xs">
+                                    <DaisyAvatarImage src={notification.sender.avatar} />
+                                    <DaisyAvatarFallback className="text-xs">
                                       {notification.sender.name
                                         .split(' ')
                                         .map((n) => n[0])

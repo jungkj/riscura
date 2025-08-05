@@ -21,7 +21,7 @@ import { useWebSocket } from '@/hooks/useWebSocket';
 import { useSession } from 'next-auth/react';
 import { ChannelType, ChatMessageType } from '@prisma/client';
 import { DaisyCardTitle, DaisySelectValue, DaisyDialogTitle } from '@/components/ui/daisy-components';
-// import {
+import {
   MessageSquare,
   Send,
   Paperclip,
@@ -572,8 +572,7 @@ const TeamChatPage: React.FC = () => {
         maxWidth="full"
         className="h-screen"
       >
-        <>  
-          <div className="grid grid-cols-12 gap-6 h-full">
+        <div className="grid grid-cols-12 gap-6 h-full">
           {/* Channel Sidebar */}
           <div className="col-span-3 space-y-4">
             {/* Search */}
@@ -1010,7 +1009,7 @@ setNewChannelData(prev => ({ ...prev, description: e.target.value }))} />
             </DaisyDialogFooter>
           </DaisyDialogContent>
         </DaisyDialog>
-        </>
+        </div>
       </MainContentArea>
     </ProtectedWrapper>
   );

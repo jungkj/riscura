@@ -35,7 +35,7 @@ import {
 } from '@/components/ui/DaisyDialog';
 import { cn } from '@/lib/utils';
 import toast from 'react-hot-toast';
-// import {
+import {
   Users,
   UserPlus,
   Calendar,
@@ -437,8 +437,8 @@ export default function TeamDelegatePage() {
                   <DaisyCardBody className="pb-3">
                     <div className="flex items-center space-x-3">
                       <DaisyAvatar className="h-10 w-10">
-                        <DaisyAvatarImage src={member.avatar} >
-                          <DaisyAvatarFallback>
+                        <DaisyAvatarImage src={member.avatar} />
+                        <DaisyAvatarFallback>
                           {member.name
                             .split(' ')
                             .map((n) => n[0])
@@ -471,7 +471,7 @@ export default function TeamDelegatePage() {
                           value={member.workload}
                           className={cn(
                             'h-2',
-                            member.workload />80
+                            member.workload > 80
                               ? 'text-red-500'
                               : member.workload > 60
                                 ? 'text-yellow-500'
@@ -760,8 +760,8 @@ setSearchQuery(e.target.value)}
                     <div className="flex items-start justify-between">
                       <div className="flex items-center space-x-4">
                         <DaisyAvatar className="h-12 w-12">
-                          <DaisyAvatarImage src={member.avatar} >
-                            <DaisyAvatarFallback>
+                          <DaisyAvatarImage src={member.avatar} />
+                          <DaisyAvatarFallback>
                             {member.name
                               .split(' ')
                               .map((n) => n[0])
