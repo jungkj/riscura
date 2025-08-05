@@ -4,57 +4,37 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 
-// Integration data - these would typically be stored in public/images/integrations/
+// Integration data using actual logos from public/images/logo/
 const integrations = [
   {
     name: 'Microsoft SharePoint',
-    logo: '/images/integrations/sharepoint.svg',
+    logo: '/images/logo/sharepoint.png',
     category: 'Document Management'
   },
   {
-    name: 'ServiceNow',
-    logo: '/images/integrations/servicenow.svg',
-    category: 'IT Service Management'
-  },
-  {
-    name: 'Jira',
-    logo: '/images/integrations/jira.svg',
-    category: 'Project Management'
-  },
-  {
     name: 'Slack',
-    logo: '/images/integrations/slack.svg',
+    logo: '/images/logo/Slack.png',
     category: 'Team Collaboration'
   },
   {
-    name: 'Salesforce',
-    logo: '/images/integrations/salesforce.svg',
-    category: 'CRM Platform'
+    name: 'Microsoft Teams',
+    logo: '/images/logo/Teams.png',
+    category: 'Team Collaboration'
   },
   {
-    name: 'AWS',
-    logo: '/images/integrations/aws.svg',
-    category: 'Cloud Infrastructure'
+    name: 'Dropbox',
+    logo: '/images/logo/dropbox.png',
+    category: 'Cloud Storage'
   },
   {
-    name: 'Azure',
-    logo: '/images/integrations/azure.svg',
-    category: 'Cloud Platform'
+    name: 'Google Drive',
+    logo: '/images/logo/googledrive.png',
+    category: 'Cloud Storage'
   },
   {
-    name: 'Google Workspace',
-    logo: '/images/integrations/google-workspace.svg',
-    category: 'Productivity Suite'
-  },
-  {
-    name: 'Okta',
-    logo: '/images/integrations/okta.svg',
-    category: 'Identity Management'
-  },
-  {
-    name: 'Splunk',
-    logo: '/images/integrations/splunk.svg',
-    category: 'Security Analytics'
+    name: 'OpenAI',
+    logo: '/images/logo/OPenAi.png',
+    category: 'AI Platform'
   }
 ];
 
@@ -96,15 +76,16 @@ export function IntegrationsCarousel() {
                 onMouseLeave={() => setHoveredIndex(null)}
               >
                 <div className="w-24 h-24 flex items-center justify-center p-4 rounded-xl border border-gray-200 bg-white hover:shadow-lg transition-all duration-300">
-                  {/* Placeholder for logo - using text for now since logos don't exist yet */}
-                  <div 
-                    className={`w-full h-full flex items-center justify-center text-xs font-semibold rounded-lg transition-all duration-300 ${
-                      hoveredIndex === index 
-                        ? 'text-[#199BEC] bg-[#199BEC]/10' 
-                        : 'text-gray-400 bg-gray-50'
-                    }`}
-                  >
-                    {integration.name.split(' ').map(word => word[0]).join('')}
+                  <div className={`w-full h-full flex items-center justify-center rounded-lg transition-all duration-300 ${
+                    hoveredIndex === index ? 'grayscale-0' : 'grayscale'
+                  }`}>
+                    <Image
+                      src={integration.logo}
+                      alt={`${integration.name} logo`}
+                      width={48}
+                      height={48}
+                      className="object-contain max-w-full max-h-full"
+                    />
                   </div>
                 </div>
 
