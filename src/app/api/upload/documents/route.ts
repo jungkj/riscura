@@ -27,11 +27,11 @@ const fileUploadSchema = z.object({
   linkedControlIds: z.array(z.string().uuid()).optional().default([]),
   reviewDate: z.string().datetime().optional(),
   retentionDate: z.string().datetime().optional(),
-})
+});
 
 // POST /api/upload/documents - Upload one or more documents
 export const POST = withAPI(async (req: NextRequest): Promise<NextResponse> => {
-  const authReq = req as AuthenticatedRequest
+  const authReq = req as AuthenticatedRequest;
   const user = getAuthenticatedUser(authReq);
 
   if (!user) {
@@ -58,13 +58,13 @@ export const POST = withAPI(async (req: NextRequest): Promise<NextResponse> => {
 
     for (const file of files) {
       // Validate file
-      const validation = await validateFile(file)
+      const validation = await validateFile(file);
       if (!validation.isValid) {
         throw new Error(`File validation failed: ${validation.errors.join(', ')}`);
       }
 
       // Generate secure file path
-      const filePath = generateSecurePath(user.organizationId, 'documents', file.name)
+      const filePath = generateSecurePath(user.organizationId, 'documents', file.name);
 
       // Upload file to storage
       const uploadResult = await uploadFile(file, filePath, {
@@ -77,7 +77,7 @@ export const POST = withAPI(async (req: NextRequest): Promise<NextResponse> => {
           type: file.type,
           uploadedAt: new Date().toISOString(),
         },
-      })
+      });
 
       if (!uploadResult.success) {
         throw new Error(`File upload failed: ${uploadResult.error}`);
@@ -95,7 +95,7 @@ export const POST = withAPI(async (req: NextRequest): Promise<NextResponse> => {
           organizationId: user.organizationId,
           uploadedBy: user.id,
         },
-      })
+      });
 
       // Link to risks and controls
       if (validatedMetadata.linkedRiskIds.length > 0) {
@@ -106,7 +106,7 @@ export const POST = withAPI(async (req: NextRequest): Promise<NextResponse> => {
               connect: validatedMetadata.linkedRiskIds.map((riskId: string) => ({ id: riskId })),
             },
           },
-        })
+        });
       }
 
       if (validatedMetadata.linkedControlIds.length > 0) {
@@ -137,7 +137,7 @@ export const POST = withAPI(async (req: NextRequest): Promise<NextResponse> => {
             type: file.type,
           },
         },
-      })
+      });
 
       uploadedDocuments.push({
         document,
@@ -156,7 +156,7 @@ export const POST = withAPI(async (req: NextRequest): Promise<NextResponse> => {
 
 // GET /api/upload/documents - Get upload progress (when uploadId is provided as query param)
 export const GET = withAPI(async (req: NextRequest) => {
-  const authReq = req as AuthenticatedRequest
+  const authReq = req as AuthenticatedRequest;
   const user = getAuthenticatedUser(authReq);
 
   if (!user) {
@@ -173,7 +173,7 @@ export const GET = withAPI(async (req: NextRequest) => {
 
     // Get upload progress from cache/database
     // This would typically be stored in Redis for real-time updates
-    const progress = await getUploadProgressFromCache(uploadId, user.organizationId)
+    const progress = await getUploadProgressFromCache(uploadId, user.organizationId);
 
     return createAPIResponse({
       data: progress,
@@ -198,12 +198,12 @@ async function getUploadProgressFromCache(uploadId: string, organizationId: stri
     errors: [] as any[],
     startedAt: new Date().toISOString(),
     completedAt: new Date().toISOString(),
-  }
+  };
 }
 
 // POST /api/upload/documents/bulk - Bulk document upload with ZIP support
 export const PUT = withAPI(async (req: NextRequest) => {
-  const authReq = req as AuthenticatedRequest
+  const authReq = req as AuthenticatedRequest;
   const user = getAuthenticatedUser(authReq);
 
   if (!user) {
@@ -227,30 +227,28 @@ export const PUT = withAPI(async (req: NextRequest) => {
 
     // Validate ZIP file
     if (!zipFile.name.endsWith('.zip')) {
-      throw new Error('Only ZIP files are supported for bulk upload')
+      throw new Error('Only ZIP files are supported for bulk upload');
     }
 
     if (zipFile.size > 100 * 1024 * 1024) {
       // 100MB limit
-      throw new Error('ZIP file too large (max 100MB)')
+      throw new Error('ZIP file too large (max 100MB)');
     }
 
     // Extract and process ZIP file
-    const extractedFiles = await extractZipFile(zipFile)
+    const extractedFiles = await extractZipFile(zipFile);
     const uploadedDocuments: Array<{ document: any }> = [];
 
     for (const extractedFile of extractedFiles) {
       // Validate each extracted file
-      const validation = await validateFile(extractedFile.file)
+      const validation = await validateFile(extractedFile.file);
       if (!validation.isValid) {
-        // console.warn(
-          `Skipping invalid file ${extractedFile.name}: ${validation.errors.join(', ')}`
-        )
+        // console.warn(`Skipping invalid file ${extractedFile.name}: ${validation.errors.join(', ')}`)
         continue;
       }
 
       // Generate secure file path
-      const filePath = generateSecurePath(user.organizationId, 'documents', extractedFile.name)
+      const filePath = generateSecurePath(user.organizationId, 'documents', extractedFile.name);
 
       // Upload file to storage
       const uploadResult = await uploadFile(extractedFile.file, filePath, {
@@ -264,7 +262,7 @@ export const PUT = withAPI(async (req: NextRequest) => {
           uploadedAt: new Date().toISOString(),
           bulkUpload: true,
         },
-      })
+      });
 
       if (!uploadResult.success) {
         // console.warn(`Failed to upload ${extractedFile.name}: ${uploadResult.error}`)
@@ -283,7 +281,7 @@ export const PUT = withAPI(async (req: NextRequest) => {
           organizationId: user.organizationId,
           uploadedBy: user.id,
         },
-      })
+      });
 
       uploadedDocuments.push({
         document,
@@ -305,7 +303,7 @@ export const PUT = withAPI(async (req: NextRequest) => {
           documentCount: uploadedDocuments.length,
         },
       },
-    })
+    });
 
     return createAPIResponse({
       data: {
@@ -334,14 +332,14 @@ async function extractZipFile(zipFile: File): Promise<Array<{ name: string; file
   files.push({
     name: zipFile.name,
     file: zipFile,
-  })
+  });
 
   return files;
 }
 
 // DELETE /api/upload/documents/[id] - Delete uploaded document
 export const DELETE = withAPI(async (req: NextRequest) => {
-  const authReq = req as AuthenticatedRequest
+  const authReq = req as AuthenticatedRequest;
   const user = getAuthenticatedUser(authReq);
 
   if (!user) {
@@ -361,7 +359,7 @@ export const DELETE = withAPI(async (req: NextRequest) => {
       where: {
         id: documentId,
       },
-    })
+    });
 
     if (!document) {
       throw new Error('Document not found');
@@ -370,7 +368,7 @@ export const DELETE = withAPI(async (req: NextRequest) => {
     // Delete file from storage
     if (document.content) {
       try {
-        await deleteFileFromStorage(document.content)
+        await deleteFileFromStorage(document.content);
       } catch (error) {
         // console.warn(`Failed to delete file from storage: ${document.content}`, error)
       }
@@ -379,7 +377,7 @@ export const DELETE = withAPI(async (req: NextRequest) => {
     // Delete document and related records (cascade)
     await db.client.document.delete({
       where: { id: documentId },
-    })
+    });
 
     // Log activity
     await db.client.activity.create({
@@ -394,7 +392,7 @@ export const DELETE = withAPI(async (req: NextRequest) => {
           documentName: document.name,
         },
       },
-    })
+    });
 
     return createAPIResponse({
       data: { deleted: true },

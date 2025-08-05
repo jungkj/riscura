@@ -9,7 +9,7 @@ import NewsletterCTA from '@/components/blog/NewsletterCTA';
 interface CategoryPageProps {
   params: {
     category: string;
-  }
+  };
 }
 
 export async function generateStaticParams() {
@@ -28,7 +28,7 @@ export async function generateMetadata({ params }: CategoryPageProps): Promise<M
     return {
       title: 'Category Not Found | Riscura Blog',
       description: 'The requested category could not be found.',
-    }
+    };
   }
 
   return generateBlogListingMetadata(category);
@@ -98,7 +98,7 @@ export default function CategoryPage({ params }: CategoryPageProps) {
   );
 }
 
-const getCategoryDescription = (category: string): string {
+const getCategoryDescription = (category: string): string => {
   const descriptions: Record<string, string> = {
     'Risk Management Basics':
       'Fundamental concepts and strategies for effective risk management in small to medium businesses.',
@@ -116,7 +116,7 @@ const getCategoryDescription = (category: string): string {
       'Proven strategies and methodologies for optimizing your risk management processes.',
     'Case Studies':
       'Real-world examples of successful risk management implementations and transformations.',
-  }
+  };
 
   return descriptions[category] || `Articles and insights about ${category.toLowerCase()}.`;
-}
+};

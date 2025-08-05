@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { withApiMiddleware } from '@/lib/api/middleware';
 import { db } from '@/lib/db';
 import { z } from 'zod';
-// import { RiskCategory, RiskLevel, RiskStatus } from '@prisma/client'
+import { RiskCategory, RiskLevel, RiskStatus } from '@prisma/client';
 
 const CreateRiskSchema = z.object({
   title: z.string().min(1),
@@ -30,7 +30,7 @@ export const GET = withApiMiddleware(
       // console.log('[Risks API] Fetching risks for organization:', user.organizationId)
 
       // Parse pagination parameters from query string
-      const { searchParams } = new URL(req.url)
+      const { searchParams } = new URL(req.url);
       const page = parseInt(searchParams.get('page') || '1');
       const limit = parseInt(searchParams.get('limit') || '50');
       const offset = (page - 1) * limit;
@@ -38,7 +38,7 @@ export const GET = withApiMiddleware(
       // Get total count for pagination
       const totalCount = await db.client.risk.count({
         where: { organizationId: user.organizationId },
-      })
+      });
 
       // Start with a simple query first
       const risks = await db.client.risk.findMany({
@@ -46,7 +46,7 @@ export const GET = withApiMiddleware(
         orderBy: { createdAt: 'desc' },
         skip: offset,
         take: limit,
-      })
+      });
 
       // console.log(`[Risks API] Found ${risks.length} risks (page ${page}, total: ${totalCount})`)
 
@@ -62,7 +62,7 @@ export const GET = withApiMiddleware(
             total: totalCount,
             totalPages: Math.ceil(totalCount / limit),
           },
-        })
+        });
       }
 
       // Try to include relationships if we have risks
@@ -87,7 +87,7 @@ export const GET = withApiMiddleware(
           orderBy: { createdAt: 'desc' },
           skip: offset,
           take: limit,
-        })
+        });
 
         return NextResponse.json({
           success: true,
@@ -114,7 +114,7 @@ export const GET = withApiMiddleware(
             total: totalCount,
             totalPages: Math.ceil(totalCount / limit),
           },
-        })
+        });
       }
     } catch (error) {
       /* console.error('[Risks API] Critical error:', {
@@ -178,7 +178,7 @@ export const POST = withApiMiddleware(
               lastRCSASync: new Date().toISOString(),
             }
           : undefined,
-      }
+      };
 
       // console.log('[Risks API] Creating risk with processed data:', riskData)
 
@@ -199,7 +199,7 @@ export const POST = withApiMiddleware(
             userId: user.id,
             organizationId: user.organizationId,
           },
-        })
+        });
       }
 
       return NextResponse.json(
@@ -236,12 +236,12 @@ export const POST = withApiMiddleware(
         );
       }
 
-      // console.error('[Risks API] Create risk error:', {
+      /* console.error('[Risks API] Create risk error:', {
         error,
         message: error instanceof Error ? error.message : 'Unknown error',
         stack: error instanceof Error ? error.stack : undefined,
         user: { id: user.id, organizationId: user.organizationId },
-      })
+      }) */
 
       return NextResponse.json(
         {
@@ -263,4 +263,4 @@ const calculateRiskLevel = (score: number): RiskLevel => {
   if (score <= 12) return RiskLevel.MEDIUM; // 7-12 (24% of range)
   if (score <= 20) return RiskLevel.HIGH; // 13-20 (32% of range)
   return RiskLevel.CRITICAL; // 21-25 (20% of range)
-}
+};
