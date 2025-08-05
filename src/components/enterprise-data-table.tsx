@@ -81,8 +81,8 @@ const UserAvatarCell: React.FC<{ value: any }> = ({ value }) => {
   return (
     <div className="flex items-center space-x-enterprise-2">
       <DaisyAvatar className="w-6 h-6" >
-          <DaisyAvatarImage src={user.avatar} alt={user.name} >
-          <DaisyAvatarFallback className="text-xs">{initials}</DaisyAvatar>
+          <DaisyAvatarImage src={user.avatar} alt={user.name} />
+          <DaisyAvatarFallback className="text-xs">{initials}</DaisyAvatarFallback>
       </DaisyAvatar>
       <span className="text-body-sm text-text-primary truncate">{user.name}</span>
     </div>

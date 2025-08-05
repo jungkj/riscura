@@ -191,10 +191,10 @@ const defaultCellRenderers = {
   user: (_value: any) => (
     <div className="flex items-center space-x-2">
       <DaisyAvatar className="h-6 w-6" >
-          <DaisyAvatarImage src={value?.avatar} >
+          <DaisyAvatarImage src={value?.avatar} />
           <DaisyAvatarFallback className="text-xs" >
             {value?.name?.split(' ').map((n: string) => n[0]).join('') || '?'}
-        </DaisyAvatar>
+          </DaisyAvatarFallback>
       </DaisyAvatar>
       <span className="truncate">{value?.name || value}</span>
     </div>

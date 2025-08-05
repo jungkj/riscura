@@ -689,8 +689,8 @@ setSearchQuery(e.target.value)}
           {/* Chat Area */}
           <div className="col-span-6 flex flex-col">
             <DaisyCard className="flex-1 flex flex-col">
-              {/* Chat Header */
               <DaisyCardBody className="border-b">
+                {/* Chat Header */}
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-3">
                     {activeChannelData?.type === ChannelType.DIRECT ? (
@@ -737,7 +737,7 @@ setSearchQuery(e.target.value)}
                         <div key={message.id} className="group">
                           <div className="flex items-start space-x-3">
                             <DaisyAvatar className="h-8 w-8">
-                              <DaisyAvatarImage src={message.user.avatar} >
+                              <DaisyAvatarImage src={message.user.avatar} />
                                 <DaisyAvatarFallback className="text-xs">
                                 {`${message.user.firstName} ${message.user.lastName}`.split(' ').map((n: string) => n[0]).join('')}
                               </DaisyAvatarFallback>
@@ -888,7 +888,7 @@ setMessageInput(e.target.value)}
                         >
                           <div className="relative">
                             <DaisyAvatar className="h-8 w-8">
-                              <DaisyAvatarImage src={member.user.avatar} >
+                              <DaisyAvatarImage src={member.user.avatar} />
                                 <DaisyAvatarFallback className="text-xs">
                                 {`${member.user.firstName} ${member.user.lastName}`.split(' ').map((n: string) => n[0]).join('')}
                               </DaisyAvatarFallback>
@@ -997,15 +997,12 @@ setNewChannelData(prev => ({ ...prev, description: e.target.value }))} />
               </div>
             </div>
             <DaisyDialogFooter>
-              <DaisyButton variant="outline" onClick={() =>
-          setIsCreateChannelOpen(false)}>
+              <DaisyButton variant="outline" onClick={() => setIsCreateChannelOpen(false)}>
                 Cancel
-              
-        </DaisyButton>
+              </DaisyButton>
               <DaisyButton onClick={handleCreateChannel} disabled={!newChannelData.name.trim()}>
-          Create Channel
-              
-        </DaisyButton>
+                Create Channel
+              </DaisyButton>
             </DaisyDialogFooter>
           </DaisyDialogContent>
         </DaisyDialog>

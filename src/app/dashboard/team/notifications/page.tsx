@@ -82,13 +82,13 @@ interface Notification {
     id: string;
     name: string;
     avatar?: string;
-  }
+  };
   metadata?: {
     taskId?: string;
     channelId?: string;
     documentId?: string;
     auditId?: string;
-  }
+  };
 }
 
 interface NotificationPreferences {
@@ -99,7 +99,7 @@ interface NotificationPreferences {
     mentions: boolean;
     systemUpdates: boolean;
     auditNotifications: boolean;
-  }
+  };
   push: {
     taskAssignments: boolean;
     deadlineReminders: boolean;
@@ -107,7 +107,7 @@ interface NotificationPreferences {
     mentions: boolean;
     systemUpdates: boolean;
     auditNotifications: boolean;
-  }
+  };
   inApp: {
     taskAssignments: boolean;
     deadlineReminders: boolean;
@@ -115,13 +115,13 @@ interface NotificationPreferences {
     mentions: boolean;
     systemUpdates: boolean;
     auditNotifications: boolean;
-  }
+  };
   frequency: 'immediate' | 'hourly' | 'daily' | 'weekly';
   quietHours: {
     enabled: boolean;
     start: string;
     end: string;
-  }
+  };
 }
 
 // Sample data
@@ -229,7 +229,7 @@ const sampleNotifications: Notification[] = [
     actionUrl: '/dashboard/compliance',
     actionLabel: 'View Dashboard',
   },
-]
+];
 
 const defaultPreferences: NotificationPreferences = {
   email: {
@@ -262,7 +262,7 @@ const defaultPreferences: NotificationPreferences = {
     start: '22:00',
     end: '08:00',
   },
-}
+};
 
 const getNotificationIcon = (type: string) => {
   const icons = {
@@ -274,9 +274,9 @@ const getNotificationIcon = (type: string) => {
     system: Settings,
     compliance: FileText,
     audit: Users,
-  }
+  };
   return icons[type as keyof typeof icons] || Bell;
-}
+};
 
 const getPriorityConfig = (priority: string) => {
   const configs = {
@@ -284,9 +284,9 @@ const getPriorityConfig = (priority: string) => {
     high: { color: 'text-orange-600', bg: 'bg-orange-50', border: 'border-orange-200' },
     medium: { color: 'text-yellow-600', bg: 'bg-yellow-50', border: 'border-yellow-200' },
     low: { color: 'text-green-600', bg: 'bg-green-50', border: 'border-green-200' },
-  }
+  };
   return configs[priority as keyof typeof configs] || configs.medium;
-}
+};
 
 const formatTimeAgo = (date: Date) => {
   const now = new Date();
@@ -302,7 +302,7 @@ const formatTimeAgo = (date: Date) => {
   if (diffInDays < 7) return `${diffInDays}d ago`;
 
   return date.toLocaleDateString();
-}
+};
 
 export default function TeamNotificationsPage() {
   const [activeTab, setActiveTab] = useState('all');
@@ -316,7 +316,7 @@ export default function TeamNotificationsPage() {
   const filteredNotifications = notifications.filter((notification) => {
     const matchesSearch =
       notification.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      notification.message.toLowerCase().includes(searchQuery.toLowerCase())
+      notification.message.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesCategory =
       filterCategory === 'all' ||
       notification.category.toLowerCase() === filterCategory.toLowerCase();
@@ -338,36 +338,36 @@ export default function TeamNotificationsPage() {
       prev.map((n) => (n.id === notificationId ? { ...n, isRead: true } : n))
     );
     toast.success('Notification marked as read');
-  }
+  };
 
   const handleMarkAllAsRead = () => {
     setNotifications((prev) => prev.map((n) => ({ ...n, isRead: true })));
     toast.success('All notifications marked as read');
-  }
+  };
 
   const handleToggleStar = (notificationId: string) => {
     setNotifications((prev) =>
       prev.map((n) => (n.id === notificationId ? { ...n, isStarred: !n.isStarred } : n))
     );
     toast.success('Notification starred');
-  }
+  };
 
   const handleDeleteNotification = (notificationId: string) => {
     setNotifications((prev) => prev.filter((n) => n.id !== notificationId));
     toast.success('Notification deleted');
-  }
+  };
 
   const handleArchiveNotification = (notificationId: string) => {
     setNotifications((prev) => prev.filter((n) => n.id !== notificationId));
     toast.success('Notification archived');
-  }
+  };
 
   const handleNotificationAction = (notification: Notification) => {
     if (notification.actionUrl) {
       toast.success(`Navigating to ${notification.actionLabel}...`);
       handleMarkAsRead(notification.id);
     }
-  }
+  };
 
   const handlePreferenceChange = (
     category: keyof NotificationPreferences['email'],
@@ -381,11 +381,11 @@ export default function TeamNotificationsPage() {
         [category]: value,
       },
     }));
-  }
+  };
 
   const handleSavePreferences = () => {
     toast.success('Notification preferences saved successfully!');
-  }
+  };
 
   return (
     <ProtectedRoute>
@@ -474,7 +474,8 @@ export default function TeamNotificationsPage() {
                 placeholder="Search notifications..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10" />
+                className="pl-10"
+              />
             </div>
 
             <DaisySelect value={filterCategory} onValueChange={setFilterCategory}>
@@ -616,7 +617,8 @@ export default function TeamNotificationsPage() {
                                   notification.isStarred
                                     ? 'fill-yellow-400 text-yellow-400'
                                     : 'text-gray-400'
-                                )} />
+                                )}
+                              />
                             </DaisyButton>
                             {!notification.isRead && (
                               <DaisyButton
@@ -839,31 +841,40 @@ export default function TeamNotificationsPage() {
                         <div className="flex items-center space-x-2">
                           <DaisySwitch
                             checked={preferences.email[item.key as keyof typeof preferences.email]}
-                            onCheckedChange={(checked) => handlePreferenceChange(
+                            onCheckedChange={(checked) =>
+                              handlePreferenceChange(
                                 item.key as keyof typeof preferences.email,
                                 'email',
                                 checked
-                              )} />
+                              )
+                            }
+                          />
                           <DaisyLabel className="text-sm">Email</DaisyLabel>
                         </div>
                         <div className="flex items-center space-x-2">
                           <DaisySwitch
                             checked={preferences.push[item.key as keyof typeof preferences.push]}
-                            onCheckedChange={(checked) => handlePreferenceChange(
+                            onCheckedChange={(checked) =>
+                              handlePreferenceChange(
                                 item.key as keyof typeof preferences.push,
                                 'push',
                                 checked
-                              )} />
+                              )
+                            }
+                          />
                           <DaisyLabel className="text-sm">Push</DaisyLabel>
                         </div>
                         <div className="flex items-center space-x-2">
                           <DaisySwitch
                             checked={preferences.inApp[item.key as keyof typeof preferences.inApp]}
-                            onCheckedChange={(checked) => handlePreferenceChange(
+                            onCheckedChange={(checked) =>
+                              handlePreferenceChange(
                                 item.key as keyof typeof preferences.inApp,
                                 'inApp',
                                 checked
-                              )} />
+                              )
+                            }
+                          />
                           <DaisyLabel className="text-sm">In-App</DaisyLabel>
                         </div>
                       </div>
@@ -873,7 +884,7 @@ export default function TeamNotificationsPage() {
               </div>
 
               <DaisySeparator />
-{/* Frequency Settings */}
+              {/* Frequency Settings */}
               <div>
                 <h3 className="font-medium mb-4">Notification Frequency</h3>
                 <div className="space-y-4">
@@ -887,6 +898,7 @@ export default function TeamNotificationsPage() {
                     >
                       <DaisySelectTrigger className="w-48 mt-1">
                         <DaisySelectValue />
+                      </DaisySelectTrigger>
                       <DaisySelectContent>
                         <DaisySelectItem value="immediate">Immediate</DaisySelectItem>
                         <DaisySelectItem value="hourly">Hourly</DaisySelectItem>
@@ -899,17 +911,20 @@ export default function TeamNotificationsPage() {
               </div>
 
               <DaisySeparator />
-{/* Quiet Hours */}
+              {/* Quiet Hours */}
               <div>
                 <h3 className="font-medium mb-4">Quiet Hours</h3>
                 <div className="space-y-4">
                   <div className="flex items-center space-x-2">
                     <DaisySwitch
                       checked={preferences.quietHours.enabled}
-                      onCheckedChange={(checked) => setPreferences((prev) => ({
+                      onCheckedChange={(checked) =>
+                        setPreferences((prev) => ({
                           ...prev,
                           quietHours: { ...prev.quietHours, enabled: checked },
-                        }))} />
+                        }))
+                      }
+                    />
                     <DaisyLabel>Enable quiet hours</DaisyLabel>
                   </div>
                   {preferences.quietHours.enabled && (
@@ -919,22 +934,28 @@ export default function TeamNotificationsPage() {
                         <DaisyInput
                           type="time"
                           value={preferences.quietHours.start}
-                          onChange={(e) => setPreferences((prev) => ({
+                          onChange={(e) =>
+                            setPreferences((prev) => ({
                               ...prev,
                               quietHours: { ...prev.quietHours, start: e.target.value },
-                            }))}
-                          className="mt-1" />
+                            }))
+                          }
+                          className="mt-1"
+                        />
                       </div>
                       <div>
                         <DaisyLabel>End Time</DaisyLabel>
                         <DaisyInput
                           type="time"
                           value={preferences.quietHours.end}
-                          onChange={(e) => setPreferences((prev) => ({
+                          onChange={(e) =>
+                            setPreferences((prev) => ({
                               ...prev,
                               quietHours: { ...prev.quietHours, end: e.target.value },
-                            })))
-                          className="mt-1" />
+                            }))
+                          }
+                          className="mt-1"
+                        />
                       </div>
                     </div>
                   )}
@@ -942,12 +963,8 @@ export default function TeamNotificationsPage() {
               </div>
 
               <div className="flex justify-end space-x-2 pt-4">
-                <DaisyButton variant="outline">
-          Reset to Default
-        </DaisyButton>
-                <DaisyButton onClick={handleSavePreferences}>
-          Save Preferences
-        </DaisyButton>
+                <DaisyButton variant="outline">Reset to Default</DaisyButton>
+                <DaisyButton onClick={handleSavePreferences}>Save Preferences</DaisyButton>
               </div>
             </DaisyCardBody>
           </DaisyCard>

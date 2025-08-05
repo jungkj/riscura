@@ -346,7 +346,7 @@ export class ProboIntegrationService {
         category: control.category,
         riskReduction: Math.floor(Math.random() * 30) + 20, // 20-50% risk reduction;
       })),
-      complianceImpact: [;
+      complianceImpact: [
         'Improves SOC 2 compliance score by 8%',
         'Addresses 3 ISO 27001 control gaps',
         'Reduces overall risk exposure by 25%',
@@ -354,8 +354,8 @@ export class ProboIntegrationService {
     }
   }
 
-  /**;
-   * Get vendor assessment summary with Probo integration;
+  /**
+   * Get vendor assessment summary with Probo integration
    */
   async getVendorAssessmentSummary(): Promise<{
     totalAssessments: number;
@@ -373,7 +373,7 @@ export class ProboIntegrationService {
       totalAssessments: 23,
       highRiskVendors: 4,
       averageRiskScore: 35,
-      recentAssessments: [;
+      recentAssessments: [
         {
           vendorName: 'CloudProvider Inc.',
           riskScore: 25,
@@ -396,38 +396,35 @@ export class ProboIntegrationService {
     }
   }
 
-  /**;
-   * Generate AI-powered controls for a specific risk;
-   * Core feature inspired by Probo's smart automation;
+  /**
+   * Generate AI-powered controls for a specific risk
+   * Core feature inspired by Probo's smart automation
    */
-  async generateControlsForRisk(_request: ControlGenerationRequest;
-  ): Promise<ControlGenerationResponse> {
+  async generateControlsForRisk(_request: ControlGenerationRequest): Promise<ControlGenerationResponse> {
     try {
       // Step 1: Analyze the risk using AI
-      const riskAnalysis = await this.analyzeRisk(request);
-;
+      const riskAnalysis = await this.analyzeRisk(_request);
       // Step 2: Generate tailored controls based on analysis
-      const controls = await this.generateTailoredControls(request, riskAnalysis);
-;
+      const controls = await this.generateTailoredControls(_request, riskAnalysis);
+      
       // Step 3: Create risk-control mappings
-      const mappings = await this.createRiskControlMappings(request.riskId, controls);
-;
+      const mappings = await this.createRiskControlMappings(_request.riskId, controls);
+      
       // Step 4: Generate implementation plan
-      const implementationPlan = await this.generateImplementationPlan(;
+      const implementationPlan = await this.generateImplementationPlan(
         controls,
-        request.organizationContext;
+        _request.organizationContext
       );
-;
+      
       // Step 5: Calculate estimates
-      const estimatedTimeToImplement = controls.reduce(;
+      const estimatedTimeToImplement = controls.reduce(
         (total, control) => total + control.estimatedHours,
-        0;
+        0
       );
-      const estimatedCost = this.calculateImplementationCost(controls, request.organizationContext);
-;
+      const estimatedCost = this.calculateImplementationCost(controls, _request.organizationContext);
+      
       // Step 6: Find alternative controls
-      const alternatives = await this.findAlternativeControls(request, controls);
-;
+      const alternatives = await this.findAlternativeControls(_request, controls);
       const response: ControlGenerationResponse = {
         success: true,
         controls,
@@ -446,12 +443,12 @@ export class ProboIntegrationService {
         data: response,
         source: 'ai',
       });
-;
+      
       return response;
     } catch (error) {
       // console.error('Error generating controls for risk:', error)
-      throw new Error(;
-        `Failed to generate controls: ${error instanceof Error ? error.message : String(error)}`;
+      throw new Error(
+        `Failed to generate controls: ${error instanceof Error ? error.message : String(error)}`
       );
     }
   }
@@ -468,61 +465,57 @@ export class ProboIntegrationService {
       confidence: 0.85,
       reasoning: `Based on the risk "${request.riskTitle}" in the ${request.riskCategory} category with ${request.riskSeverity} severity, our AI recommends implementing preventive and detective controls focusing on ${this.getRelevantFrameworks(request.preferredFrameworks).join(', ')} compliance requirements.`,
       generatedAt: new Date().toISOString(),
-      dataPoints: [;
+      dataPoints: [
         `Risk severity: ${request.riskSeverity}`,
         `Organization size: ${request.organizationContext.size}`,
         `Industry: ${request.organizationContext.industry}`,
         `Tech stack: ${request.organizationContext.techStack.join(', ')}`,
         `Compliance goals: ${request.organizationContext.complianceGoals.join(', ')}`,
       ],
-      limitations: [;
+      limitations: [
         'Analysis based on general best practices',
         'Organization-specific context may require adjustments',
         'Regular review and updates recommended',
       ],
     }
-;
     // Generate AI recommendations
-    analysis.recommendations = await this.generateAIRecommendations(request);
-;
+    analysis.recommendations = await this.generateAIRecommendations(_request);
     return analysis;
   }
 
-  /**;
-   * Generate tailored controls based on Probo's control library;
+  /**
+   * Generate tailored controls based on Probo's control library
    */
   private async generateTailoredControls(_request: ControlGenerationRequest,
-    analysis: ProboAIAnalysis;
+    analysis: ProboAIAnalysis
   ): Promise<ProboControl[]> {
     const controls: ProboControl[] = [];
-;
     // Get relevant control templates from Probo library
-    const relevantTemplates = this.getRelevantControlTemplates(request);
-;
+    const relevantTemplates = this.getRelevantControlTemplates(_request);
     for (const template of relevantTemplates) {
       const control: ProboControl = {
         id: `ctrl_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
-        title: this.customizeControlTitle(template.title, request),
-        description: this.customizeControlDescription(template.description, request),
+        title: this.customizeControlTitle(template.title, _request),
+        description: this.customizeControlDescription(template.description, _request),
         category: this.getControlCategory(template.category),
-        framework: this.getFrameworkForControl(request.preferredFrameworks[0] || 'SOC2'),
-        priority: this.determinePriority(request.riskSeverity, template.priority),
+        framework: this.getFrameworkForControl(_request.preferredFrameworks[0] || 'SOC2'),
+        priority: this.determinePriority(_request.riskSeverity, template.priority),
         implementationComplexity: this.mapComplexity(template.complexity),
-        estimatedHours: this.calculateEstimatedHours(template, request.organizationContext),
+        estimatedHours: this.calculateEstimatedHours(template, _request.organizationContext),
         status: {
           current: 'Not Started',
           progress: 0,
           lastUpdated: new Date().toISOString(),
         },
         evidenceRequirements: this.generateEvidenceRequirements(template),
-        automationPotential: this.assessAutomationPotential(;
+        automationPotential: this.assessAutomationPotential(
           template,
-          request.organizationContext.techStack;
+          _request.organizationContext.techStack
         ),
-        riskMitigationScore: this.calculateRiskMitigationScore(template, request.riskSeverity),
-        complianceMapping: this.createComplianceMapping(template, request.preferredFrameworks),
+        riskMitigationScore: this.calculateRiskMitigationScore(template, _request.riskSeverity),
+        complianceMapping: this.createComplianceMapping(template, _request.preferredFrameworks),
         dependencies: [],
-        tags: this.generateControlTags(template, request),
+        tags: this.generateControlTags(template, _request),
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
         aiGenerated: true,
@@ -535,15 +528,14 @@ export class ProboIntegrationService {
     return controls;
   }
 
-  /**;
-   * Create intelligent risk-control mappings;
+  /**
+   * Create intelligent risk-control mappings
    */
-  private async createRiskControlMappings(;
+  private async createRiskControlMappings(
     riskId: string,
-    controls: ProboControl[];
+    controls: ProboControl[]
   ): Promise<RiskControlMapping[]> {
     const mappings: RiskControlMapping[] = [];
-;
     for (const control of controls) {
       const mapping: RiskControlMapping = {
         id: `mapping_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
@@ -582,15 +574,14 @@ export class ProboIntegrationService {
         lastUpdated: new Date().toISOString(),
         version: '1.0.0',
       }
-;
       // console.log(
-        `Loaded Probo control library with ${this.controlLibrary.controls.length} controls`;
-      );
+        // `Loaded Probo control library with ${this.controlLibrary.controls.length} controls`
+      // );
     } catch (error) {
       // console.error(
-        'Failed to load Probo control library:',
-        error instanceof Error ? error.message : String(error);
-      );
+        // 'Failed to load Probo control library:',
+        // error instanceof Error ? error.message : String(error)
+      // );
       throw error;
     }
   }

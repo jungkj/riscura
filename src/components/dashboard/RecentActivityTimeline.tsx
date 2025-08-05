@@ -134,8 +134,8 @@ export default function RecentActivityTimeline({ isLoading = false }: RecentActi
               
               <div className="flex items-center">
                 <DaisyAvatar className="h-6 w-6 mr-2" >
-                    <DaisyAvatarImage src={activity.user.avatar} >
-                    <DaisyAvatarFallback className="text-[10px]">{activity.user.initials}</DaisySkeleton>
+                    <DaisyAvatarImage src={activity.user.avatar} />
+                    <DaisyAvatarFallback className="text-[10px]">{activity.user.initials}</DaisyAvatarFallback>
                 </DaisyAvatar>
                 
                 <span className="text-xs">{activity.user.name}</span>

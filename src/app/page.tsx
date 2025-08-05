@@ -14,7 +14,7 @@ import { FloatingNav } from '@/components/ui/FloatingNav';
 import { DaisyCardBody } from '@/components/ui/daisy-components';
 
 // Icons
-// import {
+import {
   Shield,
   Brain,
   Target,
@@ -38,10 +38,10 @@ import { DaisyCardBody } from '@/components/ui/daisy-components';
 } from 'lucide-react';
 
 // New single-word typewriter effect
-const cyclingWords = ['effortless', 'intelligent', 'automated', 'proactive', 'streamlined']
+const cyclingWords = ['effortless', 'intelligent', 'automated', 'proactive', 'streamlined'];
 
 // Single Word Typewriter Component
-const SingleWordTypewriter = () {
+const SingleWordTypewriter = () => {
   return (
     <div className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold text-center lg:text-left font-inter">
       <span className="text-gray-900">Risk management made </span>
@@ -51,12 +51,12 @@ const SingleWordTypewriter = () {
         cursorClassName="bg-[#199BEC]"
       />
     </div>
-  )
-}
+  );
+};
 
 // HeroProcessCard Component
-const HeroProcessCard = () {
-  const [currentStep, setCurrentStep] = useState(0)
+const HeroProcessCard = () => {
+  const [currentStep, setCurrentStep] = useState(0);
 
   const steps = [
     {
@@ -299,18 +299,18 @@ const HeroProcessCard = () {
       </DaisyCard>
     </div>
   );
-}
+};
 
 export default function HomePage() {
   const router = useRouter();
 
   const handleGetStarted = () => {
     router.push('/auth/register');
-  }
+  };
 
   const handleRequestDemo = () => {
     router.push('/auth/register');
-  }
+  };
 
   // Navigation items for FloatingNav
   const navItems = [
@@ -334,7 +334,7 @@ export default function HomePage() {
       link: '#demo',
       icon: <PlayCircle className="h-4 w-4" />,
     },
-  ]
+  ];
 
   return (
     <div className="min-h-screen font-inter" style={{ backgroundColor: '#FFFFFF' }}>

@@ -290,10 +290,10 @@ const MentionInput: React.FC<{
                   onClick={() => insertMention(user)}
                 >
                   <DaisyAvatar className="h-6 w-6" >
-                      <DaisyAvatarImage src={user.avatar} >
+                      <DaisyAvatarImage src={user.avatar} />
                       <DaisyAvatarFallback className="text-caption" >
                         {user.name.split(' ').map(n => n[0]).join('')}
-                    </DaisyAvatar>
+                      </DaisyAvatarFallback>
                   </DaisyAvatar>
                   <div className="flex-1 min-w-0">
                     <div className="text-body-sm font-medium truncate">{user.name}</div>
@@ -391,10 +391,10 @@ const CommentComponent: React.FC<{
         <div className="flex items-start justify-between mb-enterprise-3">
           <div className="flex items-center space-x-enterprise-3">
             <DaisyAvatar className="h-8 w-8" >
-                <DaisyAvatarImage src={comment.author.avatar} >
+                <DaisyAvatarImage src={comment.author.avatar} />
                 <DaisyAvatarFallback className="text-caption" >
                   {comment.author.name.split(' ').map(n => n[0]).join('')}
-              </DaisyAvatar>
+                </DaisyAvatarFallback>
             </DaisyAvatar>
             <div>
               <div className="flex items-center space-x-enterprise-2">
@@ -841,10 +841,10 @@ export const CommentSystem: React.FC<{
 </DaisyCardBody>
           <div className="flex items-start space-x-enterprise-3">
             <DaisyAvatar className="h-8 w-8" >
-                <DaisyAvatarImage src={sampleUsers[0].avatar} >
+                <DaisyAvatarImage src={sampleUsers[0].avatar} />
                 <DaisyAvatarFallback className="text-caption" >
                   {sampleUsers[0].name.split(' ').map(n => n[0]).join('')}
-              </DaisyAvatar>
+                </DaisyAvatarFallback>
             </DaisyAvatar>
             <div className="flex-1 space-y-enterprise-3">
               <MentionInput

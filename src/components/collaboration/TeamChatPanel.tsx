@@ -116,8 +116,8 @@ export default function TeamChatPanel({ isOpen, onClose }: TeamChatPanelProps) {
               )}
             >
               <DaisyAvatar className="h-8 w-8 flex-shrink-0" >
-                  <DaisyAvatarImage src={message.user.avatar} >
-                  <DaisyAvatarFallback>{message.user.initials}</DaisyScrollArea>
+                  <DaisyAvatarImage src={message.user.avatar} />
+                  <DaisyAvatarFallback>{message.user.initials}</DaisyAvatarFallback>
               </DaisyAvatar>
               
               <div className={cn(

@@ -17,7 +17,7 @@ export const spacing = {
   '4xl': '80px', // 10 units - page sections
   '5xl': '96px', // 12 units - large sections
   '6xl': '128px', // 16 units - hero sections
-} as const
+} as const;
 
 // Semantic Spacing (context-aware) - Apple/Notion inspired
 export const semanticSpacing = {
@@ -56,7 +56,7 @@ export const semanticSpacing = {
     lg: spacing['3xl'], // 64px - generous layouts
     xl: spacing['4xl'], // 80px - spacious layouts
   },
-} as const
+} as const;
 
 // Container Sizes (responsive max-widths)
 export const containers = {
@@ -68,7 +68,7 @@ export const containers = {
   '2xl': '1536px', // ~96rem - large screens
   '3xl': '1728px', // ~108rem - ultra-wide
   full: '100%', // full width
-} as const
+} as const;
 
 // Responsive Breakpoints
 export const breakpoints = {
@@ -78,7 +78,7 @@ export const breakpoints = {
   lg: '1024px',
   xl: '1280px',
   '2xl': '1536px',
-} as const
+} as const;
 
 // Grid System
 export const grid = {
@@ -127,7 +127,7 @@ export const grid = {
       padding: spacing['2xl'],
     },
   },
-} as const
+} as const;
 
 // Layout Utilities
 export const layout = {
@@ -192,7 +192,7 @@ export const layout = {
     },
     padding: spacing.lg,
   },
-} as const
+} as const;
 
 // CSS Classes for easy application
 export const spacingClasses = {
@@ -248,7 +248,7 @@ export const spacingClasses = {
     '3xl': 'max-w-6xl', // 1152px
     full: 'max-w-full', // 100%
   },
-} as const
+} as const;
 
 // Layout Component Classes
 export const layoutClasses = {
@@ -284,7 +284,7 @@ export const layoutClasses = {
     relaxed: 'space-y-6',
     loose: 'space-y-8',
   },
-} as const
+} as const;
 
 // Responsive Spacing Utilities
 export const responsiveSpacing = {
@@ -326,7 +326,7 @@ export const responsiveSpacing = {
 } as const;
 
 // Helper function to convert spacing to Tailwind values
-const getSpacingValue = (spacingKey: keyof typeof spacing): string {
+const getSpacingValue = (spacingKey: keyof typeof spacing): string => {
   const spacingMap: Record<keyof typeof spacing, string> = {
     xs: '1',
     sm: '2',
@@ -338,10 +338,10 @@ const getSpacingValue = (spacingKey: keyof typeof spacing): string {
     '4xl': '16',
     '5xl': '20',
     '6xl': '24',
-  }
+  };
 
   return spacingMap[spacingKey] || '4';
-}
+};
 
 // Component-specific spacing configurations
 export const componentSpacing = {
@@ -377,4 +377,4 @@ export const componentSpacing = {
     itemSpacing: spacingClasses.gap.md,
     padding: spacingClasses.padding.md,
   },
-} as const
+} as const;

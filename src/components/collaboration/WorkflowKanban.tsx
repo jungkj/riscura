@@ -538,10 +538,10 @@ const TaskCard: React.FC<{
             {task.assignee && (
               <div className="flex items-center space-x-enterprise-1">
                 <DaisyAvatar className="h-5 w-5" >
-                    <DaisyAvatarImage src={task.assignee.avatar} >
+                    <DaisyAvatarImage src={task.assignee.avatar} />
                     <DaisyAvatarFallback className="text-caption" >
                       {task.assignee.name.split(' ').map(n => n[0]).join('')}
-                  </DaisyAvatar>
+                    </DaisyAvatarFallback>
                 </DaisyAvatar>
               </div>
             )}

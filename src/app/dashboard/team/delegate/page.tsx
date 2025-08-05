@@ -908,6 +908,7 @@ export default function TeamDelegatePage() {
                     >
                       <DaisySelectTrigger>
                         <DaisySelectValue />
+                      </DaisySelectTrigger>
                       <DaisySelectContent>
                         <DaisySelectItem value="risk_assessment">Risk Assessment</DaisySelectItem>
                         <DaisySelectItem value="control_testing">Control Testing</DaisySelectItem>
@@ -926,10 +927,11 @@ export default function TeamDelegatePage() {
                     <DaisyLabel htmlFor="priority">Priority</DaisyLabel>
                     <DaisySelect
                       value={newTask.priority}
-                      onValueChange={(value: any) => setNewTask((prev) => ({ ...prev, priority: value })))
+                      onValueChange={(value: any) => setNewTask((prev) => ({ ...prev, priority: value }))}
                     >
                       <DaisySelectTrigger>
                         <DaisySelectValue />
+                      </DaisySelectTrigger>
                       <DaisySelectContent>
                         <DaisySelectItem value="critical">Critical</DaisySelectItem>
                         <DaisySelectItem value="high">High</DaisySelectItem>

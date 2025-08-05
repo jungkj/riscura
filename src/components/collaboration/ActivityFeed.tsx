@@ -527,11 +527,11 @@ const ActivityItem: React.FC<{
           {/* Avatar & Icon */}
           <div className="relative">
             <DaisyAvatar className="h-8 w-8" >
-                <DaisyAvatarImage src={activity.actor.avatar} >
+                <DaisyAvatarImage src={activity.actor.avatar} />
                 <DaisyAvatarFallback className="text-caption" >
                   {activity.actor.name === 'System' ? 'SYS' : 
                  activity.actor.name.split(' ').map(n => n[0]).join('')}
-              </DaisyAvatar>
+                </DaisyAvatarFallback>
             </DaisyAvatar>
             <div className={cn(
               "absolute -bottom-1 -right-1 p-0.5 rounded-full bg-white border",

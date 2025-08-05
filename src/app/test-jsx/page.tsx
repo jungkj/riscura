@@ -17,10 +17,10 @@ export default function TestJSXPage() {
   );
 }
 
-const TestComponent = ({ title }: { title: string }) {
+const TestComponent = ({ title }: { title: string }) => {
   return (
     <div className="p-3 bg-blue-50 rounded">
       <span className="font-medium">{title}</span>
     </div>
   );
-}
+};

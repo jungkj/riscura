@@ -394,8 +394,8 @@ export const RealtimeComments: React.FC<RealtimeCommentsProps> = ({
         }`}
       >
         <DaisyAvatar className="w-8 h-8" >
-            <DaisyAvatarImage src={comment.author.avatar} >
-            <DaisyAvatarFallback>{comment.author.name.split(' ').map(n => n[0]).join('')}</DaisyAvatar>
+            <DaisyAvatarImage src={comment.author.avatar} />
+            <DaisyAvatarFallback>{comment.author.name.split(' ').map(n => n[0]).join('')}</DaisyAvatarFallback>
         </DaisyAvatar>
 
         <div className="flex-1 min-w-0">
@@ -566,10 +566,10 @@ setNewComment(e.target.value)}
           <div className="flex -space-x-2">
             {participants.filter(p => p.isOnline).map(participant => (
               <DaisyAvatar key={participant.id} className="w-6 h-6 border-2 border-white" >
-                  <DaisyAvatarImage src={participant.avatar} >
+                  <DaisyAvatarImage src={participant.avatar} />
                   <DaisyAvatarFallback className="text-xs" >
                     {participant.name.split(' ').map(n => n[0]).join('')}
-                </DaisyAvatar>
+                  </DaisyAvatarFallback>
               </DaisyAvatar>
             ))}
           </div>
@@ -656,8 +656,8 @@ setSearchQuery(e.target.value)}
 
         <div className="flex space-x-2">
           <DaisyAvatar className="w-8 h-8" >
-              <DaisyAvatarImage src={currentUser.avatar} >
-              <DaisyAvatarFallback>{currentUser.name.split(' ').map(n => n[0]).join('')}</DaisyAvatar>
+              <DaisyAvatarImage src={currentUser.avatar} />
+              <DaisyAvatarFallback>{currentUser.name.split(' ').map(n => n[0]).join('')}</DaisyAvatarFallback>
           </DaisyAvatar>
           
           <div className="flex-1">

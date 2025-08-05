@@ -8,7 +8,7 @@ import { Suspense } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { DaisyCardTitle } from '@/components/ui/daisy-components';
 
-const OAuthTestContent = () {
+const OAuthTestContent = () => {
   const router = useRouter();
   const { user, isAuthenticated, isLoading, logout } = useAuth();
   const [googleConfig, setGoogleConfig] = useState({ configured: false });
@@ -17,7 +17,7 @@ const OAuthTestContent = () {
     // Check if Google OAuth is configured
     const checkConfig = async () => {
       try {
-        const response = await fetch('/api/google-oauth/config')
+        const response = await fetch('/api/google-oauth/config');
         if (response.ok) {
           const data = await response.json();
           setGoogleConfig({ configured: data.configured });
@@ -25,7 +25,7 @@ const OAuthTestContent = () {
       } catch (error) {
         // console.error('Failed to check OAuth config:', error)
       }
-    }
+    };
     checkConfig();
   }, []);
 
@@ -41,12 +41,12 @@ const OAuthTestContent = () {
 
   const handleGoogleLogin = () => {
     window.location.href = '/api/google-oauth/login';
-  }
+  };
 
   const handleLogout = async () => {
     await logout();
     router.push('/auth/login');
-  }
+  };
 
   return (
     <DaisyCard className="max-w-2xl mx-auto">
@@ -104,7 +104,7 @@ const OAuthTestContent = () {
       </DaisyCardBody>
     </DaisyCard>
   );
-}
+};
 
 export default function TestOAuthPage() {
   return (
