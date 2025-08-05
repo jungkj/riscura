@@ -16,20 +16,20 @@ import {
 export async function POST(_request: NextRequest) {
   try {
     // Check authentication
-    const session = (await getServerSession(authOptions)) as any
+    const session = (await getServerSession(authOptions)) as any;
     if (!session?.user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     // Parse request body
-    const body: ControlGenerationRequest = await request.json()
+    const body: ControlGenerationRequest = await request.json();
 
     // Validate required fields
     if (!body.riskId || !body.riskTitle || !body.riskSeverity) {
       return NextResponse.json(
         { error: 'Missing required fields: riskId, riskTitle, riskSeverity' },
         { status: 400 }
-      )
+      );
     }
 
     // Initialize Probo service with configuration
@@ -42,18 +42,18 @@ export async function POST(_request: NextRequest) {
       confidenceThreshold: 0.8,
       frameworks: [] as ComplianceFramework[],
       customCategories: [] as ProboControlCategory[],
-    }
+    };
 
     // Get Probo service instance
-    const proboService = ProboIntegrationService.getInstance()
+    const proboService = ProboIntegrationService.getInstance();
 
     // Generate controls
-    const response = await proboService.generateControlsForRisk(body)
+    const response = await proboService.generateControlsForRisk(body);
 
     // Log the generation for analytics
     // console.log(
-      `Generated ${response.controls.length} controls for risk ${body.riskId} by user ${(session.user as any).id || session.user.email}`
-    )
+    //   `Generated ${response.controls.length} controls for risk ${body.riskId} by user ${(session.user as any).id || session.user.email}`
+    // )
 
     return NextResponse.json(response);
   } catch (error) {
@@ -76,7 +76,7 @@ export async function POST(_request: NextRequest) {
 export async function GET(_request: NextRequest) {
   try {
     // Check authentication
-    const session = (await getServerSession(authOptions)) as any
+    const session = (await getServerSession(authOptions)) as any;
     if (!session?.user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
@@ -85,10 +85,10 @@ export async function GET(_request: NextRequest) {
     const riskId = searchParams.get('riskId');
 
     // Get Probo service instance
-    const proboService = ProboIntegrationService.getInstance()
+    const proboService = ProboIntegrationService.getInstance();
 
     // Get integration status and metrics
-    const status = await proboService.getIntegrationStatus()
+    const status = await proboService.getIntegrationStatus();
     const metrics = await proboService.getIntegrationMetrics();
 
     return NextResponse.json({

@@ -85,7 +85,7 @@ async function processExcelRCSA(
   userId: string,
   options: ProcessingOptions
 ): Promise<any> {
-  const workbook = XLSX.read(buffer, { type: 'buffer' })
+  const workbook = XLSX.read(buffer, { type: 'buffer' });
 
   const _result = {
     risks: [] as any[],
@@ -97,17 +97,17 @@ async function processExcelRCSA(
       processedAt: new Date(),
       totalRecords: 0,
     },
-  }
+  };
 
   // Process each worksheet
   for (const sheetName of workbook.SheetNames) {
-    const worksheet = workbook.Sheets[sheetName]
+    const worksheet = workbook.Sheets[sheetName];
     const data = XLSX.utils.sheet_to_json(worksheet);
 
     if (data.length === 0) continue;
 
     // Auto-detect sheet type based on headers
-    const headers = Object.keys(data[0] as any).map((h) => h.toLowerCase())
+    const headers = Object.keys(data[0] as any).map((h) => h.toLowerCase());
     const sheetType = detectSheetType(headers);
 
     // console.log(`Processing sheet "${sheetName}" as ${sheetType}`)
@@ -142,7 +142,7 @@ async function processExcelRCSA(
       'Sheets processed': result.metadata.sheets.length,
     },
     data: result,
-  }
+  };
 }
 
 // Policy Document Processing with AI
@@ -154,11 +154,11 @@ async function processPolicyDocument(
   userId: string,
   options: ProcessingOptions
 ): Promise<any> {
-  let textContent = ''
+  let textContent = '';
 
   // Extract text based on file type
   if (fileType === 'application/pdf') {
-    textContent = await extractPDFText(buffer)
+    textContent = await extractPDFText(buffer);
   } else if (fileType.includes('word') || fileType.includes('document')) {
     textContent = await extractWordText(buffer);
   } else if (fileType === 'text/plain') {
@@ -174,11 +174,11 @@ async function processPolicyDocument(
     extractedControls: [] as any[],
     aiConfidence: 0,
     documentSummary: '',
-  }
+  };
 
   if (options.aiAnalysis) {
     // AI-powered risk and control extraction
-    const extractionResult = await extractRisksAndControls(textContent)
+    const extractionResult = await extractRisksAndControls(textContent);
     result.extractedRisks = extractionResult.risks;
     result.extractedControls = extractionResult.controls;
     result.aiConfidence = extractionResult.confidence;
@@ -196,7 +196,7 @@ async function processPolicyDocument(
       'Document length': `${Math.round(textContent.length / 1000)}k characters`,
     },
     data: result,
-  }
+  };
 }
 
 // Bulk Upload Processing
@@ -223,12 +223,12 @@ async function processBulkUpload(
       size: buffer.length,
       type: fileType,
     },
-  }
+  };
 }
 
 // Helper functions
-const detectSheetType = (headers: string[]): 'risk' | 'control' | 'mapping' | 'mixed' {
-  const riskKeywords = ['risk', 'threat', 'vulnerability', 'likelihood', 'impact', 'probability']
+const detectSheetType = (headers: string[]): 'risk' | 'control' | 'mapping' | 'mixed' => {
+  const riskKeywords = ['risk', 'threat', 'vulnerability', 'likelihood', 'impact', 'probability'];
   const controlKeywords = ['control', 'mitigation', 'safeguard', 'procedure', 'policy'];
   const mappingKeywords = ['mapping', 'relationship', 'link'];
 
@@ -249,9 +249,10 @@ const detectSheetType = (headers: string[]): 'risk' | 'control' | 'mapping' | 'm
   if (riskScore > controlScore) return 'risk';
   if (controlScore > riskScore) return 'control';
   return 'mixed';
-}
+};
 
-async function processRiskData(_data: any[],
+async function processRiskData(
+  _data: any[],
   organizationId: string,
   userId: string,
   options: ProcessingOptions
@@ -271,10 +272,10 @@ async function processRiskData(_data: any[],
       organizationId,
       createdBy: userId,
       aiConfidence: 0.8,
-    }
+    };
 
     // Calculate risk score
-    risk.riskScore = risk.likelihood * risk.impact
+    risk.riskScore = risk.likelihood * risk.impact;
 
     // AI enhancement if enabled (temporarily disabled)
     if (options.aiAnalysis && risk.description) {
@@ -293,7 +294,8 @@ async function processRiskData(_data: any[],
   return risks;
 }
 
-async function processControlData(_data: any[],
+async function processControlData(
+  _data: any[],
   organizationId: string,
   userId: string,
   options: ProcessingOptions
@@ -312,7 +314,7 @@ async function processControlData(_data: any[],
       organizationId,
       createdBy: userId,
       aiConfidence: 0.8,
-    }
+    };
 
     // AI enhancement if enabled (temporarily disabled)
     if (options.aiAnalysis && control.description) {
@@ -331,7 +333,7 @@ async function processControlData(_data: any[],
   return controls;
 }
 
-const processMappingData = (_data: any[], organizationId: string): any[] {
+const processMappingData = (_data: any[], organizationId: string): any[] => {
   const mappings: any[] = [];
 
   for (const row of data) {
@@ -344,11 +346,11 @@ const processMappingData = (_data: any[], organizationId: string): any[] {
   }
 
   return mappings;
-}
+};
 
 // AI-powered risk and control extraction from policy documents
 async function extractRisksAndControls(textContent: string): Promise<{
-  risks: any[]
+  risks: any[];
   controls: any[];
   confidence: number;
   summary: string;
@@ -395,7 +397,7 @@ async function extractRisksAndControls(textContent: string): Promise<{
       controls: [],
       confidence: 0.0,
       summary: 'AI document analysis not available',
-    }
+    };
   } catch (error) {
     // console.error('AI extraction failed:', error)
   }
@@ -406,13 +408,13 @@ async function extractRisksAndControls(textContent: string): Promise<{
     controls: [],
     confidence: 0.0,
     summary: 'AI extraction failed, manual review required',
-  }
+  };
 }
 
 // Text extraction functions
 async function extractPDFText(buffer: Buffer): Promise<string> {
   try {
-    const pdfParse = await import('pdf-parse')
+    const pdfParse = await import('pdf-parse');
     const data = await pdfParse.default(buffer);
     return data.text;
   } catch (error) {
@@ -433,8 +435,8 @@ async function extractWordText(buffer: Buffer): Promise<string> {
 }
 
 // Mapping helper functions
-const mapRiskCategory = (category: string): string {
-  const cat = category.toLowerCase()
+const mapRiskCategory = (category: string): string => {
+  const cat = category.toLowerCase();
   if (cat.includes('operation') || cat.includes('process')) return 'operational';
   if (cat.includes('financial') || cat.includes('market')) return 'financial';
   if (cat.includes('strategic') || cat.includes('business')) return 'strategic';
@@ -442,19 +444,19 @@ const mapRiskCategory = (category: string): string {
   if (cat.includes('technology') || cat.includes('cyber') || cat.includes('it'))
     return 'technology';
   return 'operational';
-}
+};
 
-const mapControlType = (_type: string): string {
+const mapControlType = (_type: string): string => {
   const t = type.toLowerCase();
   if (t.includes('prevent')) return 'preventive';
   if (t.includes('detect') || t.includes('monitor')) return 'detective';
   if (t.includes('correct') || t.includes('response')) return 'corrective';
   return 'preventive';
-}
+};
 
-const mapControlCategory = (category: string): string {
+const mapControlCategory = (category: string): string => {
   const cat = category.toLowerCase();
   if (cat.includes('technical') || cat.includes('system')) return 'technical';
   if (cat.includes('physical') || cat.includes('facility')) return 'physical';
   return 'administrative';
-}
+};

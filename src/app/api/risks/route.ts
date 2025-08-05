@@ -258,7 +258,7 @@ export const POST = withApiMiddleware(
   }
 );
 
-const calculateRiskLevel = (score: number): RiskLevel {
+const calculateRiskLevel = (score: number): RiskLevel => {
   if (score <= 6) return RiskLevel.LOW; // 1-6 (24% of range)
   if (score <= 12) return RiskLevel.MEDIUM; // 7-12 (24% of range)
   if (score <= 20) return RiskLevel.HIGH; // 13-20 (32% of range)

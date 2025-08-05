@@ -3,14 +3,14 @@ import { withApiMiddleware } from '@/lib/api/middleware';
 import * as XLSX from 'xlsx';
 
 // Template types
-const TEMPLATE_TYPES = ['rcsa', 'controls', 'vendor-assessment'] as const
+const TEMPLATE_TYPES = ['rcsa', 'controls', 'vendor-assessment'] as const;
 type TemplateType = (typeof TEMPLATE_TYPES)[number];
 
 // Generate template based on type
-const generateTemplate = (_type: TemplateType) {
-  const workbook = XLSX.utils.book_new()
+const generateTemplate = (_type: TemplateType) => {
+  const workbook = XLSX.utils.book_new();
 
-  switch (type) {
+  switch (_type) {
     case 'rcsa': {
       // RCSA Template
       const headers = [
@@ -33,7 +33,7 @@ const generateTemplate = (_type: TemplateType) {
         'Last Review Date',
         'Next Review Date',
         'Comments',
-      ]
+      ];
 
       const sampleData = [
         [
@@ -103,7 +103,7 @@ const generateTemplate = (_type: TemplateType) {
         { wch: 15 }, // Last Review
         { wch: 15 }, // Next Review
         { wch: 30 }, // Comments
-      ]
+      ];
 
       XLSX.utils.book_append_sheet(workbook, ws, 'RCSA Template');
 
@@ -133,7 +133,7 @@ const generateTemplate = (_type: TemplateType) {
         ['Last Review Date', 'Date of last risk assessment (YYYY-MM-DD)'],
         ['Next Review Date', 'Scheduled next review date (YYYY-MM-DD)'],
         ['Comments', 'Additional notes or action items'],
-      ]
+      ];
 
       const instructionsWs = XLSX.utils.aoa_to_sheet(instructionsData);
       instructionsWs['!cols'] = [{ wch: 25 }, { wch: 60 }];
@@ -160,7 +160,7 @@ const generateTemplate = (_type: TemplateType) {
         'Test Results',
         'Evidence Location',
         'Notes',
-      ]
+      ];
 
       const sampleData = [
         [
@@ -206,7 +206,7 @@ const generateTemplate = (_type: TemplateType) {
         'Remediation Status',
         'Contact Person',
         'Notes',
-      ]
+      ];
 
       const sampleData = [
         [
@@ -236,31 +236,31 @@ const generateTemplate = (_type: TemplateType) {
   }
 
   return workbook;
-}
+};
 
 export const GET = withApiMiddleware({
   requireAuth: true,
   rateLimiters: ['standard'],
 })(async (context, params) => {
-  const { type } = params as { type: string }
+  const { type } = params as { type: string };
 
   // Validate template type
   if (!TEMPLATE_TYPES.includes(type as TemplateType)) {
     return {
       success: false,
       error: `Invalid template type. Valid types are: ${TEMPLATE_TYPES.join(', ')}`,
-    }
+    };
   }
 
   try {
     // Generate the template
-    const workbook = generateTemplate(type as TemplateType)
+    const workbook = generateTemplate(type as TemplateType);
 
     // Convert to buffer
-    const buffer = XLSX.write(workbook, { type: 'buffer', bookType: 'xlsx' })
+    const buffer = XLSX.write(workbook, { type: 'buffer', bookType: 'xlsx' });
 
     // Create filename
-    const filename = `riscura-${type}-template-${new Date().toISOString().split('T')[0]}.xlsx`
+    const filename = `riscura-${type}-template-${new Date().toISOString().split('T')[0]}.xlsx`;
 
     // Return the file
     return new NextResponse(buffer, {
@@ -275,6 +275,6 @@ export const GET = withApiMiddleware({
     return {
       success: false,
       error: 'Failed to generate template',
-    }
+    };
   }
 });

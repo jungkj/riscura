@@ -64,19 +64,19 @@ const mockSpreadsheets = [
     ],
     _count: { sheets: 2, versions: 3 },
   },
-]
+];
 
 // GET /api/spreadsheets - List spreadsheets
 export async function GET(_request: NextRequest): Promise<NextResponse> {
   try {
-    const { searchParams } = new URL(request.url)
+    const { searchParams } = new URL(request.url);
     const page = parseInt(searchParams.get('page') || '1');
     const limit = parseInt(searchParams.get('limit') || '10');
     const templateType = searchParams.get('templateType');
     const search = searchParams.get('search');
 
     // Filter mock data based on query parameters
-    let filteredSpreadsheets = mockSpreadsheets
+    let filteredSpreadsheets = mockSpreadsheets;
 
     if (templateType) {
       filteredSpreadsheets = filteredSpreadsheets.filter((s) => s.templateType === templateType);
@@ -92,7 +92,7 @@ export async function GET(_request: NextRequest): Promise<NextResponse> {
     }
 
     // Pagination
-    const total = filteredSpreadsheets.length
+    const total = filteredSpreadsheets.length;
     const skip = (page - 1) * limit;
     const paginatedSpreadsheets = filteredSpreadsheets.slice(skip, skip + limit);
 
@@ -116,7 +116,7 @@ export async function GET(_request: NextRequest): Promise<NextResponse> {
 // POST /api/spreadsheets - Create new spreadsheet
 export async function POST(_request: NextRequest): Promise<NextResponse> {
   try {
-    const body = await request.json()
+    const body = await request.json();
     const { name, description, templateType, templateId, isTemplate = false } = body;
 
     if (!name || !templateType) {
@@ -153,7 +153,7 @@ export async function POST(_request: NextRequest): Promise<NextResponse> {
         },
       ],
       _count: { sheets: 1, versions: 1 },
-    }
+    };
 
     return NextResponse.json({
       success: true,
@@ -167,7 +167,7 @@ export async function POST(_request: NextRequest): Promise<NextResponse> {
 }
 
 // Helper function to get default columns based on template type
-const getDefaultColumns = (templateType: string) {
+const getDefaultColumns = (templateType: string) => {
   switch (templateType) {
     case 'RCSA_ASSESSMENT':
       return [
@@ -237,7 +237,7 @@ const getDefaultColumns = (templateType: string) {
           isCalculated: true,
         },
         { name: 'Comments', dataType: 'TEXT' },
-      ]
+      ];
 
     case 'RISK_REGISTER':
       return [
@@ -315,4 +315,4 @@ const getDefaultColumns = (templateType: string) {
         { name: 'Column C', dataType: 'TEXT' },
       ];
   }
-}
+};

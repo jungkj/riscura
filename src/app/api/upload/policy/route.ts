@@ -18,7 +18,7 @@ interface UploadedFile {
 }
 
 // Rate limiting function
-const checkRateLimit = (clientIP: string): boolean {
+const checkRateLimit = (clientIP: string): boolean => {
   const now = Date.now()
   const userLimit = rateLimitStore.get(clientIP);
 
