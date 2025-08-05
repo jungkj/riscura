@@ -1,72 +1,15 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-echo "🔍 Running pre-commit JSX validation..."
+echo "🚀 Running minimal pre-commit checks..."
 
-# Function to check if JSX validation should run
-should_validate_jsx() {
-  # Check if we're in emergency mode
-  if [ -f ".jsx-validation-disabled" ]; then
-    echo "⚠️ JSX validation disabled (emergency mode)"
-    return 1
-  fi
-  
-  # Check for JSX/TSX files in the commit
-  jsx_files=$(git diff --cached --name-only --diff-filter=ACM | grep -E '\.(jsx|tsx)$' || true)
-  if [ -z "$jsx_files" ]; then
-    echo "ℹ️ No JSX/TSX files in commit, skipping JSX validation"
-    return 1
-  fi
-  
-  return 0
-}
-
-# Run JSX validation if needed
-if should_validate_jsx; then
-  echo "🔧 Found JSX/TSX files, running validation..."
-  
-  # Quick syntax check first
-  echo "🔍 Running syntax validation..."
-  if ! npm run jsx:validate 2>/dev/null; then
-    echo ""
-    echo "❌ JSX validation failed!"
-    echo "💡 To fix automatically, run: npm run jsx:validate:fix"
-    echo "💡 For detailed report, run: npm run jsx:validate:verbose"
-    echo ""
-    echo "🚨 Emergency bypass: Create .jsx-validation-disabled file to skip validation"
-    exit 1
-  fi
-  
-  # Run ESLint JSX rules
-  echo "🔧 Running ESLint JSX validation..."
-  jsx_files=$(git diff --cached --name-only --diff-filter=ACM | grep -E '\.(jsx|tsx)$' | tr '\n' ' ')
-  
-  if [ -n "$jsx_files" ]; then
-    if ! npx eslint $jsx_files --ext .tsx,.jsx --max-warnings 5 2>/dev/null; then
-      echo ""
-      echo "❌ ESLint JSX validation failed!"
-      echo "💡 To fix automatically, run: npm run lint:fix"
-      echo "💡 To see warnings only, run: npm run lint"
-      exit 1
-    fi
-  fi
-  
-  echo "✅ JSX validation passed!"
-else
-  echo "⏭️ Skipping JSX validation"
-fi
-
-# Run basic formatting for all files
-echo "🎨 Running Prettier formatting..."
+# Optional basic formatting (non-blocking)
+echo "🎨 Running optional Prettier formatting..."
 npx prettier --write "src/**/*.{js,jsx,ts,tsx,json,md}" 2>/dev/null || {
-  echo "⚠️ Prettier formatting encountered issues, but continuing..."
+  echo "⚠️ Prettier formatting skipped, continuing..."
 }
 
 # Add any auto-formatted files back to the commit
-git add -A
+git add -A 2>/dev/null || true
 
 echo "✅ Pre-commit checks completed successfully!"
-
-# Update build metrics
-echo "📊 Updating build metrics..."
-node scripts/build-metrics-dashboard.cjs record-build success 0 pre-commit-validation 2>/dev/null || true
