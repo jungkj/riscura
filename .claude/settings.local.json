@@ -4,8 +4,15 @@
       "Bash(NODE_OPTIONS=\"--max-old-space-size=8192\" npx next build)",
       "Bash(HUSKY=0 git push origin main --force)",
       "Bash(mkdir:*)",
-      "WebFetch(domain:ui.aceternity.com)"
+      "WebFetch(domain:ui.aceternity.com)",
+      "Bash(git checkout:*)",
+      "Bash(npm run dev:*)",
+      "Bash(git add:*)"
     ],
     "deny": []
-  }
+  },
+  "enableAllProjectMcpServers": true,
+  "enabledMcpjsonServers": [
+    "supabase"
+  ]
 }
