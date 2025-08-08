@@ -5,7 +5,9 @@
       "Bash(HUSKY=0 git push origin main --force)",
       "Bash(mkdir:*)",
       "WebFetch(domain:ui.aceternity.com)",
-      "Bash(git cherry-pick:*)"
+      "Bash(git cherry-pick:*)",
+      "Bash(git restore:*)",
+      "Bash(rm:*)"
     ],
     "deny": []
   }
