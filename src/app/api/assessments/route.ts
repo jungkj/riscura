@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { withApiMiddleware } from '@/lib/api/middleware';
 import { db } from '@/lib/db';
+import { getDemoData, isDemoUser } from '@/lib/demo-data';
 
 export const GET = withApiMiddleware(
   async (req: NextRequest) => {
@@ -16,6 +17,18 @@ export const GET = withApiMiddleware(
         { success: false, error: 'Organization context required' },
         { status: 403 }
       );
+    }
+
+    // Check if this is a demo user
+    if (isDemoUser(user.id)) {
+      console.log('[Assessments API] Serving demo data for demo user');
+      const demoVendors = getDemoData('vendors', user.organizationId);
+      
+      return NextResponse.json({
+        success: true,
+        data: demoVendors || [],
+        demoMode: true
+      });
     }
 
     try {

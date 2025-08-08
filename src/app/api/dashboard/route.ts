@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { withApiMiddleware } from '@/lib/api/middleware';
 import { db } from '@/lib/db';
+import { getDemoData, isDemoUser } from '@/lib/demo-data';
 
 export const GET = withApiMiddleware(
   async (req: NextRequest) => {
@@ -11,6 +12,31 @@ export const GET = withApiMiddleware(
         { success: false, error: 'Organization context required' },
         { status: 403 }
       );
+    }
+
+    // Check if this is a demo user
+    if (isDemoUser(user.id)) {
+      console.log('[Dashboard API] Serving demo data for demo user');
+      const demoMetrics = getDemoData('metrics', user.organizationId);
+      const demoOrganization = getDemoData('organization', user.organizationId);
+      
+      const dashboardData = {
+        metrics: demoMetrics,
+        user: {
+          id: user.id,
+          email: user.email,
+          name: `${user.firstName} ${user.lastName}`,
+          role: user.role,
+          organization: user.organizationId
+        },
+        organization: demoOrganization,
+        demoMode: true
+      };
+
+      return NextResponse.json({
+        success: true,
+        data: dashboardData
+      });
     }
 
     try {

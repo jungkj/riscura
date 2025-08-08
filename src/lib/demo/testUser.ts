@@ -1,5 +1,7 @@
 // Test User Service for Demo/Development Environment
 import { v4 as uuidv4 } from 'uuid';
+// Import comprehensive demo data
+import { demoData } from '@/lib/demo-data';
 
 export interface TestUser {
   id: string;
@@ -168,101 +170,11 @@ export const TEST_USERS: TestUser[] = [
   },
 ];
 
-// Demo Risks Data
-export const DEMO_RISKS = [
-  {
-    id: 'risk_cyber_security',
-    title: 'Cybersecurity Threat',
-    description: 'Potential data breach due to inadequate cybersecurity measures',
-    category: 'Operational',
-    type: 'Technology',
-    severity: 'High',
-    likelihood: 'Medium',
-    impact: 'High',
-    riskScore: 85,
-    status: 'Open',
-    ownerId: 'user_manager_demo',
-    department: 'IT',
-    businessUnit: 'Technology',
-    tags: ['cybersecurity', 'data-protection', 'IT'],
-    createdAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
-    updatedAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000),
-  },
-  {
-    id: 'risk_regulatory_compliance',
-    title: 'GDPR Compliance Gap',
-    description: 'Non-compliance with GDPR data protection requirements',
-    category: 'Compliance',
-    type: 'Regulatory',
-    severity: 'Critical',
-    likelihood: 'High',
-    impact: 'Critical',
-    riskScore: 95,
-    status: 'In Progress',
-    ownerId: 'user_admin_demo',
-    department: 'Legal',
-    businessUnit: 'Compliance',
-    tags: ['gdpr', 'compliance', 'legal'],
-    createdAt: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000),
-    updatedAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000),
-  },
-  {
-    id: 'risk_financial_fraud',
-    title: 'Financial Fraud Risk',
-    description: 'Risk of financial fraud due to weak internal controls',
-    category: 'Financial',
-    type: 'Fraud',
-    severity: 'Medium',
-    likelihood: 'Low',
-    impact: 'High',
-    riskScore: 65,
-    status: 'Mitigated',
-    ownerId: 'user_analyst_demo',
-    department: 'Finance',
-    businessUnit: 'Finance',
-    tags: ['fraud', 'financial', 'controls'],
-    createdAt: new Date(Date.now() - 21 * 24 * 60 * 60 * 1000),
-    updatedAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000),
-  },
-];
+// Demo Risks Data - use comprehensive demo data
+export const DEMO_RISKS = demoData.risks;
 
-// Demo Controls Data
-export const DEMO_CONTROLS = [
-  {
-    id: 'control_access_management',
-    title: 'Access Control Management',
-    description: 'Multi-factor authentication and role-based access control',
-    category: 'Preventive',
-    type: 'Technical',
-    status: 'Implemented',
-    effectiveness: 'High',
-    ownerId: 'user_manager_demo',
-    department: 'IT',
-    tags: ['access-control', 'mfa', 'security'],
-    linkedRisks: ['risk_cyber_security'],
-    testingFrequency: 'Quarterly',
-    lastTested: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
-    nextTest: new Date(Date.now() + 60 * 24 * 60 * 60 * 1000),
-    createdAt: new Date(Date.now() - 60 * 24 * 60 * 60 * 1000),
-  },
-  {
-    id: 'control_data_encryption',
-    title: 'Data Encryption Standard',
-    description: 'End-to-end encryption for sensitive data',
-    category: 'Preventive',
-    type: 'Technical',
-    status: 'Planned',
-    effectiveness: 'Medium',
-    ownerId: 'user_admin_demo',
-    department: 'IT',
-    tags: ['encryption', 'data-protection'],
-    linkedRisks: ['risk_cyber_security', 'risk_regulatory_compliance'],
-    testingFrequency: 'Monthly',
-    lastTested: null,
-    nextTest: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
-    createdAt: new Date(Date.now() - 45 * 24 * 60 * 60 * 1000),
-  },
-];
+// Demo Controls Data - use comprehensive demo data
+export const DEMO_CONTROLS = demoData.controls;
 
 // Demo Documents Data
 export const DEMO_DOCUMENTS = [
@@ -298,52 +210,8 @@ export const DEMO_DOCUMENTS = [
   },
 ];
 
-// Dashboard Metrics
-export const DEMO_DASHBOARD_METRICS = {
-  riskSummary: {
-    total: 25,
-    critical: 3,
-    high: 8,
-    medium: 10,
-    low: 4,
-    trend: '+2 this month',
-  },
-  controlsSummary: {
-    total: 45,
-    implemented: 32,
-    planned: 8,
-    testing: 5,
-    effectiveness: 87, // percentage
-  },
-  complianceScore: {
-    overall: 92,
-    frameworks: {
-      'ISO 27001': 95,
-      'GDPR': 88,
-      'SOX': 94,
-    },
-  },
-  recentActivity: [
-    {
-      type: 'Risk Updated',
-      description: 'Cybersecurity Threat risk severity updated to High',
-      timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000),
-      user: 'Maria Manager',
-    },
-    {
-      type: 'Control Tested',
-      description: 'Access Control Management testing completed',
-      timestamp: new Date(Date.now() - 6 * 60 * 60 * 1000),
-      user: 'John Analyst',
-    },
-    {
-      type: 'Document Approved',
-      description: 'Enterprise Risk Management Policy approved',
-      timestamp: new Date(Date.now() - 24 * 60 * 60 * 1000),
-      user: 'Alex Administrator',
-    },
-  ],
-};
+// Dashboard Metrics - use comprehensive demo data
+export const DEMO_DASHBOARD_METRICS = demoData.metrics;
 
 // Main function to get complete demo data
 export function getDemoData(): DemoData {
