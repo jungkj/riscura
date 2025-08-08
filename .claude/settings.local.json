@@ -7,7 +7,13 @@
       "WebFetch(domain:ui.aceternity.com)",
       "Bash(git cherry-pick:*)",
       "Bash(git restore:*)",
-      "Bash(rm:*)"
+      "Bash(rm:*)",
+      "Bash(npm run dev:check:*)",
+      "Bash(git rebase:*)",
+      "Bash(git stash:*)",
+      "Bash(git add:*)",
+      "Bash(git log:*)",
+      "Bash(git commit:*)"
     ],
     "deny": []
   }

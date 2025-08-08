@@ -251,7 +251,36 @@ export function requirePermission(...permissions: string[]) {
 }
 
 export function getAuthenticatedUser(req: AuthenticatedRequest): AuthenticatedUser | null {
-  return req.user || null;
+  // Check for existing user in request (from session auth)
+  if (req.user) {
+    return req.user;
+  }
+
+  // Check for demo user cookie
+  const demoUserCookie = req.cookies.get('demo-user');
+  if (demoUserCookie) {
+    try {
+      const demoUser = JSON.parse(demoUserCookie.value);
+      // Validate demo user structure
+      if (demoUser.id && demoUser.email && demoUser.role && demoUser.permissions) {
+        return {
+          id: demoUser.id,
+          email: demoUser.email,
+          firstName: demoUser.firstName || 'Demo',
+          lastName: demoUser.lastName || 'User', 
+          role: demoUser.role,
+          organizationId: 'demo-org-id',
+          permissions: demoUser.permissions,
+          isActive: true,
+          avatar: demoUser.avatar
+        };
+      }
+    } catch (error) {
+      console.warn('Failed to parse demo user cookie:', error);
+    }
+  }
+
+  return null;
 }
 
 export function hasPermission(user: AuthenticatedUser, permission: string): boolean {
