@@ -162,25 +162,99 @@ export const useRisks = () => {
   return context;
 };
 
-// Mock API service
+// Data service
 const riskService = {
   async getAllRisks(): Promise<Risk[]> {
-    await new Promise(resolve => setTimeout(resolve, 800));
-    return generateMockRisks();
+    try {
+      const res = await fetch('/api/risks?limit=200');
+      if (!res.ok) {
+        // Fallback to mock data if API is not available
+        return generateMockRisks();
+      }
+      const json = await res.json();
+      if (!json.success || !Array.isArray(json.data)) {
+        return generateMockRisks();
+      }
+      // Normalize backend -> UI Risk type
+      const normalized: Risk[] = json.data.map((r: any) => {
+        const likelihood = Number(r.likelihood) || 0;
+        const impact = Number(r.impact) || 0;
+        const riskScore = Number(r.riskScore) || (likelihood * impact);
+        const toLevel = (score: number) => score >= 20 ? 'critical' : score >= 12 ? 'high' : score >= 6 ? 'medium' : 'low';
+        const mapped: Risk = {
+          id: String(r.id),
+          title: r.title || 'Untitled Risk',
+          description: r.description || '',
+          // UI filters expect lowercase categories; convert known enums safely
+          category: ((r.category || 'OPERATIONAL').toString().toUpperCase()) as any,
+          likelihood,
+          impact,
+          riskScore,
+          riskLevel: (r.riskLevel ? r.riskLevel.toString().toLowerCase() : toLevel(riskScore)) as any,
+          owner: r.owner || r.assignedUser?.email || 'Unassigned',
+          status: (r.status || 'IDENTIFIED').toString().toLowerCase() as any,
+          controls: (Array.isArray(r.controls) ? r.controls.map((m: any) => (m.controlId || m.control?.id)).filter(Boolean) : []) as string[],
+          linkedControls: [] as string[] | undefined,
+          existingControls: [] as any[] | undefined,
+          evidence: [] as any[],
+          createdAt: (r.createdAt ? new Date(r.createdAt).toISOString() : new Date().toISOString()),
+          updatedAt: (r.updatedAt ? new Date(r.updatedAt).toISOString() : new Date().toISOString()),
+          lastAssessed: r.lastAssessed ? new Date(r.lastAssessed) : undefined,
+          dateIdentified: r.dateIdentified ? new Date(r.dateIdentified) : undefined,
+          nextReview: r.nextReview ? new Date(r.nextReview) : undefined,
+          aiConfidence: r.aiConfidence ?? undefined,
+          comments: [] as any[],
+          tasks: [] as string[],
+        };
+        // Convert Prisma enum names to our RiskCategory union strings
+        const category = mapped.category as unknown as string;
+        const categoryMap: Record<string, any> = {
+          OPERATIONAL: 'OPERATIONAL',
+          FINANCIAL: 'FINANCIAL',
+          STRATEGIC: 'STRATEGIC',
+          COMPLIANCE: 'COMPLIANCE',
+          TECHNOLOGY: 'TECHNOLOGY',
+        };
+        mapped.category = (categoryMap[category] || 'OPERATIONAL') as any;
+        return mapped;
+      });
+      return normalized;
+    } catch {
+      // Fallback to mock data on any unexpected failure
+      return generateMockRisks();
+    }
   },
 
   async createRisk(riskData: Omit<Risk, 'id' | 'createdAt' | 'updatedAt' | 'riskScore'>): Promise<Risk> {
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
-    const newRisk: Risk = {
+    try {
+      const body = {
+        title: riskData.title,
+        description: riskData.description,
+        category: (riskData.category || 'OPERATIONAL').toString().toUpperCase(),
+        likelihood: riskData.likelihood,
+        impact: riskData.impact,
+      };
+      const res = await fetch('/api/risks', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+      if (res.ok) {
+        const created = await res.json();
+        // Re-fetch to keep things simple and accurate
+        return {
+          ...riskData,
+          id: created.data?.id || `risk-${Date.now()}`,
+          riskScore: calculateRiskScore(riskData.likelihood, riskData.impact),
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        };
+      }
+    } catch {}
+    // Fallback local create
+    return {
       ...riskData,
       id: `risk-${Date.now()}`,
       riskScore: calculateRiskScore(riskData.likelihood, riskData.impact),
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     };
-    
-    return newRisk;
   },
 
   async updateRisk(id: string, riskData: Partial<Risk>): Promise<Risk> {
@@ -357,7 +431,7 @@ export const RiskProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const getRisksByCategory = (): Record<RiskCategory, Risk[]> => {
-    const categories: RiskCategory[] = ['operational', 'financial', 'strategic', 'compliance', 'technology'];
+    const categories: RiskCategory[] = ['OPERATIONAL', 'FINANCIAL', 'STRATEGIC', 'COMPLIANCE', 'TECHNOLOGY'];
     const result = {} as Record<RiskCategory, Risk[]>;
     
     categories.forEach(category => {

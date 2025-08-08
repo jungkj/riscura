@@ -5,12 +5,20 @@ import { complianceService } from '@/services/ComplianceService';
 import { ApiResponseFormatter } from '@/lib/api/response-formatter';
 import { z } from 'zod';
 import { AssessmentStatus } from '@prisma/client';
+import { getDemoData, isDemoUser } from '@/lib/demo-data';
 
 // GET /api/compliance/assessments - Get assessments
 export const GET = withApiMiddleware(async (req: NextRequest) => {
   const user = (req as any).user;
   if (!user) {
     return ApiResponseFormatter.authError('User not authenticated');
+  }
+
+  // Check if this is a demo user
+  if (isDemoUser(user.id)) {
+    console.log('[Compliance API] Serving demo compliance data');
+    const demoCompliance = getDemoData('compliance', user.organizationId);
+    return ApiResponseFormatter.success(demoCompliance || []);
   }
 
   const searchParams = req.nextUrl.searchParams;

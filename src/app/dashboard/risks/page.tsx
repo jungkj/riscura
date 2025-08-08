@@ -3,6 +3,7 @@
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
 import { MainContentArea } from '@/components/layout/MainContentArea';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { RiskListView } from '@/components/risks/RiskListView';
 
 export default function RisksPage() {
   return (
@@ -20,7 +21,7 @@ export default function RisksPage() {
             <CardTitle>Risk Registry</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-gray-500">Risk management interface coming soon...</p>
+            <RiskListView />
           </CardContent>
         </Card>
       </MainContentArea>

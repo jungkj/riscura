@@ -182,11 +182,27 @@ export default function DashboardPage() {
             if (controlsRes.ok) {
               const ctrlData = await controlsRes.json();
               if (ctrlData.success && ctrlData.data) {
-                setControlsData(ctrlData.data.map((item: any) => ({
-                  ...item,
-                  type: item.type?.toLowerCase() || 'preventive',
-                  effectiveness: item.effectiveness?.toLowerCase() || 'medium'
-                })));
+                setControlsData(
+                  ctrlData.data.map((item: any) => {
+                    const normalizedType = typeof item.type === 'string'
+                      ? item.type.toLowerCase()
+                      : item.type;
+                    let normalizedEffectiveness: string;
+                    if (typeof item.effectiveness === 'number') {
+                      const score = item.effectiveness;
+                      normalizedEffectiveness = score >= 85 ? 'high' : score >= 60 ? 'medium' : 'low';
+                    } else if (typeof item.effectiveness === 'string') {
+                      normalizedEffectiveness = item.effectiveness.toLowerCase();
+                    } else {
+                      normalizedEffectiveness = 'medium';
+                    }
+                    return {
+                      ...item,
+                      type: normalizedType || 'preventive',
+                      effectiveness: normalizedEffectiveness
+                    };
+                  })
+                );
               }
             }
             

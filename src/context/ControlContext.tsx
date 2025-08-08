@@ -216,11 +216,46 @@ export const useControls = () => {
   return context;
 };
 
-// Mock API service
+// Data service
 const controlService = {
   async getAllControls(): Promise<Control[]> {
-    await new Promise(resolve => setTimeout(resolve, 800));
-    return generateMockControls();
+    try {
+      const res = await fetch('/api/controls?limit=200');
+      if (!res.ok) {
+        return generateMockControls();
+      }
+      const json = await res.json();
+      if (!json.success || !Array.isArray(json.data)) {
+        return generateMockControls();
+      }
+      // Normalize API control -> UI Control
+      const normalized: Control[] = json.data.map((c: any) => {
+        const score = typeof c.effectiveness === 'number' ? c.effectiveness : 0;
+        const effectivenessStr = typeof c.effectiveness === 'string' ? c.effectiveness.toLowerCase() : (score >= 85 ? 'high' : score >= 60 ? 'medium' : 'low');
+        const mapped: Control = {
+          id: String(c.id),
+          title: c.title || c.name || 'Untitled Control',
+          description: c.description || '',
+          type: (c.type || 'PREVENTIVE').toString().toLowerCase(),
+          effectiveness: effectivenessStr as any,
+          owner: c.owner || c.assignedUser?.email || 'Unassigned',
+          frequency: c.frequency || 'MONTHLY',
+          evidence: [] as any[],
+          linkedRisks: (Array.isArray(c.risks) ? c.risks.map((m: any) => m.riskId || m.risk?.id).filter(Boolean) : []) as string[],
+          status: (c.status || 'ACTIVE').toString().toLowerCase() as any,
+          lastTestDate: c.lastTestDate ? new Date(c.lastTestDate).toISOString() : undefined,
+          nextTestDate: c.nextTestDate ? new Date(c.nextTestDate).toISOString() : undefined,
+          createdAt: (c.createdAt ? new Date(c.createdAt).toISOString() : new Date().toISOString()),
+          updatedAt: (c.updatedAt ? new Date(c.updatedAt).toISOString() : new Date().toISOString()),
+          comments: [] as any[],
+          tasks: [] as string[],
+        };
+        return mapped;
+      });
+      return normalized;
+    } catch {
+      return generateMockControls();
+    }
   },
 
   async createControl(controlData: Omit<Control, 'id' | 'createdAt' | 'updatedAt'>): Promise<Control> {
@@ -269,13 +304,13 @@ export const ControlProvider: React.FC<{ children: React.ReactNode }> = ({ child
         dispatch({ type: 'SET_CONTROLS', payload: controls });
         
         // Generate mock control-risk mappings
-        const mockMappings: ControlRiskMapping[] = controls.slice(0, 5).map((control, index) => ({
+        const mockMappings: ControlRiskMapping[] = controls.slice(0, 5).map((control, index): ControlRiskMapping => ({
           controlId: control.id,
           riskId: `risk-${index + 1}`,
           effectivenessRating: 3 + Math.floor(Math.random() * 3), // 3-5 rating
           lastTested: new Date(Date.now() - Math.random() * 90 * 24 * 60 * 60 * 1000).toISOString(),
           nextTestDue: new Date(Date.now() + Math.random() * 90 * 24 * 60 * 60 * 1000).toISOString(),
-          evidence: [],
+          evidence: [] as any[],
           mitigationImpact: 0.2 + Math.random() * 0.6, // 20-80% impact
         }));
         
@@ -521,13 +556,13 @@ export const ControlProvider: React.FC<{ children: React.ReactNode }> = ({ child
     if (!template) throw new Error('Template not found');
     
     // Create control from template with customizations
-    const controlData = { 
+    const controlData: Partial<Control> = { 
       ...template, 
       ...customizations,
       // Remove id, createdAt, updatedAt as they'll be generated
-      id: undefined,
-      createdAt: undefined,
-      updatedAt: undefined
+      id: undefined as unknown as string,
+      createdAt: undefined as unknown as string,
+      updatedAt: undefined as unknown as string
     };
     
     // Remove undefined properties

@@ -1,0 +1,29 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(NODE_OPTIONS=\"--max-old-space-size=8192\" npx next build)",
+      "Bash(HUSKY=0 git push origin main --force)",
+      "Bash(mkdir:*)",
+      "WebFetch(domain:ui.aceternity.com)",
+      "Bash(git cherry-pick:*)",
+      "Bash(git restore:*)",
+      "Bash(rm:*)",
+      "Bash(npm run dev:check:*)",
+      "Bash(git rebase:*)",
+      "Bash(git stash:*)",
+      "Bash(git add:*)",
+      "Bash(git log:*)",
+      "Bash(git commit:*)",
+      "Bash(FILTER_BRANCH_SQUELCH_WARNING=1 git filter-branch -f --msg-filter '\nsed \"\"\ns/Demo credentials: admin@riscura\\.com \\/ admin123/Demo credentials available in documentation/g\ns/admin@riscura\\.com \\/ admin123/demo credentials/g  \ns/admin@riscura\\.com/\\[demo_user\\]/g\ns/admin123/\\[demo_pass\\]/g\ns/🤖 Generated with \\[Claude Code\\](https:\\/\\/claude\\.ai\\/code)//g\ns/Co-Authored-By: Claude <noreply@anthropic\\.com>//g\n/^[[:space:]]*$/d\n\"\"' -- --all)",
+      "Bash(git rm:*)",
+      "Bash(FILTER_BRANCH_SQUELCH_WARNING=1 git filter-branch -f --msg-filter '\nsed \"\"\ns/Demo credentials: admin@riscura\\.com \\/ admin123/Demo credentials available in documentation/g\ns/admin@riscura\\.com \\/ admin123/demo credentials/g  \ns/admin@riscura\\.com/\\[demo_user\\]/g\ns/admin123/\\[demo_pass\\]/g\ns/🤖 Generated with \\[Claude Code\\](https:\\/\\/claude\\.ai\\/code)//g\ns/Co-Authored-By: Claude <noreply@anthropic\\.com>//g\n/^[[:space:]]*$/d\n\"\"' -- --all)",
+      "Bash(FILTER_BRANCH_SQUELCH_WARNING=1 git filter-branch -f --msg-filter 'sed \"\"s/Demo credentials: admin@riscura\\.com \\/ admin123/Demo credentials available in documentation/g; s/admin@riscura\\.com \\/ admin123/demo credentials/g; s/admin@riscura\\.com/[demo_user]/g; s/admin123/[demo_pass]/g; s/🤖 Generated with \\[Claude Code\\](https:\\/\\/claude\\.ai\\/code)//g; s/Co-Authored-By: Claude <noreply@anthropic\\.com>//g; /^[[:space:]]*$/d\"\"' HEAD~10..HEAD)",
+      "Bash(FILTER_BRANCH_SQUELCH_WARNING=1 git filter-branch -f --msg-filter 'sed \"\"s/Demo credentials: admin@riscura\\.com \\/ admin123/Demo credentials available in documentation/g; s/admin@riscura\\.com \\/ admin123/demo credentials/g; s/admin@riscura\\.com/[demo_user]/g; s/admin123/[demo_pass]/g; s/🤖 Generated with \\[Claude Code\\](https:\\/\\/claude\\.ai\\/code)//g; s/Co-Authored-By: Claude <noreply@anthropic\\.com>//g; /^[[:space:]]*$/d\"\"' HEAD~50..HEAD~10)",
+      "Bash(FILTER_BRANCH_SQUELCH_WARNING=1 git filter-branch -f --msg-filter 'sed \"\"s/Demo credentials: admin@riscura\\.com \\/ admin123/Demo credentials available in documentation/g; s/admin@riscura\\.com \\/ admin123/demo credentials/g; s/admin@riscura\\.com/[demo_user]/g; s/admin123/[demo_pass]/g; s/🤖 Generated with \\[Claude Code\\](https:\\/\\/claude\\.ai\\/code)//g; s/Co-Authored-By: Claude <noreply@anthropic\\.com>//g; /^[[:space:]]*$/d\"\"' HEAD~100..HEAD~10)",
+      "Bash(FILTER_BRANCH_SQUELCH_WARNING=1 git filter-branch -f --msg-filter 'sed \"\"s/Demo credentials: admin@riscura\\.com \\/ admin123/Demo credentials available in documentation/g; s/admin@riscura\\.com \\/ admin123/demo credentials/g; s/admin@riscura\\.com/[demo_user]/g; s/admin123/[demo_pass]/g; s/🤖 Generated with \\[Claude Code\\](https:\\/\\/claude\\.ai\\/code)//g; s/Co-Authored-By: Claude <noreply@anthropic\\.com>//g; /^[[:space:]]*$/d\"\"' main)",
+      "Bash(FILTER_BRANCH_SQUELCH_WARNING=1 git filter-branch -f --msg-filter 'sed \"\"s/Demo credentials: admin@riscura\\.com \\/ admin123/Demo credentials available in documentation/g; s/admin@riscura\\.com \\/ admin123/demo credentials/g; s/admin@riscura\\.com/[demo_user]/g; s/admin123/[demo_pass]/g; s/🤖 Generated with \\[Claude Code\\](https:\\/\\/claude\\.ai\\/code)//g; s/Co-Authored-By: Claude <noreply@anthropic\\.com>//g; /^[[:space:]]*$/d\"\"' -- --all)",
+      "Bash(git push:*)"
+    ],
+    "deny": []
+  }
+}

@@ -270,11 +270,11 @@ export const RiskListView: React.FC<RiskListViewProps> = ({
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="">All Categories</SelectItem>
-                  <SelectItem value="operational">Operational</SelectItem>
-                  <SelectItem value="financial">Financial</SelectItem>
-                  <SelectItem value="strategic">Strategic</SelectItem>
-                  <SelectItem value="compliance">Compliance</SelectItem>
-                  <SelectItem value="technology">Technology</SelectItem>
+                  <SelectItem value="OPERATIONAL">Operational</SelectItem>
+                  <SelectItem value="FINANCIAL">Financial</SelectItem>
+                  <SelectItem value="STRATEGIC">Strategic</SelectItem>
+                  <SelectItem value="COMPLIANCE">Compliance</SelectItem>
+                  <SelectItem value="TECHNOLOGY">Technology</SelectItem>
                 </SelectContent>
               </Select>
 

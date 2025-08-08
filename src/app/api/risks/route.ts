@@ -19,6 +19,16 @@ export const GET = withApiMiddleware(
   async (req: NextRequest) => {
     const user = (req as any).user;
     
+    console.log('[Risks API] User object received:', {
+      user: user ? {
+        id: user.id,
+        email: user.email,
+        organizationId: user.organizationId,
+        role: user.role
+      } : null,
+      isDemoUserResult: user ? isDemoUser(user.id) : false
+    });
+    
     if (!user || !user.organizationId) {
       console.warn('[Risks API] Missing user or organizationId', { user });
       return NextResponse.json(
