@@ -38,7 +38,7 @@ export const GET = withApiMiddleware(
     }
 
     // Check if this is a demo user
-    if (isDemoUser(user.id)) {
+    if (isDemoUser(user.id) || user.organizationId === 'demo-org-id') {
       console.log('[Risks API] Serving demo data for demo user');
       const demoRisks = getDemoData('risks', user.organizationId);
       

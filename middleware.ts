@@ -91,7 +91,10 @@ export async function middleware(request: NextRequest) {
     pathname.startsWith('/api/test') ||
     pathname.startsWith('/api/google-oauth/') ||
     pathname.startsWith('/sw.js') ||
-    pathname === '/manifest.json'
+    pathname === '/manifest.json' ||
+    pathname.startsWith('/api/auth/login') ||
+    pathname.startsWith('/api/auth/refresh') ||
+    pathname.startsWith('/api/auth/session')
   ) {
     return NextResponse.next();
   }
@@ -154,6 +157,7 @@ export async function middleware(request: NextRequest) {
       const nextAuthToken = request.cookies.get('next-auth.session-token')?.value || 
                            request.cookies.get('__Secure-next-auth.session-token')?.value;
       const oauthToken = request.cookies.get('session-token')?.value;
+      const demoUserCookie = request.cookies.get('demo-user')?.value;
       
       console.log(`[Middleware] Auth check for ${pathname}:`, {
         hasNextAuthToken: !!nextAuthToken,
@@ -162,7 +166,7 @@ export async function middleware(request: NextRequest) {
       });
       
       // If no tokens found, redirect to login
-      if (!nextAuthToken && !oauthToken) {
+      if (!nextAuthToken && !oauthToken && !demoUserCookie) {
         console.log(`[Middleware] No valid session found, redirecting to login`);
         const url = request.nextUrl.clone();
         url.pathname = '/auth/login';

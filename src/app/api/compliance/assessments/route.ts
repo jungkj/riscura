@@ -15,7 +15,7 @@ export const GET = withApiMiddleware(async (req: NextRequest) => {
   }
 
   // Check if this is a demo user
-  if (isDemoUser(user.id)) {
+  if (isDemoUser(user.id) || user.organizationId === 'demo-org-id') {
     console.log('[Compliance API] Serving demo compliance data');
     const demoCompliance = getDemoData('compliance', user.organizationId);
     return ApiResponseFormatter.success(demoCompliance || []);

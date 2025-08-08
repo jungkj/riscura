@@ -652,6 +652,9 @@ export function withAPI(
             throw new AuthenticationError();
           }
 
+          // Attach authenticated user to request for downstream handlers
+          (req as any).user = user;
+
           // Permission checking
           if (options.requiredPermissions && options.requiredPermissions.length > 0) {
             const hasPermission = options.requiredPermissions.some(permission => 

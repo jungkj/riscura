@@ -39,7 +39,7 @@ export const GET = withApiMiddleware(
     }
 
     // Check if this is a demo user
-    if (isDemoUser(user.id)) {
+    if (isDemoUser(user.id) || user.organizationId === 'demo-org-id') {
       console.log('[Controls API] Serving demo data for demo user');
       const demoControls = getDemoData('controls', user.organizationId) as any[] | null;
       

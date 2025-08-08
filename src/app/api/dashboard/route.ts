@@ -26,7 +26,7 @@ export const GET = withApiMiddleware(
     }
 
     // Check if this is a demo user
-    if (isDemoUser(user.id)) {
+    if (isDemoUser(user.id) || user.organizationId === 'demo-org-id') {
       console.log('[Dashboard API] Serving demo data for demo user');
       const demoMetrics = getDemoData('metrics', user.organizationId);
       const demoOrganization = getDemoData('organization', user.organizationId);
