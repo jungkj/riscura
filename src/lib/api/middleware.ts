@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { z, ZodError } from 'zod';
 import { withAuth, rateLimit, type AuthenticatedRequest } from '@/lib/auth/middleware';
-import { db } from '@/lib/db';
+import { isDatabaseAvailable } from '@/lib/db';
 import { env } from '@/config/env';
 import { unstable_getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/auth/auth-options';
@@ -424,6 +424,17 @@ async function enforceSubscriptionLimits(
   organizationId: string,
   subscriptionOptions: NonNullable<MiddlewareOptions['subscription']>
 ): Promise<void> {
+  // Skip subscription checks for demo organization
+  if (organizationId === 'demo-org-id') {
+    return; // Demo has unlimited access
+  }
+
+  // Check if database is available for subscription checks
+  if (!isDatabaseAvailable()) {
+    console.warn('Database not available for subscription checks, skipping');
+    return;
+  }
+
   // Check if organization has an active subscription
   if (subscriptionOptions.requireActive) {
     const subscription = await billingManager.getActiveSubscription(organizationId);
@@ -503,6 +514,19 @@ async function enforceSubscriptionLimits(
 }
 
 async function getCurrentUsage(organizationId: string, limitType: string): Promise<number> {
+  // Skip for demo organization
+  if (organizationId === 'demo-org-id') {
+    return 0; // Demo has unlimited usage
+  }
+
+  // Check if database is available
+  if (!isDatabaseAvailable()) {
+    return 0; // Cannot check usage without database
+  }
+
+  // Dynamically import db to avoid initialization errors
+  const { db } = await import('@/lib/db');
+
   // This is a simplified implementation. In production, you'd have more sophisticated usage tracking
   switch (limitType) {
     case 'users':

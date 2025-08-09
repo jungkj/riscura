@@ -22,7 +22,7 @@ interface DatabaseConfig {
 }
 
 // Get database configuration from environment
-function getDatabaseConfig(): DatabaseConfig {
+function getDatabaseConfig(): DatabaseConfig | null {
   // Skip database configuration on client side
   if (typeof window !== 'undefined') {
     throw new Error('Database operations are not available on the client side');
@@ -111,16 +111,19 @@ function getDatabaseConfig(): DatabaseConfig {
   
   // Validate required environment variables
   if (!databaseUrl) {
+    // In development, allow missing DATABASE_URL for demo mode
+    if (process.env.NODE_ENV !== 'production') {
+      console.warn('⚠️  DATABASE_URL not set - database operations will be unavailable');
+      console.warn('   Demo mode will be used for demo account (admin@riscura.com)');
+      return null;
+    }
+    
+    // In production, DATABASE_URL is required
     console.error('❌ DATABASE_URL environment variable is missing');
     console.error('Checked: DATABASE_URL =', process.env.DATABASE_URL, 'database_url =', process.env.database_url);
     throw new Error(
-      'DATABASE_URL environment variable is required. Please set it in your .env file.\n' +
-      'Example: DATABASE_URL="postgresql://username:password@localhost:5432/riscura"\n' +
-      '\nTo fix this:\n' +
-      '1. Copy .env.example to .env\n' +
-      '2. Set your DATABASE_URL in the .env file\n' +
-      '3. Ensure PostgreSQL is running\n' +
-      '4. Run: tsx scripts/init-database.ts'
+      'DATABASE_URL environment variable is required in production.\n' +
+      'Example: DATABASE_URL="postgresql://username:password@localhost:5432/riscura"'
     );
   }
 
@@ -161,8 +164,13 @@ function getLogConfig(): ('query' | 'info' | 'warn' | 'error')[] {
 }
 
 // Create Prisma client with proper configuration
-function createPrismaClient(): PrismaClient {
+function createPrismaClient(): PrismaClient | null {
   const config = getDatabaseConfig();
+  
+  // If no config (DATABASE_URL missing in dev), return null
+  if (!config) {
+    return null;
+  }
   
   console.log('🔗 Initializing database connection...');
   console.log(`📊 Connection pool: ${config.minConnections}-${config.maxConnections}`);
@@ -226,19 +234,32 @@ async function withRetry<T>(
 }
 
 // Global Prisma instance (singleton pattern)
-let prisma: PrismaClient | undefined;
+let prisma: PrismaClient | null | undefined;
+let databaseAvailable: boolean | undefined;
 
-function getPrismaClient(): PrismaClient {
+// Check if database is available
+export function isDatabaseAvailable(): boolean {
+  if (databaseAvailable !== undefined) {
+    return databaseAvailable;
+  }
+  
+  // Check if we can get a config
+  const config = getDatabaseConfig();
+  databaseAvailable = config !== null;
+  return databaseAvailable;
+}
+
+function getPrismaClient(): PrismaClient | null {
   // Prevent client-side initialization
   if (typeof window !== 'undefined') {
     throw new Error('Prisma client cannot be initialized on the client side');
   }
 
-  if (!prisma) {
+  if (prisma === undefined) {
     prisma = createPrismaClient();
     
     // Log slow queries in development
-    if (process.env.NODE_ENV === 'development') {
+    if (process.env.NODE_ENV === 'development' && prisma) {
       // Set up basic logging without event handlers for now
       console.log('🔧 Database client initialized in development mode');
     }
@@ -253,8 +274,12 @@ function getSafePrismaClient(): PrismaClient {
     throw new Error('Database operations are not available on the client side');
   }
   
-  if (!prisma) {
+  if (prisma === undefined) {
     prisma = getPrismaClient();
+  }
+  
+  if (!prisma) {
+    throw new Error('Database is not available. Please set DATABASE_URL environment variable.');
   }
   
   return prisma;
@@ -262,14 +287,13 @@ function getSafePrismaClient(): PrismaClient {
 
 // Development hot reloading support (server-side only)
 // Skip initialization during build time
+// DO NOT initialize eagerly - let getPrismaClient() handle it lazily
 if (typeof window === 'undefined' && process.env.BUILDING !== 'true' && process.env.NEXT_PHASE !== 'phase-production-build') {
+  // Only set up global reference in development for hot reloading
+  // But don't actually initialize Prisma yet
   if (process.env.NODE_ENV !== 'production') {
-    if (!globalThis.prisma) {
-      globalThis.prisma = getPrismaClient();
-    }
-    prisma = globalThis.prisma;
-  } else {
-    prisma = getPrismaClient();
+    // Just mark that we've set up the global reference
+    // Actual initialization happens lazily on first use
   }
 }
 
@@ -380,11 +404,17 @@ export async function disconnectDatabase(): Promise<void> {
 
 // Connect to database with retry logic
 export async function connectDatabase(): Promise<void> {
+  if (!isDatabaseAvailable()) {
+    console.warn('⚠️ Database not available, skipping connection');
+    return;
+  }
+  
   try {
     console.log('🔗 Connecting to database...');
     
+    const client = getSafePrismaClient();
     await withRetry(async () => {
-      await prisma.$connect();
+      await client.$connect();
     }, 3, 1000, 'database connection');
     
     console.log('✅ Database connected successfully');
@@ -408,10 +438,15 @@ export async function withTransaction<T>(
     timeout?: number;
   } = {}
 ): Promise<T> {
+  if (!isDatabaseAvailable()) {
+    throw new Error('Database is not available for transactions');
+  }
+  
   const { maxAttempts = 3, timeout = 30000 } = options;
+  const client = getSafePrismaClient();
   
   return withRetry(async () => {
-    return await prisma.$transaction(fn, {
+    return await client.$transaction(fn, {
       timeout,
     });
   }, maxAttempts, 1000, 'database transaction');
@@ -507,6 +542,9 @@ export function buildSearchQuery(
 export const db = {
   // Core Prisma client
   get client() {
+    if (!isDatabaseAvailable()) {
+      throw new Error('Database is not available. Please set DATABASE_URL environment variable.');
+    }
     return getSafePrismaClient();
   },
   
@@ -531,21 +569,34 @@ export const db = {
   
   // Raw query execution with retry
   raw: async (query: TemplateStringsArray, ...values: any[]) => {
+    if (!isDatabaseAvailable()) {
+      throw new Error('Database is not available for raw queries');
+    }
     return withRetry(async () => {
-      return await prisma.$queryRaw(query, ...values);
+      const client = getSafePrismaClient();
+      return await client.$queryRaw(query, ...values);
     }, 2, 500, 'raw query');
   },
   
   rawUnsafe: async (query: string, ...values: any[]) => {
+    if (!isDatabaseAvailable()) {
+      throw new Error('Database is not available for raw queries');
+    }
     return withRetry(async () => {
-      return await prisma.$queryRawUnsafe(query, ...values);
+      const client = getSafePrismaClient();
+      return await client.$queryRawUnsafe(query, ...values);
     }, 2, 500, 'raw unsafe query');
   },
 };
 
 // Export the Prisma client as default and named export
 // Use lazy getter to avoid initialization during build
-const getPrismaClientLazy = () => getSafePrismaClient();
+const getPrismaClientLazy = () => {
+  if (!isDatabaseAvailable()) {
+    throw new Error('Database is not available. Please set DATABASE_URL environment variable.');
+  }
+  return getSafePrismaClient();
+};
 
 // Create a proxy that lazily initializes Prisma when accessed
 const prismaProxy = new Proxy({} as PrismaClient, {

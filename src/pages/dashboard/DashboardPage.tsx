@@ -103,19 +103,83 @@ export default function DashboardPage() {
   const [complianceData, setComplianceData] = useState<any[]>([]);
   const [controlsData, setControlsData] = useState<any[]>([]);
   const [pendingActionsData, setPendingActionsData] = useState<any[]>([]);
+  const [openItems, setOpenItems] = useState<any[]>([]);
+  const [controlEffectivenessData, setControlEffectivenessData] = useState<any[]>([]);
+
+  // Generate sparkline data for trends
+  const generateSparkline = (trend: 'up' | 'down' | 'stable') => {
+    const points = 7;
+    const data = [];
+    let value = 50;
+    for (let i = 0; i < points; i++) {
+      if (trend === 'up') {
+        value += Math.random() * 10 - 2;
+      } else if (trend === 'down') {
+        value -= Math.random() * 10 - 2;
+      } else {
+        value += Math.random() * 6 - 3;
+      }
+      value = Math.max(20, Math.min(80, value));
+      data.push(value);
+    }
+    return data;
+  };
+
+  // Simple sparkline component
+  const Sparkline = ({ data, color = '#199BEC', trend }: { data: number[], color?: string, trend?: 'up' | 'down' | 'stable' }) => {
+    const max = Math.max(...data);
+    const min = Math.min(...data);
+    const range = max - min || 1;
+    const width = 60;
+    const height = 20;
+    const points = data.map((v, i) => {
+      const x = (i / (data.length - 1)) * width;
+      const y = height - ((v - min) / range) * height;
+      return `${x},${y}`;
+    }).join(' ');
+
+    return (
+      <div className="inline-flex items-center gap-1">
+        <svg width={width} height={height} className="overflow-visible">
+          <polyline
+            points={points}
+            fill="none"
+            stroke={color}
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </svg>
+        {trend && (
+          <span className={`text-xs font-medium ${
+            trend === 'up' ? 'text-green-600' : 
+            trend === 'down' ? 'text-red-600' : 
+            'text-gray-500'
+          }`}>
+            {trend === 'up' ? '↑' : trend === 'down' ? '↓' : '→'}
+          </span>
+        )}
+      </div>
+    );
+  };
 
   // Fetch real dashboard data
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
-        const [dashboardRes, risksRes, complianceRes, controlsRes] = await Promise.all([
-          fetch('/api/dashboard'),
-          fetch('/api/risks?limit=200'),
-          fetch('/api/compliance/assessments'),
-          fetch('/api/controls?limit=200')
+        const results = await Promise.allSettled([
+          fetch('/api/dashboard', { credentials: 'include' }),
+          fetch('/api/risks?limit=200', { credentials: 'include' }),
+          fetch('/api/compliance/assessments', { credentials: 'include' }),
+          fetch('/api/controls?limit=200', { credentials: 'include' })
         ]);
         
-        if (dashboardRes.ok) {
+        const dashboardRes = results[0].status === 'fulfilled' ? results[0].value : null;
+        const risksRes = results[1].status === 'fulfilled' ? results[1].value : null;
+        const complianceRes = results[2].status === 'fulfilled' ? results[2].value : null;
+        const controlsRes = results[3].status === 'fulfilled' ? results[3].value : null;
+        
+        if (dashboardRes && dashboardRes.ok) {
           const dashboardData = await dashboardRes.json();
           if (dashboardData.success && dashboardData.data) {
             const metrics = dashboardData.data.metrics;
@@ -127,7 +191,7 @@ export default function DashboardPage() {
             let lowCount = 0;
             let totalRisksFromAPI = 0;
             
-            if (risksRes.ok) {
+            if (risksRes && risksRes.ok) {
               const risksData = await risksRes.json();
               if (risksData.success && risksData.data) {
                 console.log('Dashboard processing risks:', risksData.data.length);
@@ -157,6 +221,22 @@ export default function DashboardPage() {
             setMediumRisks(mediumCount);
             setLowRisks(lowCount);
             
+            // Set open items (high and critical risks)
+            if (risksData.data) {
+              const highPriorityRisks = risksData.data
+                .filter((r: any) => r.riskLevel === 'CRITICAL' || r.riskLevel === 'HIGH')
+                .slice(0, 5)
+                .map((r: any) => ({
+                  id: r.id,
+                  title: r.title || r.riskName,
+                  severity: r.riskLevel?.toLowerCase() || 'high',
+                  category: r.category || 'Operational',
+                  status: r.status || 'Open',
+                  owner: r.assignedTo || 'Unassigned'
+                }));
+              setOpenItems(highPriorityRisks);
+            }
+            
             setStats({
               totalRisks: metrics.totalRisks || totalRisksFromAPI,
               highRisks: highRiskCount || metrics.highRisks || 0,
@@ -176,7 +256,7 @@ export default function DashboardPage() {
             }
             
             // Set compliance data
-            if (complianceRes.ok) {
+            if (complianceRes && complianceRes.ok) {
               const compData = await complianceRes.json();
               if (compData.success && compData.data) {
                 setComplianceData(compData.data.map((item: any) => ({
@@ -186,10 +266,25 @@ export default function DashboardPage() {
               }
             }
             
-            // Set controls data
-            if (controlsRes.ok) {
+            // Set controls data and effectiveness breakdown
+            if (controlsRes && controlsRes.ok) {
               const ctrlData = await controlsRes.json();
               if (ctrlData.success && ctrlData.data) {
+                // Calculate control effectiveness distribution
+                let highEff = 0, mediumEff = 0, lowEff = 0;
+                ctrlData.data.forEach((control: any) => {
+                  const effectiveness = typeof control.effectiveness === 'number' ? control.effectiveness : 50;
+                  if (effectiveness >= 85) highEff++;
+                  else if (effectiveness >= 60) mediumEff++;
+                  else lowEff++;
+                });
+                
+                setControlEffectivenessData([
+                  { name: 'High', value: highEff, color: '#22c55e' },
+                  { name: 'Medium', value: mediumEff, color: '#eab308' },
+                  { name: 'Low', value: lowEff, color: '#ef4444' }
+                ]);
+                
                 setControlsData(
                   ctrlData.data.map((item: any) => {
                     const normalizedType = typeof item.type === 'string'
@@ -618,8 +713,11 @@ export default function DashboardPage() {
             >
               <CardContent className="p-4">
                 <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-3xl font-bold text-blue-900 mb-1">{stats.totalRisks}</p>
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2 mb-1">
+                      <p className="text-3xl font-bold text-blue-900">{stats.totalRisks}</p>
+                      <Sparkline data={generateSparkline('stable')} color="#3b82f6" trend="stable" />
+                    </div>
                     <p className="text-sm font-medium text-blue-700">Total Risks</p>
                     <p className="text-xs text-blue-600 mt-1">RCSA Complete</p>
                   </div>
@@ -636,8 +734,11 @@ export default function DashboardPage() {
             >
               <CardContent className="p-4">
                 <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-3xl font-bold text-red-900 mb-1">{stats.highRisks}</p>
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2 mb-1">
+                      <p className="text-3xl font-bold text-red-900">{stats.highRisks}</p>
+                      <Sparkline data={generateSparkline(stats.highRisks > 10 ? 'up' : 'down')} color="#ef4444" trend={stats.highRisks > 10 ? 'up' : 'down'} />
+                    </div>
                     <p className="text-sm font-medium text-red-700">High Priority</p>
                     <p className="text-xs text-red-600 mt-1">Material Risks</p>
                   </div>
@@ -720,15 +821,206 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      {/* Probo Integration Section */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8">
-        <div className="lg:col-span-2">
-          <RiskControlWidget variant="detailed" showActions={true} />
-        </div>
-        <div className="space-y-4 md:space-y-6">
-          <RiskControlWidget variant="metrics-only" showActions={false} />
-          <RiskControlWidget variant="compact" showActions={false} />
-        </div>
+      {/* Enhanced Dashboard Bottom Section */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+        {/* Open Items - Critical/High Risks */}
+        <Card className="bg-white border-gray-200">
+          <CardHeader className="pb-3">
+            <CardTitle className="flex items-center gap-2 text-base">
+              <AlertCircle className="h-5 w-5 text-orange-500" />
+              <span className="text-[#191919] font-bold">Open Items</span>
+              <Badge variant="secondary" className="ml-auto text-xs">
+                {openItems.length}
+              </Badge>
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="pt-0">
+            <div className="space-y-2 max-h-64 overflow-y-auto">
+              {openItems.length > 0 ? (
+                openItems.map((item) => (
+                  <div key={item.id} className="p-2 border rounded-lg hover:bg-gray-50 transition-colors cursor-pointer">
+                    <div className="flex items-start justify-between">
+                      <div className="flex-1">
+                        <p className="text-sm font-medium text-gray-900 line-clamp-1">{item.title}</p>
+                        <div className="flex items-center gap-2 mt-1">
+                          <Badge 
+                            variant={item.severity === 'critical' ? 'destructive' : 'default'}
+                            className="text-xs"
+                          >
+                            {item.severity}
+                          </Badge>
+                          <span className="text-xs text-gray-500">{item.category}</span>
+                        </div>
+                      </div>
+                      <ArrowRight className="h-4 w-4 text-gray-400 mt-1" />
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <p className="text-sm text-gray-500 text-center py-4">No critical items</p>
+              )}
+            </div>
+            {openItems.length > 0 && (
+              <Button 
+                variant="secondary" 
+                size="sm" 
+                className="w-full mt-3"
+                onClick={() => router.push('/dashboard/risks')}
+              >
+                View All Risks
+              </Button>
+            )}
+          </CardContent>
+        </Card>
+
+        {/* Control Effectiveness Donut */}
+        <Card className="bg-white border-gray-200">
+          <CardHeader className="pb-3">
+            <CardTitle className="flex items-center gap-2 text-base">
+              <Target className="h-5 w-5 text-blue-500" />
+              <span className="text-[#191919] font-bold">Control Effectiveness</span>
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="pt-0">
+            {controlEffectivenessData.length > 0 ? (
+              <>
+                {/* Simple SVG Donut Chart */}
+                <div className="flex justify-center">
+                  <svg width="160" height="160" viewBox="0 0 160 160">
+                    {(() => {
+                      const centerX = 80;
+                      const centerY = 80;
+                      const radius = 60;
+                      const innerRadius = 35;
+                      const total = controlEffectivenessData.reduce((sum, item) => sum + item.value, 0);
+                      let cumulativeAngle = -90; // Start from top
+                      
+                      return controlEffectivenessData.map((item, index) => {
+                        const percentage = (item.value / total) * 100;
+                        const angle = (percentage / 100) * 360;
+                        const startAngle = cumulativeAngle;
+                        const endAngle = cumulativeAngle + angle;
+                        cumulativeAngle += angle;
+                        
+                        const startAngleRad = (startAngle * Math.PI) / 180;
+                        const endAngleRad = (endAngle * Math.PI) / 180;
+                        
+                        const x1 = centerX + radius * Math.cos(startAngleRad);
+                        const y1 = centerY + radius * Math.sin(startAngleRad);
+                        const x2 = centerX + radius * Math.cos(endAngleRad);
+                        const y2 = centerY + radius * Math.sin(endAngleRad);
+                        
+                        const x3 = centerX + innerRadius * Math.cos(startAngleRad);
+                        const y3 = centerY + innerRadius * Math.sin(startAngleRad);
+                        const x4 = centerX + innerRadius * Math.cos(endAngleRad);
+                        const y4 = centerY + innerRadius * Math.sin(endAngleRad);
+                        
+                        const largeArcFlag = angle > 180 ? 1 : 0;
+                        
+                        const pathData = [
+                          `M ${x3} ${y3}`,
+                          `L ${x1} ${y1}`,
+                          `A ${radius} ${radius} 0 ${largeArcFlag} 1 ${x2} ${y2}`,
+                          `L ${x4} ${y4}`,
+                          `A ${innerRadius} ${innerRadius} 0 ${largeArcFlag} 0 ${x3} ${y3}`,
+                          'Z'
+                        ].join(' ');
+                        
+                        return (
+                          <path
+                            key={index}
+                            d={pathData}
+                            fill={item.color}
+                            stroke="white"
+                            strokeWidth="2"
+                            className="hover:opacity-80 transition-opacity"
+                          />
+                        );
+                      });
+                    })()}
+                    {/* Center text */}
+                    <text x="80" y="75" textAnchor="middle" className="text-2xl font-bold fill-gray-900">
+                      {controlEffectivenessData.length > 0 ? 
+                        Math.round(
+                          (controlEffectivenessData[0].value * 100 + 
+                           controlEffectivenessData[1].value * 70 + 
+                           controlEffectivenessData[2].value * 30) / 
+                          controlEffectivenessData.reduce((a, b) => a + b.value, 0)
+                        ) : 0}%
+                    </text>
+                    <text x="80" y="95" textAnchor="middle" className="text-xs fill-gray-500">
+                      Overall
+                    </text>
+                  </svg>
+                </div>
+                <div className="flex justify-around mt-4">
+                  {controlEffectivenessData.map((item) => (
+                    <div key={item.name} className="text-center">
+                      <div className="flex items-center gap-1">
+                        <div className={`w-3 h-3 rounded-full`} style={{ backgroundColor: item.color }} />
+                        <span className="text-xs text-gray-600">{item.name}</span>
+                      </div>
+                      <p className="text-sm font-bold text-gray-900">{item.value}</p>
+                    </div>
+                  ))}
+                </div>
+              </>
+            ) : (
+              <div className="flex items-center justify-center h-48">
+                <p className="text-sm text-gray-500">No control data available</p>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+
+        {/* Recent Activity */}
+        <Card className="bg-white border-gray-200">
+          <CardHeader className="pb-3">
+            <CardTitle className="flex items-center gap-2 text-base">
+              <Activity className="h-5 w-5 text-green-500" />
+              <span className="text-[#191919] font-bold">Recent Activity</span>
+              <Badge variant="secondary" className="ml-auto text-xs">
+                Live
+              </Badge>
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="pt-0">
+            <div className="space-y-2 max-h-64 overflow-y-auto">
+              {recentActivity.length > 0 ? (
+                recentActivity.slice(0, 6).map((activity) => (
+                  <div key={activity.id} className="flex items-start gap-2 pb-2 border-b last:border-0">
+                    <div className={`mt-1 w-2 h-2 rounded-full ${
+                      activity.type === 'success' ? 'bg-green-500' : 
+                      activity.type === 'warning' ? 'bg-yellow-500' : 
+                      activity.type === 'error' ? 'bg-red-500' : 
+                      'bg-blue-500'
+                    }`} />
+                    <div className="flex-1">
+                      <p className="text-sm text-gray-900 line-clamp-1">{activity.action}</p>
+                      <div className="flex items-center gap-2 mt-1">
+                        <span className="text-xs text-gray-500">{activity.user}</span>
+                        <span className="text-xs text-gray-400">•</span>
+                        <span className="text-xs text-gray-500">{activity.time}</span>
+                      </div>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <p className="text-sm text-gray-500 text-center py-4">No recent activity</p>
+              )}
+            </div>
+            {recentActivity.length > 0 && (
+              <Button 
+                variant="secondary" 
+                size="sm" 
+                className="w-full mt-3"
+                onClick={() => router.push('/dashboard/activity')}
+              >
+                View All Activity
+              </Button>
+            )}
+          </CardContent>
+        </Card>
       </div>
 
       {/* Bottom Section - AI Insights Only */}

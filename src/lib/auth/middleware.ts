@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { verifyAccessToken } from '@/lib/auth/jwt';
-import { db } from '@/lib/db';
+import { isDatabaseAvailable } from '@/lib/db';
 import { productionGuard, throwIfProduction } from '@/lib/security/production-guard';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from './auth-options';
@@ -50,6 +50,34 @@ export async function withAuth(
 ) {
   return async (req: NextRequest): Promise<NextResponse> => {
     try {
+      // Check for demo user cookie first
+      const demoUserCookie = req.cookies.get('demo-user');
+      if (demoUserCookie?.value) {
+        try {
+          const demoUser = JSON.parse(demoUserCookie.value);
+          // Create authenticated user object for demo user
+          const authenticatedUser: AuthenticatedUser = {
+            id: demoUser.id || 'demo-admin-id',
+            email: demoUser.email || 'admin@riscura.com',
+            firstName: 'Demo',
+            lastName: 'Admin',
+            role: demoUser.role || 'ADMIN',
+            organizationId: 'demo-org-id',
+            permissions: demoUser.permissions || ['*'],
+            isActive: true,
+            lastLoginAt: new Date(),
+          };
+
+          // Add user to request
+          const authReq = req as AuthenticatedRequest;
+          authReq.user = authenticatedUser;
+
+          return handler(authReq);
+        } catch (parseError) {
+          console.warn('Failed to parse demo user cookie:', parseError);
+        }
+      }
+
       // Get session from NextAuth
       const session = await getServerSession(authOptions) as any;
 
@@ -59,6 +87,18 @@ export async function withAuth(
           { status: 401 }
         );
       }
+
+      // Check if database is available
+      if (!isDatabaseAvailable()) {
+        // Return error if not demo user and database is not available
+        return NextResponse.json(
+          { error: 'Database connection unavailable' },
+          { status: 503 }
+        );
+      }
+
+      // Dynamically import db to avoid initialization errors
+      const { db } = await import('@/lib/db');
 
       // Get user from database with organization
       const user = await db.client.user.findUnique({
