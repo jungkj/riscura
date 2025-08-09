@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { withApiMiddleware } from '@/lib/api/middleware';
 import getEnhancedProboService from '@/services/EnhancedProboService';
 import { z } from 'zod';
+import { getDemoData, isDemoUser } from '@/lib/demo-data';
 
 // GET /api/dashboard/probo-insights - Get Probo integration insights
 export const GET = withApiMiddleware(
@@ -15,6 +16,71 @@ export const GET = withApiMiddleware(
           { success: false, error: 'Organization context required' },
           { status: 403 }
         );
+      }
+
+      // Check if this is a demo user
+      if (isDemoUser(user.id) || user.organizationId === 'demo-org-id') {
+        console.log('[Risk Insights API] Serving demo data');
+        const demoMetrics = getDemoData('metrics', user.organizationId);
+        const demoRisks = getDemoData('risks', user.organizationId) as any[];
+        
+        // Generate insights from demo data
+        const highRisks = demoRisks?.filter(r => r.riskLevel === 'HIGH' || r.riskLevel === 'CRITICAL') || [];
+        const insights = [
+          {
+            id: 'insight-1',
+            type: 'risk',
+            priority: 'high',
+            title: `${highRisks.length} High Priority Risks Identified`,
+            description: `RCSA process identified ${highRisks.length} high/critical risks requiring immediate attention`,
+            recommendation: 'Review and prioritize mitigation strategies for high-risk areas',
+            timestamp: new Date().toISOString()
+          },
+          {
+            id: 'insight-2',
+            type: 'control',
+            priority: 'medium',
+            title: 'Control Effectiveness at 87%',
+            description: 'Overall control effectiveness is good but some controls need improvement',
+            recommendation: 'Focus on enhancing partially effective controls',
+            timestamp: new Date().toISOString()
+          },
+          {
+            id: 'insight-3',
+            type: 'compliance',
+            priority: 'low',
+            title: 'RCSA Assessment 100% Complete',
+            description: 'All 77 risks and controls have been documented and assessed',
+            recommendation: 'Schedule quarterly review to maintain completeness',
+            timestamp: new Date().toISOString()
+          }
+        ];
+        
+        return NextResponse.json({
+          success: true,
+          data: {
+            metrics: demoMetrics,
+            insights,
+            complianceStatus: {
+              overall: 88,
+              frameworks: [
+                { name: 'Basel III', score: 92 },
+                { name: 'SOC 2', score: 88 },
+                { name: 'ISO 27001', score: 85 },
+                { name: 'PCI DSS', score: 87 }
+              ]
+            },
+            vendorSummary: {
+              total: 5,
+              approved: 3,
+              conditional: 1,
+              underReview: 1,
+              critical: 2
+            },
+            timestamp: new Date().toISOString(),
+            demoMode: true
+          }
+        });
       }
 
       // Fetch all Probo data
@@ -85,14 +151,15 @@ export const POST = withApiMiddleware(
 
       switch (validatedData.action) {
         case 'setup':
-          const integration = await EnhancedProboService.setupIntegration(
+          const proboService = getEnhancedProboService();
+          const integration = await proboService.setupIntegration(
             user.organizationId,
             validatedData.apiKey,
             validatedData.webhookUrl
           );
           
           // Initial sync
-          await EnhancedProboService.syncMetrics(user.organizationId);
+          await proboService.syncMetrics(user.organizationId);
           
           return NextResponse.json({
             success: true,
@@ -101,7 +168,8 @@ export const POST = withApiMiddleware(
           });
 
         case 'sync':
-          await EnhancedProboService.syncMetrics(user.organizationId);
+          const proboServiceSync = getEnhancedProboService();
+          await proboServiceSync.syncMetrics(user.organizationId);
           
           return NextResponse.json({
             success: true,
@@ -109,7 +177,8 @@ export const POST = withApiMiddleware(
           });
 
         case 'disable':
-          await EnhancedProboService.disableIntegration(user.organizationId);
+          const proboServiceDisable = getEnhancedProboService();
+          await proboServiceDisable.disableIntegration(user.organizationId);
           
           return NextResponse.json({
             success: true,

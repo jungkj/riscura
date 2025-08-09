@@ -46,15 +46,39 @@ export const RiskHeatMap: React.FC<RiskHeatMapProps> = ({ className = '' }) => {
   useEffect(() => {
     const fetchRisks = async () => {
       try {
-        const response = await fetch('/api/risks');
+        const response = await fetch('/api/risks?limit=200');
         if (response.ok) {
           const data = await response.json();
           if (data.success && data.data) {
-            setRisks(data.data);
+            // Transform API data to match expected Risk interface
+            const transformedRisks = data.data.map((risk: any) => ({
+              id: risk.id,
+              title: risk.title,
+              description: risk.description,
+              category: risk.category,
+              likelihood: risk.likelihood,
+              impact: risk.impact,
+              riskScore: risk.riskScore,
+              riskLevel: risk.riskLevel?.toLowerCase() || 'low',
+              owner: risk.owner,
+              status: risk.status?.toLowerCase() || 'identified',
+              createdAt: risk.createdAt,
+              updatedAt: risk.updatedAt,
+              nextReview: risk.nextReviewDate
+            }));
+            console.log('Fetched and transformed risks for heat map:', transformedRisks.length);
+            setRisks(transformedRisks);
+          } else {
+            console.warn('No risk data available, using sample risks');
+            setRisks(sampleRisks);
           }
+        } else {
+          console.warn('Failed to fetch risks, using sample risks');
+          setRisks(sampleRisks);
         }
       } catch (error) {
         console.error('Failed to fetch risks:', error);
+        setRisks(sampleRisks);
       } finally {
         setLoading(false);
       }
@@ -392,21 +416,29 @@ export const RiskHeatMap: React.FC<RiskHeatMapProps> = ({ className = '' }) => {
 
   return (
     <>
-      <Card className={`${className} bg-white border border-gray-200`}>
-        <CardHeader className="pb-4">
+      <Card className={`${className} bg-white border border-gray-200 shadow-lg`}>
+        <CardHeader className="pb-4 bg-gradient-to-r from-blue-50 to-white border-b border-gray-100">
           <CardTitle className="flex items-center justify-between">
-            <div className="flex items-center">
-              <Target className="w-5 h-5 mr-2 text-blue-600" />
+            <div className="flex items-center gap-3">
+              <div className="p-2 bg-blue-100 rounded-lg">
+                <Target className="w-6 h-6 text-blue-600" />
+              </div>
               <div>
-                <h2 className="text-lg font-semibold text-gray-900">Risk Heat Map</h2>
-                <p className="text-sm text-gray-500 font-normal">
-                  {loading ? 'Loading risks...' : totalRisks === 0 ? 'No risks yet - add your first risk to see it here' : 'Interactive risk assessment matrix'}
+                <h2 className="text-xl font-bold text-gray-900">Risk Heat Map</h2>
+                <p className="text-sm text-gray-600 font-normal">
+                  {loading ? 'Loading RCSA data...' : totalRisks === 0 ? 'No risks yet - add your first risk to see it here' : 'RCSA Risk Assessment Matrix - Likelihood vs Impact Analysis'}
                 </p>
               </div>
             </div>
-            <Badge variant="secondary" className="bg-blue-50 text-blue-700 text-xs">
-              {totalRisks} Total Risks
-            </Badge>
+            <div className="flex items-center gap-2">
+              <Badge variant="secondary" className="bg-blue-100 text-blue-800 font-semibold">
+                {totalRisks} Total Risks
+              </Badge>
+              <Badge variant={risks.filter(r => r.riskLevel === 'critical' || r.riskLevel === 'high').length > 0 ? 'destructive' : 'secondary'} 
+                     className="font-semibold">
+                {risks.filter(r => r.riskLevel === 'critical' || r.riskLevel === 'high').length} High Priority
+              </Badge>
+            </div>
           </CardTitle>
         </CardHeader>
         <CardContent className="pb-4">

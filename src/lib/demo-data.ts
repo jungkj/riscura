@@ -1,5 +1,9 @@
 // Demo data for demonstration and testing purposes
 import { RiskCategory, RiskStatus, RiskLevel, ControlType, ControlStatus, ControlCategory, AutomationLevel, ComplianceStatus } from '@prisma/client';
+import { getRCSADemoData } from './demo-data-rcsa';
+
+// Get comprehensive RCSA data
+const rcsaData = getRCSADemoData('demo-org-id');
 
 export const demoData = {
   // Demo Organization - Anonymized Financial Services Company
@@ -16,8 +20,8 @@ export const demoData = {
     branches: 15,
   },
 
-  // Demo Risks - Comprehensive RCSA-Based Financial Services Risks
-  risks: [
+  // Demo Risks - Comprehensive RCSA-Based Financial Services Risks (77 total)
+  risks: rcsaData.risks || [
     {
       id: 'risk-1',
       organizationId: 'demo-org-id',
@@ -340,8 +344,8 @@ export const demoData = {
     },
   ],
 
-  // Demo Controls - Corresponding Financial Services Controls for RCSA Risks
-  controls: [
+  // Demo Controls - Corresponding Financial Services Controls for RCSA Risks (77 total)
+  controls: rcsaData.controls || [
     {
       id: 'ctrl-1',
       organizationId: 'demo-org-id',
@@ -908,26 +912,13 @@ export const demoData = {
 
   // Demo Dashboard Metrics - Updated for RCSA-based data
   metrics: {
-    totalRisks: 10,
-    highRisks: 6,
-    mediumRisks: 3,
-    lowRisks: 1,
-    criticalRisks: 2,
-    activeControls: 10,
-    failedControls: 0,
-    partiallyEffectiveControls: 2,
+    ...rcsaData.metrics,
     vendorsAssessed: 5,
     vendorsApproved: 3,
-    complianceScore: 88,
-    overallRiskScore: 68,
     openIncidents: 2,
     resolvedIncidents: 8,
     upcomingAssessments: 5,
     overdueItems: 1,
-    rcsaCompleteness: 95,
-    controlTestingRate: 100,
-    avgRiskScore: 68,
-    avgControlEffectiveness: 87,
   },
 };
 

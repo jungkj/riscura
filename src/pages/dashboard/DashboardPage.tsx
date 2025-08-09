@@ -110,9 +110,9 @@ export default function DashboardPage() {
       try {
         const [dashboardRes, risksRes, complianceRes, controlsRes] = await Promise.all([
           fetch('/api/dashboard'),
-          fetch('/api/risks'),
+          fetch('/api/risks?limit=200'),
           fetch('/api/compliance/assessments'),
-          fetch('/api/controls')
+          fetch('/api/controls?limit=200')
         ]);
         
         if (dashboardRes.ok) {
@@ -125,23 +125,31 @@ export default function DashboardPage() {
             let criticalCount = 0;
             let mediumCount = 0;
             let lowCount = 0;
+            let totalRisksFromAPI = 0;
             
             if (risksRes.ok) {
               const risksData = await risksRes.json();
               if (risksData.success && risksData.data) {
+                console.log('Dashboard processing risks:', risksData.data.length);
+                totalRisksFromAPI = risksData.data.length;
+                
                 risksData.data.forEach((risk: any) => {
-                  const riskScore = (risk.likelihood || 0) * (risk.impact || 0);
-                  if (riskScore >= 20) {
+                  const riskLevel = risk.riskLevel?.toLowerCase() || 'low';
+                  const riskScore = risk.riskScore || (risk.likelihood || 0) * (risk.impact || 0);
+                  
+                  // Count by actual risk level from RCSA data
+                  if (riskLevel === 'critical') {
                     criticalCount++;
+                    highRiskCount++; // Critical risks are also counted as high priority
+                  } else if (riskLevel === 'high') {
                     highRiskCount++;
-                  } else if (riskScore >= 12) {
-                    highRiskCount++;
-                  } else if (riskScore >= 6) {
+                  } else if (riskLevel === 'medium') {
                     mediumCount++;
                   } else {
                     lowCount++;
                   }
                 });
+                console.log('Risk counts - Critical:', criticalCount, 'High:', highRiskCount, 'Medium:', mediumCount, 'Low:', lowCount);
               }
             }
             
@@ -150,11 +158,11 @@ export default function DashboardPage() {
             setLowRisks(lowCount);
             
             setStats({
-              totalRisks: metrics.totalRisks || 0,
-              highRisks: highRiskCount,
+              totalRisks: metrics.totalRisks || totalRisksFromAPI,
+              highRisks: highRiskCount || metrics.highRisks || 0,
               complianceScore: metrics.complianceScore || 0,
-              activeControls: metrics.totalControls || 0,
-              pendingActions: metrics.openTasks || 0
+              activeControls: metrics.activeControls || metrics.totalControls || 0,
+              pendingActions: metrics.openTasks || metrics.overdueItems || 0
             });
             
             // Set recent activity
@@ -602,71 +610,75 @@ export default function DashboardPage() {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
         {/* Left Column - Compact Stats & Quick Actions */}
         <div className="lg:col-span-4 space-y-4">
-          {/* Quick Stats */}
+          {/* Enhanced Stats Cards */}
           <div className="grid grid-cols-2 gap-3">
             <Card 
-              className="bg-white border-gray-200 hover:shadow-md transition-shadow cursor-pointer" 
+              className="bg-gradient-to-br from-blue-50 to-blue-100/50 border-blue-200 hover:shadow-lg hover:scale-105 transition-all duration-200 cursor-pointer group" 
               onClick={() => handleStatsCardClick('totalRisks')}
             >
               <CardContent className="p-4">
-                <div className="flex items-center">
-                  <div className="p-2 bg-blue-50 rounded-lg">  
-                    <Shield className="h-5 w-5 text-blue-600" />
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-3xl font-bold text-blue-900 mb-1">{stats.totalRisks}</p>
+                    <p className="text-sm font-medium text-blue-700">Total Risks</p>
+                    <p className="text-xs text-blue-600 mt-1">RCSA Complete</p>
                   </div>
-                  <div className="ml-3">
-                    <p className="text-2xl font-bold text-[#191919]">{stats.totalRisks}</p>
-                    <p className="text-xs text-gray-600">Total Risks</p>
+                  <div className="p-3 bg-blue-600 rounded-xl group-hover:bg-blue-700 transition-colors">  
+                    <Shield className="h-6 w-6 text-white" />
                   </div>
                 </div>
               </CardContent>
             </Card>
 
             <Card 
-              className="bg-white border-gray-200 hover:shadow-md transition-shadow cursor-pointer" 
+              className="bg-gradient-to-br from-red-50 to-red-100/50 border-red-200 hover:shadow-lg hover:scale-105 transition-all duration-200 cursor-pointer group" 
               onClick={() => handleStatsCardClick('highRisks')}
             >
               <CardContent className="p-4">
-                <div className="flex items-center">
-                  <div className="p-2 bg-red-50 rounded-lg">
-                    <AlertTriangle className="h-5 w-5 text-red-600" />
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-3xl font-bold text-red-900 mb-1">{stats.highRisks}</p>
+                    <p className="text-sm font-medium text-red-700">High Priority</p>
+                    <p className="text-xs text-red-600 mt-1">Material Risks</p>
                   </div>
-                  <div className="ml-3">
-                    <p className="text-2xl font-bold text-red-600">{stats.highRisks}</p>
-                    <p className="text-xs text-gray-600">High Priority</p>
+                  <div className="p-3 bg-red-600 rounded-xl group-hover:bg-red-700 transition-colors">
+                    <AlertTriangle className="h-6 w-6 text-white" />
                   </div>
                 </div>
               </CardContent>
             </Card>
 
             <Card 
-              className="bg-white border-gray-200 hover:shadow-md transition-shadow cursor-pointer" 
+              className="bg-gradient-to-br from-green-50 to-green-100/50 border-green-200 hover:shadow-lg hover:scale-105 transition-all duration-200 cursor-pointer group" 
               onClick={() => handleStatsCardClick('complianceScore')}
             >
               <CardContent className="p-4">
-                <div className="flex items-center">
-                  <div className="p-2 bg-green-50 rounded-lg">
-                    <CheckCircle className="h-5 w-5 text-green-600" />
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-3xl font-bold text-green-900 mb-1">{stats.complianceScore}%</p>
+                    <p className="text-sm font-medium text-green-700">Compliance</p>
+                    <p className="text-xs text-green-600 mt-1">Multi-Framework</p>
                   </div>
-                  <div className="ml-3">
-                    <p className="text-2xl font-bold text-green-600">{stats.complianceScore}%</p>
-                    <p className="text-xs text-gray-600">Compliance</p>
+                  <div className="p-3 bg-green-600 rounded-xl group-hover:bg-green-700 transition-colors">
+                    <CheckCircle className="h-6 w-6 text-white" />
                   </div>
                 </div>
               </CardContent>
             </Card>
 
             <Card 
-              className="bg-white border-gray-200 hover:shadow-md transition-shadow cursor-pointer" 
+              className="bg-gradient-to-br from-purple-50 to-purple-100/50 border-purple-200 hover:shadow-lg hover:scale-105 transition-all duration-200 cursor-pointer group" 
               onClick={() => handleStatsCardClick('activeControls')}
             >
               <CardContent className="p-4">
-                <div className="flex items-center">
-                  <div className="p-2 bg-purple-50 rounded-lg">
-                    <Settings className="h-5 w-5 text-purple-600" />
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-3xl font-bold text-purple-900 mb-1">{stats.activeControls}</p>
+                    <p className="text-sm font-medium text-purple-700">Controls</p>
+                    <p className="text-xs text-purple-600 mt-1">Active & Tested</p>
                   </div>
-                  <div className="ml-3">
-                    <p className="text-2xl font-bold text-purple-600">{stats.activeControls}</p>
-                    <p className="text-xs text-gray-600">Controls</p>
+                  <div className="p-3 bg-purple-600 rounded-xl group-hover:bg-purple-700 transition-colors">
+                    <Settings className="h-6 w-6 text-white" />
                   </div>
                 </div>
               </CardContent>

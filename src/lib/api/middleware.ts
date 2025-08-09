@@ -627,17 +627,17 @@ export function withAPI(
         try {
           let user = getAuthenticatedUser(req as any);
           
-          // Development mode bypass: Create a mock user for testing
+          // Development mode bypass: Use demo user for testing
           if (!user && process.env.NODE_ENV === 'development') {
-            console.log('🔧 Development mode: Using mock authentication');
+            console.log('🔧 Development mode: Using demo authentication');
             const mockUser = {
-              id: 'dev-user-123',
-              email: 'dev@riscura.com',
-              firstName: 'Development',
-              lastName: 'User',
+              id: 'demo-admin-id',
+              email: 'admin@riscura.com',
+              firstName: 'Demo',
+              lastName: 'Admin',
               role: 'ADMIN',
-              organizationId: 'dev-org-123',
-              permissions: ['*'], // All permissions for development
+              organizationId: 'demo-org-id',
+              permissions: ['*'], // All permissions for demo
               avatar: '',
               isActive: true,
               lastLoginAt: new Date()

@@ -33,7 +33,7 @@ export const GET = withApiMiddleware(async (req: NextRequest) => {
   const assessments = await complianceService.getAssessments(user.organizationId, filters);
 
   return ApiResponseFormatter.success(assessments);
-});
+}, { requireAuth: true });
 
 // POST /api/compliance/assessments - Create assessment
 const createAssessmentSchema = z.object({
@@ -63,4 +63,4 @@ export const POST = withApiMiddleware(async (req: NextRequest) => {
   });
 
   return ApiResponseFormatter.success(assessment, { status: 201 });
-});
+}, { requireAuth: true });
