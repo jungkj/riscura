@@ -46,39 +46,90 @@ export const RiskHeatMap: React.FC<RiskHeatMapProps> = ({ className = '' }) => {
   useEffect(() => {
     const fetchRisks = async () => {
       try {
-        const response = await fetch('/api/risks?limit=200');
+        const response = await fetch('/api/risks/summary');
         if (response.ok) {
           const data = await response.json();
-          if (data.success && data.data) {
-            // Transform API data to match expected Risk interface
-            const transformedRisks = data.data.map((risk: any) => ({
-              id: risk.id,
-              title: risk.title,
-              description: risk.description,
-              category: risk.category,
-              likelihood: risk.likelihood,
-              impact: risk.impact,
-              riskScore: risk.riskScore,
-              riskLevel: risk.riskLevel?.toLowerCase() || 'low',
-              owner: risk.owner,
-              status: risk.status?.toLowerCase() || 'identified',
-              createdAt: risk.createdAt,
-              updatedAt: risk.updatedAt,
-              nextReview: risk.nextReviewDate
-            }));
-            console.log('Fetched and transformed risks for heat map:', transformedRisks.length);
-            setRisks(transformedRisks);
+          if (data.success && data.data && data.data.heatmapData) {
+            // Use summary data to build risks for heatmap
+            const allRisks: Risk[] = [];
+            data.data.heatmapData.forEach((cell: any) => {
+              cell.risks.forEach((risk: any) => {
+                allRisks.push({
+                  id: risk.id,
+                  title: risk.title,
+                  description: risk.description || '',
+                  category: risk.category,
+                  likelihood: cell.likelihood,
+                  impact: cell.impact,
+                  riskScore: risk.riskScore || (cell.likelihood * cell.impact),
+                  riskLevel: risk.riskLevel?.toLowerCase() || 'low',
+                  owner: risk.owner || 'Unassigned',
+                  status: 'identified',
+                  createdAt: new Date().toISOString(),
+                  updatedAt: new Date().toISOString()
+                });
+              });
+            });
+            console.log('Fetched risks for heat map:', allRisks.length);
+            setRisks(allRisks);
           } else {
-            console.warn('No risk data available, using sample risks');
-            setRisks(sampleRisks);
+            // Fallback to regular risks API
+            const fallbackResponse = await fetch('/api/risks?limit=200');
+            if (fallbackResponse.ok) {
+              const fallbackData = await fallbackResponse.json();
+              if (fallbackData.success && fallbackData.data) {
+                const transformedRisks = fallbackData.data.map((risk: any) => ({
+                  id: risk.id,
+                  title: risk.title,
+                  description: risk.description,
+                  category: risk.category,
+                  likelihood: risk.likelihood,
+                  impact: risk.impact,
+                  riskScore: risk.riskScore,
+                  riskLevel: risk.riskLevel?.toLowerCase() || 'low',
+                  owner: risk.owner,
+                  status: risk.status?.toLowerCase() || 'identified',
+                  createdAt: risk.createdAt,
+                  updatedAt: risk.updatedAt,
+                  nextReview: risk.nextReviewDate
+                }));
+                setRisks(transformedRisks);
+              } else {
+                // Only use sample data in non-production
+                if (process.env.NODE_ENV !== 'production') {
+                  console.warn('No risk data available, using sample risks in development');
+                  setRisks(sampleRisks);
+                } else {
+                  setRisks([]);
+                }
+              }
+            } else {
+              // Only use sample data in non-production
+              if (process.env.NODE_ENV !== 'production') {
+                console.warn('Failed to fetch risks, using sample risks in development');
+                setRisks(sampleRisks);
+              } else {
+                setRisks([]);
+              }
+            }
           }
         } else {
-          console.warn('Failed to fetch risks, using sample risks');
-          setRisks(sampleRisks);
+          // Only use sample data in non-production
+          if (process.env.NODE_ENV !== 'production') {
+            console.warn('Failed to fetch risk summary, using sample risks in development');
+            setRisks(sampleRisks);
+          } else {
+            setRisks([]);
+          }
         }
       } catch (error) {
         console.error('Failed to fetch risks:', error);
-        setRisks(sampleRisks);
+        // Only use sample data in non-production
+        if (process.env.NODE_ENV !== 'production') {
+          setRisks(sampleRisks);
+        } else {
+          setRisks([]);
+        }
       } finally {
         setLoading(false);
       }

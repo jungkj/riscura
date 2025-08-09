@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -29,64 +29,132 @@ import {
 import AIControlGenerator from '@/components/probo/AIControlGenerator';
 import SmartRiskControlMapper from '@/components/probo/SmartRiskControlMapper';
 
+interface Risk {
+  id: string;
+  title: string;
+  riskLevel: string;
+  status: string;
+  likelihood: number;
+  impact: number;
+  category: string;
+  riskScore: number;
+}
+
+interface Assessment {
+  id: string;
+  title: string;
+  status: string;
+  progress: number;
+  dueDate: string;
+  createdDate?: string;
+  assignedToName: string;
+  priority: string;
+  riskCount: number;
+  description: string;
+  objectives?: string[];
+  type?: string;
+}
+
 export default function AssessmentDetailPage() {
   const router = useRouter();
   const params = useParams();
-  const assessmentId = params?.id;
+  const assessmentId = params?.id as string;
 
-  // Mock assessment data
-  const assessment = {
-    id: Number(assessmentId),
-    title: 'Annual Security Assessment',
-    status: 'In Progress',
-    progress: 65,
-    dueDate: '2025-02-15',
-    createdDate: '2025-01-01',
-    assignee: 'Security Team',
-    priority: 'High',
-    riskCount: 12,
-    description: 'Comprehensive annual security risk assessment covering all critical business processes, systems, and third-party integrations.',
-    objectives: [
-      'Identify and assess security vulnerabilities',
-      'Evaluate current security controls effectiveness',
-      'Recommend improvements and remediation actions',
-      'Ensure compliance with security frameworks'
-    ],
-    risks: [
-      { id: 1, title: 'Data Breach Risk', severity: 'High', status: 'Open', likelihood: 'Medium', impact: 'High' },
-      { id: 2, title: 'System Downtime', severity: 'Medium', status: 'In Review', likelihood: 'Low', impact: 'High' },
-      { id: 3, title: 'Third-party Vendor Risk', severity: 'High', status: 'Open', likelihood: 'High', impact: 'Medium' }
-    ],
-    activities: [
-      { id: 1, action: 'Assessment created', user: 'John Doe', date: '2025-01-01', type: 'create' },
-      { id: 2, action: 'Risk analysis started', user: 'Jane Smith', date: '2025-01-05', type: 'progress' },
-      { id: 3, action: 'Controls evaluation completed', user: 'Security Team', date: '2025-01-10', type: 'milestone' }
-    ]
-  };
+  const [assessment, setAssessment] = useState<Assessment | null>(null);
+  const [risks, setRisks] = useState<Risk[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchAssessmentData = async () => {
+      try {
+        // Fetch assessment details and risks in parallel
+        const [assessmentResponse, risksResponse] = await Promise.all([
+          fetch(`/api/assessments`),
+          fetch(`/api/assessments/${assessmentId}/risks`)
+        ]);
+
+        if (assessmentResponse.ok) {
+          const assessmentData = await assessmentResponse.json();
+          if (assessmentData.success && assessmentData.data) {
+            // Find the specific assessment
+            const foundAssessment = assessmentData.data.find((a: any) => a.id === assessmentId);
+            if (foundAssessment) {
+              setAssessment(foundAssessment);
+            } else {
+              setError('Assessment not found');
+            }
+          }
+        }
+
+        if (risksResponse.ok) {
+          const risksData = await risksResponse.json();
+          if (risksData.success && risksData.data) {
+            setRisks(risksData.data);
+          }
+        }
+      } catch (err) {
+        console.error('Error fetching assessment data:', err);
+        setError('Failed to load assessment data');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (assessmentId) {
+      fetchAssessmentData();
+    }
+  }, [assessmentId]);
+
+  if (loading) {
+    return (
+      <div className="p-6 space-y-6">
+        <div className="flex items-center justify-center py-12">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
+            <p className="text-gray-600">Loading assessment...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error || !assessment) {
+    return (
+      <div className="p-6 space-y-6">
+        <div className="flex items-center justify-center py-12 text-red-600">
+          <AlertTriangle className="h-5 w-5 mr-2" />
+          {error || 'Assessment not found'}
+        </div>
+      </div>
+    );
+  }
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'Completed': return 'bg-green-100 text-green-800 border-green-200';
-      case 'In Progress': return 'bg-blue-100 text-blue-800 border-blue-200';
-      case 'Pending': return 'bg-yellow-100 text-yellow-800 border-yellow-200';
+      case 'COMPLETED': return 'bg-green-100 text-green-800 border-green-200';
+      case 'IN_PROGRESS': return 'bg-blue-100 text-blue-800 border-blue-200';
+      case 'DRAFT': return 'bg-yellow-100 text-yellow-800 border-yellow-200';
+      case 'CANCELLED': return 'bg-red-100 text-red-800 border-red-200';
       default: return 'bg-gray-100 text-gray-800 border-gray-200';
     }
   };
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case 'High': return 'bg-red-100 text-red-800 border-red-200';
-      case 'Medium': return 'bg-orange-100 text-orange-800 border-orange-200';
-      case 'Low': return 'bg-green-100 text-green-800 border-green-200';
+      case 'HIGH': return 'bg-red-100 text-red-800 border-red-200';
+      case 'MEDIUM': return 'bg-orange-100 text-orange-800 border-orange-200';
+      case 'LOW': return 'bg-green-100 text-green-800 border-green-200';
       default: return 'bg-gray-100 text-gray-800 border-gray-200';
     }
   };
 
-  const getSeverityColor = (severity: string) => {
-    switch (severity) {
-      case 'High': return 'text-red-600 bg-red-50 border-red-200';
-      case 'Medium': return 'text-orange-600 bg-orange-50 border-orange-200';
-      case 'Low': return 'text-green-600 bg-green-50 border-green-200';
+  const getSeverityColor = (riskLevel: string) => {
+    switch (riskLevel) {
+      case 'CRITICAL': return 'text-red-600 bg-red-50 border-red-200';
+      case 'HIGH': return 'text-red-600 bg-red-50 border-red-200';
+      case 'MEDIUM': return 'text-orange-600 bg-orange-50 border-orange-200';
+      case 'LOW': return 'text-green-600 bg-green-50 border-green-200';
       default: return 'text-gray-600 bg-gray-50 border-gray-200';
     }
   };
@@ -224,7 +292,7 @@ export default function AssessmentDetailPage() {
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <h4 className="font-medium text-gray-900">Assignee</h4>
-                    <p className="text-sm text-gray-600">{assessment.assignee}</p>
+                    <p className="text-sm text-gray-600">{assessment.assignedToName || 'Unassigned'}</p>
                   </div>
                   <div>
                     <h4 className="font-medium text-gray-900">Priority</h4>
@@ -252,13 +320,16 @@ export default function AssessmentDetailPage() {
               </CardHeader>
               <CardContent>
                 <ul className="space-y-2">
-                  {assessment.objectives.map((objective, index) => (
+                  {(assessment.objectives || []).map((objective, index) => (
                     <li key={index} className="flex items-start space-x-2">
                       <Target className="h-4 w-4 text-blue-600 mt-0.5 flex-shrink-0" />
                       <span className="text-sm text-gray-700">{objective}</span>
                     </li>
                   ))}
                 </ul>
+                {(!assessment.objectives || assessment.objectives.length === 0) && (
+                  <div className="text-sm text-gray-500 italic">No objectives defined for this assessment.</div>
+                )}
               </CardContent>
             </Card>
           </div>
@@ -271,20 +342,20 @@ export default function AssessmentDetailPage() {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {assessment.risks.map((risk) => (
+                {risks.map((risk) => (
                   <div key={risk.id} className="border rounded-lg p-4 hover:bg-gray-50">
                     <div className="flex items-center justify-between">
                       <div className="flex-1">
                         <h4 className="font-medium text-gray-900">{risk.title}</h4>
                         <div className="flex items-center space-x-4 mt-2">
-                          <Badge className={getSeverityColor(risk.severity)}>
-                            {risk.severity} Risk
+                          <Badge className={getSeverityColor(risk.riskLevel)}>
+                            {risk.riskLevel} Risk
                           </Badge>
                           <span className="text-sm text-gray-600">
-                            Likelihood: {risk.likelihood}
+                            Likelihood: {risk.likelihood}/5
                           </span>
                           <span className="text-sm text-gray-600">
-                            Impact: {risk.impact}
+                            Impact: {risk.impact}/5
                           </span>
                         </div>
                       </div>
@@ -309,20 +380,28 @@ export default function AssessmentDetailPage() {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {assessment.activities.map((activity) => (
-                  <div key={activity.id} className="flex items-start space-x-3 pb-4 border-b last:border-b-0">
-                    <div className="flex-shrink-0">
-                      {activity.type === 'create' && <FileCheck className="h-5 w-5 text-blue-600" />}
-                      {activity.type === 'progress' && <Clock className="h-5 w-5 text-orange-600" />}
-                      {activity.type === 'milestone' && <CheckCircle className="h-5 w-5 text-green-600" />}
+                {(assessment as any).activities && (assessment as any).activities.length > 0 ? (
+                  (assessment as any).activities.map((activity: any) => (
+                    <div key={activity.id} className="flex items-start space-x-3 pb-4 border-b last:border-b-0">
+                      <div className="flex-shrink-0">
+                        {activity.type === 'create' && <FileCheck className="h-5 w-5 text-blue-600" />}
+                        {activity.type === 'progress' && <Clock className="h-5 w-5 text-orange-600" />}
+                        {activity.type === 'milestone' && <CheckCircle className="h-5 w-5 text-green-600" />}
+                      </div>
+                      <div className="flex-1">
+                        <p className="text-sm font-medium text-gray-900">{activity.action}</p>
+                        <p className="text-sm text-gray-600">by {activity.user}</p>
+                        <p className="text-xs text-gray-500">{activity.date}</p>
+                      </div>
                     </div>
-                    <div className="flex-1">
-                      <p className="text-sm font-medium text-gray-900">{activity.action}</p>
-                      <p className="text-sm text-gray-600">by {activity.user}</p>
-                      <p className="text-xs text-gray-500">{activity.date}</p>
-                    </div>
+                  ))
+                ) : (
+                  <div className="flex flex-col items-center justify-center py-8 text-gray-500">
+                    <MessageSquare className="h-12 w-12 mb-4 text-gray-400" />
+                    <h3 className="text-lg font-medium mb-2">No Activities Yet</h3>
+                    <p className="text-center text-sm">Assessment activities and updates will appear here as they occur.</p>
                   </div>
-                ))}
+                )}
               </div>
             </CardContent>
           </Card>
@@ -331,14 +410,14 @@ export default function AssessmentDetailPage() {
         <TabsContent value="ai-controls" className="space-y-6">
           <div className="space-y-6">
             {/* AI Control Generator for each risk */}
-            {assessment.risks.map((risk) => (
+            {risks.map((risk) => (
               <AIControlGenerator
                 key={risk.id}
                 riskId={risk.id.toString()}
                 riskTitle={risk.title}
-                riskDescription={`${risk.severity} severity risk with ${risk.likelihood} likelihood and ${risk.impact} impact`}
-                riskCategory="Security"
-                riskSeverity={risk.severity as 'Critical' | 'High' | 'Medium' | 'Low'}
+                riskDescription={`${risk.riskLevel} severity risk with likelihood ${risk.likelihood}/5 and impact ${risk.impact}/5`}
+                riskCategory={risk.category}
+                riskSeverity={risk.riskLevel as 'Critical' | 'High' | 'Medium' | 'Low'}
                 onControlsGenerated={(controls, mappings) => {
                   console.log('Generated controls for risk:', risk.id, controls, mappings);
                 }}
@@ -347,15 +426,15 @@ export default function AssessmentDetailPage() {
             
             {/* Smart Risk-Control Mapper */}
             <SmartRiskControlMapper
-              risks={assessment.risks.map(risk => ({
-                id: risk.id.toString(),
+              risks={risks.map(risk => ({
+                id: risk.id,
                 title: risk.title,
-                description: `${risk.severity} severity risk with ${risk.likelihood} likelihood and ${risk.impact} impact`,
-                category: 'Security',
-                severity: risk.severity as 'Critical' | 'High' | 'Medium' | 'Low',
-                likelihood: risk.likelihood as 'Very High' | 'High' | 'Medium' | 'Low' | 'Very Low',
-                impact: risk.impact as 'Very High' | 'High' | 'Medium' | 'Low' | 'Very Low',
-                riskScore: risk.severity === 'High' ? 80 : risk.severity === 'Medium' ? 60 : 40
+                description: `${risk.riskLevel} severity risk with likelihood ${risk.likelihood} and impact ${risk.impact}`,
+                category: risk.category,
+                severity: risk.riskLevel as 'Critical' | 'High' | 'Medium' | 'Low',
+                likelihood: (['Very Low', 'Low', 'Medium', 'High', 'Very High'] as const)[risk.likelihood - 1] || 'Medium',
+                impact: (['Very Low', 'Low', 'Medium', 'High', 'Very High'] as const)[risk.impact - 1] || 'Medium',
+                riskScore: risk.riskScore
               }))}
               controls={[]} // Would be populated from actual controls
               existingMappings={[]} // Would be populated from existing mappings

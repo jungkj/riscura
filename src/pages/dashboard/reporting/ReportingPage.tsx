@@ -48,8 +48,9 @@ export default function ReportingPage({ view = 'dashboard' }: ReportingPageProps
   const [showFilters, setShowFilters] = useState(false);
 
   // Data
-  const [reports, setReports] = useState<ReportTemplate[]>([]);
+  const [reports, setReports] = useState<any[]>([]);
   const [generations, setGenerations] = useState<ReportGeneration[]>([]);
+  const [metrics, setMetrics] = useState<any>(null);
   const [analytics, setAnalytics] = useState({
     totalReports: 0,
     activeGenerations: 0,
@@ -68,457 +69,53 @@ export default function ReportingPage({ view = 'dashboard' }: ReportingPageProps
     try {
       setIsLoading(true);
       
-      // Load demo data
-      const demoReports: ReportTemplate[] = [
-        {
-          id: 'rpt-001',
-          name: 'Executive Risk Dashboard',
-          description: 'High-level risk overview for executives and board members',
-          category: 'executive',
-          type: 'dashboard',
-          version: '2.1',
-          config: {
-            refreshFrequency: 'daily',
-            autoRefresh: true,
-            cacheEnabled: true,
-            cacheDuration: 60,
-            maxDataPoints: 1000,
-            dateRange: {
-              type: 'relative',
-              relative: { unit: 'months', value: 3, includeToday: true }
-            },
-            aggregationLevel: 'daily',
-            includeHistorical: true,
-            realTimeUpdates: false
-          },
-          layout: {
-            orientation: 'landscape',
-            pageSize: 'A4',
-            columns: 3,
-            gridTemplate: {
-              rows: ['auto', '1fr', '1fr'],
-              columns: ['1fr', '1fr', '1fr'],
-              areas: [
-                ['header', 'header', 'header'],
-                ['kpi1', 'kpi2', 'kpi3'],
-                ['chart1', 'chart2', 'chart3']
-              ],
-              gap: { row: 16, column: 16 }
-            },
-            responsiveBreakpoints: []
-          },
-          sections: [],
-          dataSources: [],
-          filters: [],
-          parameters: [],
-          styling: {} as any,
-          permissions: {
-            view: [{ type: 'role', identifier: 'executive' }],
-            edit: [{ type: 'role', identifier: 'admin' }],
-            delete: [{ type: 'role', identifier: 'admin' }],
-            export: [{ type: 'role', identifier: 'executive' }],
-            schedule: [{ type: 'role', identifier: 'admin' }],
-            share: [{ type: 'role', identifier: 'executive' }]
-          },
-          aiFeatures: {
-            narrativeGeneration: {
-              enabled: true,
-              sections: ['executive-summary'],
-              style: 'executive_summary',
-              length: 'medium',
-              language: 'en',
-              tone: 'executive',
-              includeInsights: true,
-              includeRecommendations: true
-            },
-            insightGeneration: {
-              enabled: true,
-              types: ['trend', 'anomaly', 'threshold_breach'],
-              confidence: 80,
-              priority: ['critical', 'high'],
-              categories: ['risk', 'compliance'],
-              maxInsights: 5
-            },
-            recommendationEngine: {
-              enabled: true,
-              types: ['risk_mitigation', 'process_improvement'],
-              context: {
-                organizationProfile: {
-                  industry: 'financial',
-                  size: 'large',
-                  region: 'us',
-                  riskProfile: 'medium',
-                  maturityLevel: 3
-                },
-                userRole: 'executive',
-                historicalData: true,
-                industryBenchmarks: true,
-                regulatoryRequirements: true
-              },
-              personalization: {
-                enabled: true,
-                userPreferences: true,
-                roleBasedFiltering: true,
-                historicalInteractions: false,
-                learningEnabled: true
-              },
-              maxRecommendations: 3
-            },
-            anomalyDetection: {
-              enabled: true,
-              algorithms: ['statistical', 'isolation_forest'],
-              sensitivity: 0.7,
-              seasonality: true,
-              trendFiltering: true,
-              minDataPoints: 30
-            },
-            predictiveAnalytics: {
-              enabled: true,
-              models: [{
-                id: 'risk-forecast-1',
-                name: 'Risk Trend Forecaster',
-                type: 'prophet',
-                features: ['risk_score', 'control_effectiveness'],
-                target: 'risk_level',
-                accuracy: 0.85,
-                lastTrained: new Date('2024-01-15')
-              }],
-              horizon: 90,
-              confidence: 0.8,
-              scenarios: []
-            },
-            naturalLanguageQuery: {
-              enabled: true,
-              supportedLanguages: ['en'],
-              contextAware: true,
-              suggestionsEnabled: true,
-              maxTokens: 2000
-            }
-          },
-          createdBy: 'admin',
-          createdAt: new Date('2024-01-10'),
-          updatedAt: new Date('2024-01-20'),
-          lastUsed: new Date('2024-01-25'),
-          usageCount: 147,
-          isPublic: false,
-          isSystem: true,
-          tags: ['executive', 'risk', 'dashboard'],
-          organizationId: 'org-1'
-        },
-        {
-          id: 'rpt-002',
-          name: 'SOC 2 Compliance Report',
-          description: 'Detailed SOC 2 compliance status and control effectiveness report',
-          category: 'compliance',
-          type: 'detailed_report',
-          version: '1.5',
-          config: {
-            refreshFrequency: 'weekly',
-            autoRefresh: false,
-            cacheEnabled: true,
-            cacheDuration: 240,
-            maxDataPoints: 5000,
-            dateRange: {
-              type: 'relative',
-              relative: { unit: 'quarters', value: 1, includeToday: true }
-            },
-            aggregationLevel: 'weekly',
-            includeHistorical: true,
-            realTimeUpdates: false
-          },
-          layout: {
-            orientation: 'portrait',
-            pageSize: 'A4',
-            columns: 2,
-            gridTemplate: {
-              rows: ['auto', '1fr'],
-              columns: ['1fr', '1fr'],
-              areas: [
-                ['header', 'header'],
-                ['content', 'sidebar']
-              ],
-              gap: { row: 20, column: 20 }
-            },
-            responsiveBreakpoints: []
-          },
-          sections: [],
-          dataSources: [],
-          filters: [],
-          parameters: [],
-          styling: {} as any,
-          permissions: {
-            view: [{ type: 'role', identifier: 'auditor' }],
-            edit: [{ type: 'role', identifier: 'auditor' }],
-            delete: [{ type: 'role', identifier: 'admin' }],
-            export: [{ type: 'role', identifier: 'auditor' }],
-            schedule: [{ type: 'role', identifier: 'auditor' }],
-            share: [{ type: 'role', identifier: 'auditor' }]
-          },
-          aiFeatures: {
-            narrativeGeneration: {
-              enabled: true,
-              sections: ['compliance-summary', 'findings'],
-              style: 'detailed_analysis',
-              length: 'long',
-              language: 'en',
-              tone: 'formal',
-              includeInsights: true,
-              includeRecommendations: true
-            },
-            insightGeneration: {
-              enabled: true,
-              types: ['trend', 'pattern', 'benchmark_comparison'],
-              confidence: 85,
-              priority: ['critical', 'high', 'medium'],
-              categories: ['compliance', 'controls'],
-              maxInsights: 10
-            },
-            recommendationEngine: {
-              enabled: true,
-              types: ['compliance_improvement', 'process_improvement'],
-              context: {
-                organizationProfile: {
-                  industry: 'technology',
-                  size: 'medium',
-                  region: 'us',
-                  riskProfile: 'medium',
-                  maturityLevel: 4
-                },
-                userRole: 'auditor',
-                historicalData: true,
-                industryBenchmarks: true,
-                regulatoryRequirements: true
-              },
-              personalization: {
-                enabled: false,
-                userPreferences: false,
-                roleBasedFiltering: true,
-                historicalInteractions: false,
-                learningEnabled: false
-              },
-              maxRecommendations: 5
-            },
-            anomalyDetection: {
-              enabled: false,
-              algorithms: [],
-              sensitivity: 0.5,
-              seasonality: false,
-              trendFiltering: false,
-              minDataPoints: 0
-            },
-            predictiveAnalytics: {
-              enabled: false,
-              models: [],
-              horizon: 0,
-              confidence: 0,
-              scenarios: []
-            },
-            naturalLanguageQuery: {
-              enabled: false,
-              supportedLanguages: [],
-              contextAware: false,
-              suggestionsEnabled: false,
-              maxTokens: 0
-            }
-          },
-          createdBy: 'auditor',
-          createdAt: new Date('2024-01-05'),
-          updatedAt: new Date('2024-01-18'),
-          lastUsed: new Date('2024-01-23'),
-          usageCount: 43,
-          isPublic: false,
-          isSystem: false,
-          tags: ['compliance', 'soc2', 'audit'],
-          organizationId: 'org-1'
-        },
-        {
-          id: 'rpt-003',
-          name: 'Monthly Risk Trend Analysis',
-          description: 'AI-powered risk trend analysis with predictive insights',
-          category: 'risk_management',
-          type: 'trend_analysis',
-          version: '3.0',
-          config: {
-            refreshFrequency: 'monthly',
-            autoRefresh: true,
-            cacheEnabled: true,
-            cacheDuration: 1440,
-            maxDataPoints: 2000,
-            dateRange: {
-              type: 'relative',
-              relative: { unit: 'months', value: 12, includeToday: true }
-            },
-            aggregationLevel: 'monthly',
-            includeHistorical: true,
-            realTimeUpdates: true
-          },
-          layout: {
-            orientation: 'landscape',
-            pageSize: 'A3',
-            columns: 4,
-            gridTemplate: {
-              rows: ['auto', '1fr', '1fr'],
-              columns: ['1fr', '1fr', '1fr', '1fr'],
-              areas: [
-                ['header', 'header', 'header', 'ai-panel'],
-                ['trends', 'trends', 'forecast', 'forecast'],
-                ['insights', 'insights', 'recommendations', 'recommendations']
-              ],
-              gap: { row: 16, column: 16 }
-            },
-            responsiveBreakpoints: []
-          },
-          sections: [],
-          dataSources: [],
-          filters: [],
-          parameters: [],
-          styling: {} as any,
-          permissions: {
-            view: [{ type: 'role', identifier: 'analyst' }],
-            edit: [{ type: 'role', identifier: 'analyst' }],
-            delete: [{ type: 'role', identifier: 'admin' }],
-            export: [{ type: 'role', identifier: 'analyst' }],
-            schedule: [{ type: 'role', identifier: 'analyst' }],
-            share: [{ type: 'role', identifier: 'analyst' }]
-          },
-          aiFeatures: {
-            narrativeGeneration: {
-              enabled: true,
-              sections: ['trend-summary', 'prediction-summary'],
-              style: 'detailed_analysis',
-              length: 'long',
-              language: 'en',
-              tone: 'technical',
-              includeInsights: true,
-              includeRecommendations: true
-            },
-            insightGeneration: {
-              enabled: true,
-              types: ['trend', 'anomaly', 'correlation', 'forecast'],
-              confidence: 75,
-              priority: ['critical', 'high', 'medium'],
-              categories: ['risk', 'trends', 'prediction'],
-              maxInsights: 15
-            },
-            recommendationEngine: {
-              enabled: true,
-              types: ['risk_mitigation', 'process_improvement', 'automation_opportunity'],
-              context: {
-                organizationProfile: {
-                  industry: 'financial',
-                  size: 'large',
-                  region: 'us',
-                  riskProfile: 'high',
-                  maturityLevel: 4
-                },
-                userRole: 'analyst',
-                historicalData: true,
-                industryBenchmarks: true,
-                regulatoryRequirements: true
-              },
-              personalization: {
-                enabled: true,
-                userPreferences: true,
-                roleBasedFiltering: true,
-                historicalInteractions: true,
-                learningEnabled: true
-              },
-              maxRecommendations: 8
-            },
-            anomalyDetection: {
-              enabled: true,
-              algorithms: ['statistical', 'isolation_forest', 'lstm_autoencoder'],
-              sensitivity: 0.8,
-              seasonality: true,
-              trendFiltering: true,
-              minDataPoints: 50
-            },
-            predictiveAnalytics: {
-              enabled: true,
-              models: [
-                {
-                  id: 'risk-forecast-advanced',
-                  name: 'Advanced Risk Forecaster',
-                  type: 'lstm',
-                  features: ['risk_score', 'control_effectiveness', 'incident_count', 'threat_level'],
-                  target: 'risk_trend',
-                  accuracy: 0.92,
-                  lastTrained: new Date('2024-01-20')
-                },
-                {
-                  id: 'control-performance',
-                  name: 'Control Performance Predictor',
-                  type: 'xgboost',
-                  features: ['test_results', 'effectiveness_score', 'maturity_level'],
-                  target: 'control_health',
-                  accuracy: 0.88,
-                  lastTrained: new Date('2024-01-18')
-                }
-              ],
-              horizon: 180,
-              confidence: 0.85,
-              scenarios: [
-                {
-                  name: 'Baseline',
-                  description: 'Current trajectory continues',
-                  parameters: [],
-                  probability: 0.6
-                },
-                {
-                  name: 'Increased Threat',
-                  description: 'External threat level increases by 25%',
-                  parameters: [{ field: 'threat_level', adjustment: 25, type: 'increase' }],
-                  probability: 0.3
-                }
-              ]
-            },
-            naturalLanguageQuery: {
-              enabled: true,
-              supportedLanguages: ['en'],
-              contextAware: true,
-              suggestionsEnabled: true,
-              maxTokens: 4000
-            }
-          },
-          createdBy: 'analyst',
-          createdAt: new Date('2024-01-01'),
-          updatedAt: new Date('2024-01-25'),
-          lastUsed: new Date('2024-01-26'),
-          usageCount: 89,
-          isPublic: false,
-          isSystem: false,
-          tags: ['risk', 'trends', 'ai', 'predictive'],
-          organizationId: 'org-1'
+      // Load data from APIs in parallel
+      const [reportsResponse, metricsResponse] = await Promise.all([
+        fetch('/api/reports?limit=50', { credentials: 'include' }),
+        fetch('/api/reporting/metrics?timeRange=30d', { credentials: 'include' })
+      ]);
+
+      // Handle reports
+      if (reportsResponse.ok) {
+        const reportsData = await reportsResponse.json();
+        if (reportsData.success || reportsData.data) {
+          setReports(reportsData.data || []);
         }
-      ];
+      }
 
-      setReports(demoReports);
+      // Handle metrics
+      if (metricsResponse.ok) {
+        const metricsData = await metricsResponse.json();
+        if (metricsData.success || metricsData.data) {
+          setMetrics(metricsData.data);
+        }
+      }
+
+      // Calculate analytics from real data
+      const totalReports = reports.length || 0;
+      const totalViews = reports.reduce((sum, r) => sum + (r.totalViews || 0), 0);
       
-      // Calculate analytics
-      const totalViews = demoReports.reduce((sum, r) => sum + r.usageCount, 0);
-      const aiEnabled = demoReports.filter(r => r.aiFeatures.narrativeGeneration.enabled).length;
-
       setAnalytics({
-        totalReports: demoReports.length,
-        activeGenerations: 2,
-        scheduledReports: 5,
+        totalReports,
+        activeGenerations: 2, // Would come from a separate API
+        scheduledReports: reports.filter(r => r.scheduledDelivery?.enabled).length,
         totalViews,
-        aiInsights: aiEnabled * 12, // Estimate
-        avgGenerationTime: 45 // seconds
+        aiInsights: totalReports * 8, // Estimate based on reports with AI features
+        avgGenerationTime: 45 // Would come from metrics API
       });
 
       setIsLoading(false);
       
       toast({
         title: 'Reporting System Ready',
-        description: `${demoReports.length} report templates loaded with AI intelligence`,
+        description: `${totalReports} reports loaded successfully`,
       });
     } catch (error) {
-      console.error('Failed to load reports:', error);
+      console.error('Failed to load reporting data:', error);
       setIsLoading(false);
       toast({
         title: 'Loading Failed',
-        description: 'Unable to load reports. Please try again.',
+        description: 'Unable to load reporting data. Please try again.',
         variant: 'destructive',
       });
     }
@@ -526,8 +123,10 @@ export default function ReportingPage({ view = 'dashboard' }: ReportingPageProps
 
   // Filtering
   const filteredReports = reports.filter(r => {
-    const matchesSearch = r.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         r.description.toLowerCase().includes(searchQuery.toLowerCase());
+    if (!r) return false;
+    const matchesSearch = !searchQuery || 
+      (r.title || r.name || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (r.description || '').toLowerCase().includes(searchQuery.toLowerCase());
     const matchesCategory = selectedCategory === 'all' || r.category === selectedCategory;
     const matchesType = selectedType === 'all' || r.type === selectedType;
     
@@ -733,27 +332,171 @@ export default function ReportingPage({ view = 'dashboard' }: ReportingPageProps
         </TabsList>
 
         <TabsContent value="dashboard" className="space-y-6">
-          <div className="text-center py-12">
-            <BarChart3 className="w-16 h-16 text-notion-text-tertiary mx-auto mb-4" />
-            <h3 className="text-lg font-semibold text-notion-text-primary mb-2">
-              Interactive Dashboard Coming Soon
-            </h3>
-            <p className="text-notion-text-secondary">
-              Real-time reporting dashboard will be available here
-            </p>
-          </div>
+          {metrics ? (
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <TrendingUp className="h-5 w-5 text-blue-600" />
+                    Risk Trends
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm text-gray-600">Critical Risks</span>
+                      <Badge variant="destructive">{metrics.summary?.criticalRisks || 0}</Badge>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm text-gray-600">High Risks</span>
+                      <Badge variant="secondary" className="bg-orange-100 text-orange-800">{metrics.summary?.highRisks || 0}</Badge>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm text-gray-600">Total Risks</span>
+                      <Badge variant="secondary">{metrics.summary?.totalRisks || 0}</Badge>
+                    </div>
+                    <div className="mt-4 pt-4 border-t">
+                      <span className="text-sm text-gray-600">Risk Trend: </span>
+                      <Badge variant={metrics.summary?.trendsAnalysis?.riskTrend === 'decreasing' ? 'default' : 'secondary'}>
+                        {metrics.summary?.trendsAnalysis?.riskTrend || 'stable'}
+                      </Badge>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Shield className="h-5 w-5 text-green-600" />
+                    Control Effectiveness
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm text-gray-600">Total Controls</span>
+                      <Badge variant="secondary">{metrics.summary?.totalControls || 0}</Badge>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm text-gray-600">Effective Controls</span>
+                      <Badge variant="default" className="bg-green-100 text-green-800">{metrics.summary?.effectiveControls || 0}</Badge>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm text-gray-600">Effectiveness Rate</span>
+                      <Badge variant="secondary">
+                        {metrics.summary?.totalControls > 0 ? Math.round((metrics.summary.effectiveControls / metrics.summary.totalControls) * 100) : 0}%
+                      </Badge>
+                    </div>
+                    <div className="mt-4 pt-4 border-t">
+                      <span className="text-sm text-gray-600">Compliance Rate: </span>
+                      <Badge variant="default" className="bg-blue-100 text-blue-800">
+                        {metrics.summary?.complianceRate || 0}%
+                      </Badge>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          ) : (
+            <div className="text-center py-12">
+              <BarChart3 className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                Loading Dashboard Data
+              </h3>
+              <p className="text-gray-600">
+                Fetching real-time reporting metrics...
+              </p>
+            </div>
+          )}
         </TabsContent>
 
         <TabsContent value="library" className="space-y-6">
-          <div className="text-center py-12">
-            <FileText className="w-16 h-16 text-notion-text-tertiary mx-auto mb-4" />
-            <h3 className="text-lg font-semibold text-notion-text-primary mb-2">
-              Report Library Coming Soon
-            </h3>
-            <p className="text-notion-text-secondary">
-              Comprehensive report templates library will be available here
-            </p>
+          {/* Search and Filters */}
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+                <Input
+                  placeholder="Search reports..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="pl-10 w-80"
+                />
+              </div>
+              <Select value={selectedCategory} onValueChange={(value: any) => setSelectedCategory(value)}>
+                <SelectTrigger className="w-40">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Categories</SelectItem>
+                  <SelectItem value="executive">Executive</SelectItem>
+                  <SelectItem value="compliance">Compliance</SelectItem>
+                  <SelectItem value="risk_management">Risk Management</SelectItem>
+                  <SelectItem value="operational">Operational</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <Button onClick={handleCreateReport}>
+              <Plus className="h-4 w-4 mr-2" />
+              New Report
+            </Button>
           </div>
+
+          {/* Reports List */}
+          {filteredReports.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {filteredReports.map((report) => (
+                <Card key={report.id} className="hover:shadow-md transition-shadow cursor-pointer">
+                  <CardHeader className="pb-3">
+                    <div className="flex items-start justify-between">
+                      <div className="flex-1">
+                        <CardTitle className="text-lg">{report.title || report.name}</CardTitle>
+                        <p className="text-sm text-gray-600 mt-1 line-clamp-2">
+                          {report.description}
+                        </p>
+                      </div>
+                      <Badge variant="secondary" className="ml-2">
+                        {report.category}
+                      </Badge>
+                    </div>
+                  </CardHeader>
+                  <CardContent className="pt-0">
+                    <div className="flex items-center justify-between text-sm text-gray-500 mb-3">
+                      <span>By {report.createdBy}</span>
+                      <span>{report.totalViews || 0} views</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Button variant="outline" size="sm" className="flex-1">
+                        <Eye className="h-4 w-4 mr-1" />
+                        View
+                      </Button>
+                      <Button variant="outline" size="sm" onClick={() => handleGenerateReport(report.id)}>
+                        <Download className="h-4 w-4 mr-1" />
+                        Generate
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-12">
+              <FileText className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                {searchQuery || selectedCategory !== 'all' ? 'No Matching Reports' : 'No Reports Available'}
+              </h3>
+              <p className="text-gray-600 mb-4">
+                {searchQuery || selectedCategory !== 'all' 
+                  ? 'Try adjusting your search or filters'
+                  : 'Create your first report to get started'}
+              </p>
+              <Button onClick={handleCreateReport}>
+                <Plus className="h-4 w-4 mr-2" />
+                Create Report
+              </Button>
+            </div>
+          )}
         </TabsContent>
 
         <TabsContent value="builder" className="space-y-6">

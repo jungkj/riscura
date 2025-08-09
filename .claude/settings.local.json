@@ -27,8 +27,26 @@
       "Bash(npm run dev:*)",
       "Bash(curl:*)",
       "Bash(test:*)",
-      "Bash(cp:*)"
+      "Bash(cp:*)",
+      "Bash(npm install:*)",
+      "Bash(tasklist:*)",
+      "Bash(powershell:*)",
+      "Bash(wmic:*)",
+      "Bash(npx:*)",
+      "Bash(set SUPABASE_ACCESS_TOKEN=sbp_3fc89c44813ec40157aa50b135c57a56e7bd1e87)",
+      "Bash(npm run health:database:*)",
+      "Bash(npm run:*)",
+      "Bash(grep:*)",
+      "mcp__supabase__get_project_url",
+      "mcp__supabase__get_anon_key",
+      "mcp__supabase__execute_sql",
+      "mcp__supabase__list_extensions",
+      "Bash(timeout 30s npm run dev:*)"
     ],
     "deny": []
-  }
+  },
+  "enableAllProjectMcpServers": true,
+  "enabledMcpjsonServers": [
+    "supabase"
+  ]
 }

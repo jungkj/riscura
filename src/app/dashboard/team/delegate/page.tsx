@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
 import { MainContentArea } from '@/components/layout/MainContentArea';
 import { Button } from '@/components/ui/button';
@@ -75,115 +75,7 @@ interface DelegatedTask {
   comments: number;
 }
 
-// Sample data
-const sampleTeamMembers: TeamMember[] = [
-  {
-    id: 'user-1',
-    name: 'Sarah Chen',
-    email: 'sarah.chen@company.com',
-    role: 'manager',
-    department: 'Security',
-    status: 'active',
-    workload: 75,
-    completedTasks: 23,
-    assignedTasks: 8,
-    expertise: ['SOC 2', 'Risk Management', 'Access Controls'],
-  },
-  {
-    id: 'user-2',
-    name: 'Michael Rodriguez',
-    email: 'michael.rodriguez@company.com',
-    role: 'analyst',
-    department: 'Compliance',
-    status: 'active',
-    workload: 60,
-    completedTasks: 18,
-    assignedTasks: 5,
-    expertise: ['GDPR', 'Data Protection', 'Privacy'],
-  },
-  {
-    id: 'user-3',
-    name: 'Emma Johnson',
-    email: 'emma.johnson@company.com',
-    role: 'auditor',
-    department: 'Internal Audit',
-    status: 'busy',
-    workload: 90,
-    completedTasks: 31,
-    assignedTasks: 12,
-    expertise: ['ISO 27001', 'Control Testing', 'Documentation'],
-  },
-  {
-    id: 'user-4',
-    name: 'David Kim',
-    email: 'david.kim@company.com',
-    role: 'analyst',
-    department: 'IT Security',
-    status: 'active',
-    workload: 45,
-    completedTasks: 15,
-    assignedTasks: 3,
-    expertise: ['Network Security', 'Vulnerability Management', 'NIST'],
-  },
-];
-
-const sampleTasks: DelegatedTask[] = [
-  {
-    id: 'TASK-001',
-    title: 'SOC 2 Access Control Review',
-    description: 'Review and test access control implementations for SOC 2 Type II audit preparation',
-    type: 'control_testing',
-    priority: 'critical',
-    status: 'in_progress',
-    assignee: 'user-1',
-    assignedBy: 'admin',
-    dueDate: new Date('2024-02-15'),
-    createdDate: new Date('2024-01-20'),
-    estimatedHours: 16,
-    actualHours: 8,
-    progress: 50,
-    framework: 'SOC 2',
-    tags: ['access-control', 'soc2', 'audit'],
-    attachments: 3,
-    comments: 7,
-  },
-  {
-    id: 'TASK-002',
-    title: 'GDPR Data Processing Assessment',
-    description: 'Conduct comprehensive assessment of data processing activities for GDPR compliance',
-    type: 'compliance_review',
-    priority: 'high',
-    status: 'pending',
-    assignee: 'user-2',
-    assignedBy: 'admin',
-    dueDate: new Date('2024-02-28'),
-    createdDate: new Date('2024-01-25'),
-    estimatedHours: 24,
-    progress: 0,
-    framework: 'GDPR',
-    tags: ['gdpr', 'data-protection', 'assessment'],
-    attachments: 1,
-    comments: 2,
-  },
-  {
-    id: 'TASK-003',
-    title: 'Risk Register Update',
-    description: 'Update quarterly risk register with new identified risks and control assessments',
-    type: 'risk_assessment',
-    priority: 'medium',
-    status: 'review',
-    assignee: 'user-3',
-    assignedBy: 'admin',
-    dueDate: new Date('2024-02-10'),
-    createdDate: new Date('2024-01-15'),
-    estimatedHours: 12,
-    actualHours: 14,
-    progress: 95,
-    tags: ['risk-management', 'quarterly-review'],
-    attachments: 5,
-    comments: 12,
-  },
-];
+// Data will be fetched from API
 
 const getRoleConfig = (role: string) => {
   const configs = {
@@ -233,6 +125,10 @@ export default function TeamDelegatePage() {
   const [selectedStatus, setSelectedStatus] = useState('all');
   const [selectedMember, setSelectedMember] = useState('');
   const [isCreateTaskModalOpen, setIsCreateTaskModalOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
+  const [delegatedTasks, setDelegatedTasks] = useState<DelegatedTask[]>([]);
+  const [summary, setSummary] = useState<any>({});
   const [newTask, setNewTask] = useState({
     title: '',
     description: '',
@@ -245,10 +141,50 @@ export default function TeamDelegatePage() {
     tags: [] as string[],
   });
 
-  const totalTasks = sampleTasks.length;
-  const pendingTasks = sampleTasks.filter(t => t.status === 'pending').length;
-  const inProgressTasks = sampleTasks.filter(t => t.status === 'in_progress').length;
-  const completedTasks = sampleTasks.filter(t => t.status === 'completed').length;
+  useEffect(() => {
+    fetchTeamData();
+  }, []);
+
+  const fetchTeamData = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch('/api/team?includeWorkload=true&includeTasks=true', { 
+        credentials: 'include' 
+      });
+      
+      if (response.ok) {
+        const data = await response.json();
+        if (data.success && data.data) {
+          setTeamMembers(data.data.teamMembers || []);
+          setDelegatedTasks(data.data.delegatedTasks || []);
+          setSummary(data.data.summary || {});
+        } else {
+          console.error('Failed to load team data:', data.error);
+          // Fallback to empty data
+          setTeamMembers([]);
+          setDelegatedTasks([]);
+          setSummary({});
+        }
+      } else {
+        console.error('Failed to fetch team data:', response.statusText);
+        setTeamMembers([]);
+        setDelegatedTasks([]);
+        setSummary({});
+      }
+    } catch (error) {
+      console.error('Error fetching team data:', error);
+      setTeamMembers([]);
+      setDelegatedTasks([]);
+      setSummary({});
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const totalTasks = summary.totalTasks || 0;
+  const pendingTasks = summary.pendingTasks || 0;
+  const inProgressTasks = summary.inProgressTasks || 0;
+  const completedTasks = summary.completedTasks || 0;
 
   const handleCreateTask = () => {
     setIsCreateTaskModalOpen(true);
@@ -305,7 +241,7 @@ export default function TeamDelegatePage() {
       comments: 0,
     };
 
-    toast.success(`Task "${task.title}" created and assigned to ${sampleTeamMembers.find(m => m.id === task.assignee)?.name}`);
+    toast.success(`Task "${task.title}" created and assigned to ${teamMembers.find(m => m.id === task.assignee)?.name}`);
     setIsCreateTaskModalOpen(false);
     setNewTask({
       title: '',
@@ -400,14 +336,20 @@ export default function TeamDelegatePage() {
 
         <TabsContent value="overview" className="space-y-6">
           {/* Team Performance Overview */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            {sampleTeamMembers.map((member) => {
-              const roleConfig = getRoleConfig(member.role);
-              const statusConfig = getStatusConfig(member.status);
-              
-              return (
-                <Card key={member.id}>
-                  <CardHeader className="pb-3">
+          {loading ? (
+            <div className="flex items-center justify-center py-8">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mr-3"></div>
+              <span className="text-gray-600">Loading team data...</span>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              {teamMembers.map((member) => {
+                const roleConfig = getRoleConfig(member.role);
+                const statusConfig = getStatusConfig(member.status);
+                
+                return (
+                  <Card key={member.id}>
+                    <CardHeader className="pb-3">
                     <div className="flex items-center space-x-3">
                       <Avatar className="h-10 w-10">
                         <AvatarImage src={member.avatar} />
@@ -467,10 +409,11 @@ export default function TeamDelegatePage() {
                       </div>
                     </div>
                   </CardContent>
-                </Card>
-              );
-            })}
+                  </Card>
+                );
+              })}
           </div>
+          )}
 
           {/* Recent Activity */}
           <Card>
@@ -480,8 +423,8 @@ export default function TeamDelegatePage() {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {sampleTasks.slice(0, 3).map((task) => {
-                  const member = sampleTeamMembers.find(m => m.id === task.assignee);
+                {delegatedTasks.slice(0, 3).map((task) => {
+                  const member = teamMembers.find(m => m.id === task.assignee);
                   const priorityConfig = getPriorityConfig(task.priority);
                   const statusConfig = getTaskStatusConfig(task.status);
                   const StatusIcon = statusConfig.icon;
@@ -557,14 +500,14 @@ export default function TeamDelegatePage() {
             </Select>
 
             <div className="text-sm text-gray-600 ml-auto">
-              {sampleTasks.length} task{sampleTasks.length !== 1 ? 's' : ''} found
+              {delegatedTasks.length} task{delegatedTasks.length !== 1 ? 's' : ''} found
             </div>
           </div>
 
           {/* Task List */}
           <div className="space-y-4">
-            {sampleTasks.map((task) => {
-              const member = sampleTeamMembers.find(m => m.id === task.assignee);
+            {delegatedTasks.map((task) => {
+              const member = teamMembers.find(m => m.id === task.assignee);
               const priorityConfig = getPriorityConfig(task.priority);
               const statusConfig = getTaskStatusConfig(task.status);
               const StatusIcon = statusConfig.icon;
@@ -699,7 +642,7 @@ export default function TeamDelegatePage() {
 
         <TabsContent value="team" className="space-y-6">
           <div className="grid gap-6">
-            {sampleTeamMembers.map((member) => {
+            {teamMembers.map((member) => {
               const roleConfig = getRoleConfig(member.role);
               const statusConfig = getStatusConfig(member.status);
               
@@ -884,7 +827,7 @@ export default function TeamDelegatePage() {
                         <SelectValue placeholder="Select team member" />
                       </SelectTrigger>
                       <SelectContent>
-                        {sampleTeamMembers.map((member) => (
+                        {teamMembers.map((member) => (
                           <SelectItem key={member.id} value={member.id}>
                             <div className="flex items-center space-x-2">
                               <span>{member.name}</span>

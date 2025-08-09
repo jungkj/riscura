@@ -924,7 +924,8 @@ export const demoData = {
 
 // Helper function to get demo data for a specific entity
 export function getDemoData(entity: string, organizationId: string) {
-  if (organizationId !== 'demo-org-id') {
+  // Use production-safe demo mode check
+  if (!shouldServeDemoData(undefined, organizationId)) {
     return null;
   }
 
@@ -952,9 +953,12 @@ export function getDemoData(entity: string, organizationId: string) {
   }
 }
 
+// Import production-safe demo mode controls
+import { shouldServeDemoData } from './demo/demo-mode';
+
 // Helper to check if a user is using demo mode
 export function isDemoUser(userId: string): boolean {
-  return userId === 'demo-admin-id';
+  return shouldServeDemoData(userId, undefined);
 }
 
 // Helper to get demo user details

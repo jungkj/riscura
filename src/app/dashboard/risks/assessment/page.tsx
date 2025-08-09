@@ -1,6 +1,6 @@
 'use client';
 
-import { Suspense, useState } from 'react';
+import { Suspense, useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -21,68 +21,98 @@ import {
   Edit
 } from 'lucide-react';
 
+interface Assessment {
+  id: string;
+  title: string;
+  status: string;
+  progress: number;
+  dueDate: string;
+  assignedToName: string;
+  priority: string;
+  riskCount: number;
+  type?: string;
+  description?: string;
+}
+
 export default function RiskAssessmentPage() {
   const router = useRouter();
-  const [selectedAssessment, setSelectedAssessment] = useState<number | null>(null);
+  const [selectedAssessment, setSelectedAssessment] = useState<string | null>(null);
+  const [assessments, setAssessments] = useState<Assessment[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  // Mock data for assessments
-  const assessments = [
-    {
-      id: 1,
-      title: 'Annual Security Assessment',
-      status: 'In Progress',
-      progress: 65,
-      dueDate: '2025-02-15',
-      assignee: 'Security Team',
-      priority: 'High',
-      riskCount: 12
-    },
-    {
-      id: 2,
-      title: 'Compliance Risk Review',
-      status: 'Completed',
-      progress: 100,
-      dueDate: '2025-01-30',
-      assignee: 'Compliance Team',
-      priority: 'Medium',
-      riskCount: 8
-    },
-    {
-      id: 3,
-      title: 'Third-Party Vendor Assessment',
-      status: 'Pending',
-      progress: 0,
-      dueDate: '2025-03-01',
-      assignee: 'Risk Team',
-      priority: 'High',
-      riskCount: 15
-    }
-  ];
+  // Fetch assessments from API
+  useEffect(() => {
+    const fetchAssessments = async () => {
+      try {
+        const response = await fetch('/api/assessments', { credentials: 'include' });
+        if (response.ok) {
+          const data = await response.json();
+          if (data.success && data.data) {
+            setAssessments(data.data);
+          } else {
+            // Only show fallback in development
+            if (process.env.NODE_ENV !== 'production') {
+              console.warn('No assessments data available, using fallback in development');
+              setAssessments([]);
+            } else {
+              setAssessments([]);
+            }
+          }
+        } else {
+          console.error('Failed to fetch assessments:', response.statusText);
+          setError('Failed to fetch assessments');
+          setAssessments([]);
+        }
+      } catch (error) {
+        console.error('Error fetching assessments:', error);
+        setError('Failed to load assessments');
+        setAssessments([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchAssessments();
+  }, []);
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'Completed': return 'bg-green-100 text-green-800 border-green-200';
-      case 'In Progress': return 'bg-blue-100 text-blue-800 border-blue-200';
-      case 'Pending': return 'bg-yellow-100 text-yellow-800 border-yellow-200';
+      case 'COMPLETED': return 'bg-green-100 text-green-800 border-green-200';
+      case 'IN_PROGRESS': return 'bg-blue-100 text-blue-800 border-blue-200';
+      case 'DRAFT': return 'bg-yellow-100 text-yellow-800 border-yellow-200';
+      case 'CANCELLED': return 'bg-red-100 text-red-800 border-red-200';
       default: return 'bg-gray-100 text-gray-800 border-gray-200';
     }
   };
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case 'High': return 'bg-red-100 text-red-800 border-red-200';
-      case 'Medium': return 'bg-orange-100 text-orange-800 border-orange-200';
-      case 'Low': return 'bg-green-100 text-green-800 border-green-200';
+      case 'HIGH': return 'bg-red-100 text-red-800 border-red-200';
+      case 'MEDIUM': return 'bg-orange-100 text-orange-800 border-orange-200';
+      case 'LOW': return 'bg-green-100 text-green-800 border-green-200';
       default: return 'bg-gray-100 text-gray-800 border-gray-200';
     }
   };
 
-  const handleViewDetails = (assessmentId: number) => {
+  // Calculate stats from actual data
+  const calculateStats = () => {
+    const total = assessments.length;
+    const inProgress = assessments.filter(a => a.status === 'IN_PROGRESS').length;
+    const pending = assessments.filter(a => a.status === 'DRAFT').length;
+    const completed = assessments.filter(a => a.status === 'COMPLETED').length;
+    
+    return { total, inProgress, pending, completed };
+  };
+
+  const stats = calculateStats();
+
+  const handleViewDetails = (assessmentId: string) => {
     // Navigate to assessment detail page
     router.push(`/dashboard/risks/assessment/${assessmentId}`);
   };
 
-  const handleEditAssessment = (assessmentId: number) => {
+  const handleEditAssessment = (assessmentId: string) => {
     // Navigate to assessment edit page
     router.push(`/dashboard/risks/assessment/${assessmentId}/edit`);
   };
@@ -134,7 +164,7 @@ export default function RiskAssessmentPage() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-blue-600">Total Assessments</p>
-                <p className="text-3xl font-bold text-blue-900">3</p>
+                <p className="text-3xl font-bold text-blue-900">{loading ? '-' : stats.total}</p>
               </div>
               <Target className="h-8 w-8 text-blue-600" />
             </div>
@@ -146,7 +176,7 @@ export default function RiskAssessmentPage() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-green-600">In Progress</p>
-                <p className="text-3xl font-bold text-green-900">1</p>
+                <p className="text-3xl font-bold text-green-900">{loading ? '-' : stats.inProgress}</p>
               </div>
               <TrendingUp className="h-8 w-8 text-green-600" />
             </div>
@@ -158,7 +188,7 @@ export default function RiskAssessmentPage() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-yellow-600">Pending</p>
-                <p className="text-3xl font-bold text-yellow-900">1</p>
+                <p className="text-3xl font-bold text-yellow-900">{loading ? '-' : stats.pending}</p>
               </div>
               <AlertTriangle className="h-8 w-8 text-yellow-600" />
             </div>
@@ -170,7 +200,7 @@ export default function RiskAssessmentPage() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-emerald-600">Completed</p>
-                <p className="text-3xl font-bold text-emerald-900">1</p>
+                <p className="text-3xl font-bold text-emerald-900">{loading ? '-' : stats.completed}</p>
               </div>
               <FileCheck className="h-8 w-8 text-emerald-600" />
             </div>
@@ -187,8 +217,28 @@ export default function RiskAssessmentPage() {
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          <Suspense fallback={<LoadingSpinner />}>
-            {assessments.map((assessment) => (
+          {loading ? (
+            <div className="flex items-center justify-center py-8">
+              <LoadingSpinner />
+              <span className="ml-2 text-gray-600">Loading assessments...</span>
+            </div>
+          ) : error ? (
+            <div className="flex items-center justify-center py-8 text-red-600">
+              <AlertTriangle className="h-5 w-5 mr-2" />
+              {error}
+            </div>
+          ) : assessments.length === 0 ? (
+            <div className="flex flex-col items-center justify-center py-12 text-gray-500">
+              <FileCheck className="h-12 w-12 mb-4 text-gray-400" />
+              <h3 className="text-lg font-medium mb-2">No Assessments Found</h3>
+              <p className="text-center mb-4">Get started by creating your first risk assessment.</p>
+              <Button onClick={handleNewAssessment}>
+                <Plus className="h-4 w-4 mr-2" />
+                Create Assessment
+              </Button>
+            </div>
+          ) : (
+            assessments.map((assessment) => (
               <Card key={assessment.id} className="border-gray-200 hover:shadow-md transition-shadow">
                 <CardContent className="p-6">
                   <div className="flex items-start justify-between">
@@ -212,7 +262,7 @@ export default function RiskAssessmentPage() {
                         </div>
                         <div className="flex items-center space-x-2 text-sm text-gray-600">
                           <Users className="w-4 h-4" />
-                          <span>{assessment.assignee}</span>
+                          <span>{assessment.assignedToName || 'Unassigned'}</span>
                         </div>
                         <div className="flex items-center space-x-2 text-sm text-gray-600">
                           <AlertTriangle className="w-4 h-4" />
@@ -220,7 +270,7 @@ export default function RiskAssessmentPage() {
                         </div>
                       </div>
 
-                      {assessment.status === 'In Progress' && (
+                      {assessment.status === 'IN_PROGRESS' && (
                         <div className="mb-4">
                           <div className="flex items-center justify-between text-sm text-gray-600 mb-2">
                             <span>Progress</span>
@@ -252,8 +302,8 @@ export default function RiskAssessmentPage() {
                   </div>
                 </CardContent>
               </Card>
-            ))}
-          </Suspense>
+            ))
+          )}
         </CardContent>
       </Card>
     </div>

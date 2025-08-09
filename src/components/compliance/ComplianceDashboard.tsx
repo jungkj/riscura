@@ -51,101 +51,62 @@ const ComplianceDashboard: React.FC = () => {
   const [frameworks, setFrameworks] = useState<ComplianceFramework[]>([]);
   const [gaps, setGaps] = useState<ComplianceGap[]>([]);
   const [insights, setInsights] = useState<ComplianceInsight[]>([]);
+  const [summary, setSummary] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [selectedFramework, setSelectedFramework] = useState<string>('');
 
-  // Mock data for demonstration
-  const mockFrameworks: ComplianceFramework[] = [
-    {
-      id: 'sox-2002',
-      name: 'Sarbanes-Oxley Act',
-      description: 'U.S. federal law for public companies',
-      type: 'regulatory',
-      mandatory: true,
-      coverage: 85,
-      maturityScore: 78,
-      gaps: 12,
-      status: 'in-progress',
-    },
-    {
-      id: 'iso-27001-2022',
-      name: 'ISO/IEC 27001:2022',
-      description: 'Information security management systems',
-      type: 'standard',
-      mandatory: false,
-      coverage: 92,
-      maturityScore: 88,
-      gaps: 3,
-      status: 'compliant',
-    },
-    {
-      id: 'gdpr-2018',
-      name: 'General Data Protection Regulation',
-      description: 'EU regulation on data protection',
-      type: 'regulatory',
-      mandatory: true,
-      coverage: 76,
-      maturityScore: 71,
-      gaps: 8,
-      status: 'in-progress',
-    },
-    {
-      id: 'nist-csf-2.0',
-      name: 'NIST Cybersecurity Framework',
-      description: 'Framework for cybersecurity',
-      type: 'guideline',
-      mandatory: false,
-      coverage: 68,
-      maturityScore: 65,
-      gaps: 15,
-      status: 'in-progress',
-    },
-  ];
-
-  const mockGaps: ComplianceGap[] = [
-    { id: '1', title: 'Access Control Testing', priority: 'critical', framework: 'SOX', category: 'IT Controls', dueDate: '2024-03-15' },
-    { id: '2', title: 'Data Encryption Policy', priority: 'high', framework: 'GDPR', category: 'Data Protection', dueDate: '2024-03-22' },
-    { id: '3', title: 'Incident Response Plan', priority: 'medium', framework: 'ISO 27001', category: 'Security Management', dueDate: '2024-04-01' },
-    { id: '4', title: 'Risk Assessment Documentation', priority: 'high', framework: 'NIST', category: 'Risk Management', dueDate: '2024-03-30' },
-  ];
-
-  const mockInsights: ComplianceInsight[] = [
-    {
-      id: '1',
-      type: 'risk-based-prioritization',
-      title: 'Control Prioritization Recommendations',
-      description: 'Based on risk analysis, 5 controls should be prioritized for implementation',
-      severity: 'warning',
-      confidence: 0.85,
-      recommendations: [],
-    },
-    {
-      id: '2',
-      type: 'regulatory-interpretation',
-      title: 'New GDPR Guidance Available',
-      description: 'Updated guidance on AI systems under GDPR requires review',
-      severity: 'info',
-      confidence: 0.92,
-      recommendations: [],
-    },
-  ];
-
   useEffect(() => {
-    // Simulate API calls
-    setTimeout(() => {
-      setFrameworks(mockFrameworks);
-      setGaps(mockGaps);
-      setInsights(mockInsights);
-      setLoading(false);
-    }, 1000);
+    const fetchComplianceData = async () => {
+      try {
+        setLoading(true);
+        
+        const response = await fetch('/api/compliance/dashboard', { 
+          credentials: 'include' 
+        });
+        
+        if (response.ok) {
+          const data = await response.json();
+          if (data.success && data.data) {
+            setFrameworks(data.data.frameworks || []);
+            setGaps(data.data.gaps || []);
+            setInsights(data.data.insights || []);
+            setSummary(data.data.summary || {});
+          } else {
+            console.error('Failed to load compliance data:', data.error);
+            // Fallback to empty data
+            setFrameworks([]);
+            setGaps([]);
+            setInsights([]);
+            setSummary({});
+          }
+        } else {
+          console.error('Failed to fetch compliance data:', response.statusText);
+          // Fallback to empty data
+          setFrameworks([]);
+          setGaps([]);
+          setInsights([]);
+          setSummary({});
+        }
+      } catch (error) {
+        console.error('Error fetching compliance data:', error);
+        // Fallback to empty data
+        setFrameworks([]);
+        setGaps([]);
+        setInsights([]);
+        setSummary({});
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchComplianceData();
   }, []);
 
-  const overallComplianceScore = Math.round(
-    frameworks.reduce((sum, f) => sum + (f.coverage || 0), 0) / frameworks.length
-  );
+  const overallComplianceScore = summary?.overallComplianceScore || 
+    (frameworks.length > 0 ? Math.round(frameworks.reduce((sum, f) => sum + (f.coverage || 0), 0) / frameworks.length) : 0);
 
-  const criticalGaps = gaps.filter(g => g.priority === 'critical').length;
-  const highGaps = gaps.filter(g => g.priority === 'high').length;
+  const criticalGaps = summary?.criticalGaps || gaps.filter(g => g.priority === 'critical').length;
+  const highGaps = summary?.highPriorityGaps || gaps.filter(g => g.priority === 'high').length;
 
   const getStatusColor = (status: string) => {
     switch (status) {

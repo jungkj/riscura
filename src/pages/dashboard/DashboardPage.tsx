@@ -171,13 +171,15 @@ export default function DashboardPage() {
           fetch('/api/dashboard', { credentials: 'include' }),
           fetch('/api/risks?limit=200', { credentials: 'include' }),
           fetch('/api/compliance/assessments', { credentials: 'include' }),
-          fetch('/api/controls?limit=200', { credentials: 'include' })
+          fetch('/api/controls?limit=200', { credentials: 'include' }),
+          fetch('/api/tasks?status=OPEN&status=IN_PROGRESS&limit=50', { credentials: 'include' })
         ]);
         
         const dashboardRes = results[0].status === 'fulfilled' ? results[0].value : null;
         const risksRes = results[1].status === 'fulfilled' ? results[1].value : null;
         const complianceRes = results[2].status === 'fulfilled' ? results[2].value : null;
         const controlsRes = results[3].status === 'fulfilled' ? results[3].value : null;
+        const tasksRes = results[4].status === 'fulfilled' ? results[4].value : null;
         
         if (dashboardRes && dashboardRes.ok) {
           const dashboardData = await dashboardRes.json();
@@ -309,8 +311,27 @@ export default function DashboardPage() {
               }
             }
             
-            // Mock pending actions for now
-            setPendingActionsData([]);
+            // Set tasks/pending actions data
+            if (tasksRes && tasksRes.ok) {
+              const tasksData = await tasksRes.json();
+              if (tasksData.success && tasksData.data) {
+                setPendingActionsData(tasksData.data.map((task: any) => ({
+                  id: task.id,
+                  title: task.title,
+                  description: task.description,
+                  priority: task.priority,
+                  dueDate: task.dueDate,
+                  assignedTo: task.assignedToName || 'Unassigned',
+                  status: task.status,
+                  entityType: task.entityType,
+                  entityTitle: task.entityTitle
+                })));
+              } else {
+                setPendingActionsData([]);
+              }
+            } else {
+              setPendingActionsData([]);
+            }
           }
         }
       } catch (error) {
