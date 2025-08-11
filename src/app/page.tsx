@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
+import Script from 'next/script';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -51,8 +52,8 @@ function StaticHeadline() {
         <ContainerTextFlip 
           words={words}
           interval={2500}
-          className="text-[#191919] bg-gradient-to-b from-[#199BEC]/10 to-[#199BEC]/20 shadow-[inset_0_-1px_theme(colors.blue.300),inset_0_1px_theme(colors.white)]"
-          textClassName="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold bg-gradient-to-r from-[#199BEC] to-[#0066CC]"
+          className=""
+          textClassName="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold text-[#199BEC]"
           animationDuration={0.5}
         />
       </div>
@@ -305,6 +306,18 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen font-inter" style={{ backgroundColor: '#FFFFFF' }}>
+      {/* Unicorn Studio Script */}
+      <Script 
+        src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v1.4.29/dist/unicornStudio.umd.js"
+        strategy="afterInteractive"
+        onLoad={() => {
+          if (window.UnicornStudio && !window.UnicornStudio.isInitialized) {
+            window.UnicornStudio.init();
+            window.UnicornStudio.isInitialized = true;
+          }
+        }}
+      />
+      
       {/* Static Navbar */}
       <StaticNav />
       
@@ -312,8 +325,19 @@ export default function HomePage() {
       <FloatingNav navItems={navItems} />
 
       {/* Enhanced Hero Section */}
-      <section className="pt-36 pb-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-background via-card to-background">
-        <div className="max-w-7xl mx-auto">
+      <section className="pt-36 pb-24 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+        {/* Unicorn Studio Interactive Background */}
+        <div 
+          data-us-project="IRWbk402q4OXq2TWpE10" 
+          className="absolute inset-0 z-0"
+          style={{
+            width: '100%',
+            height: '100%',
+            minHeight: '900px'
+          }}
+        />
+        
+        <div className="max-w-7xl mx-auto relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             {/* Left Column - Content */}
             <div className="text-center lg:text-left space-y-6 md:space-y-8">
