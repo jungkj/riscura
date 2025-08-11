@@ -656,37 +656,59 @@ export function withAPI(
             const session = await getServerSession(authOptions) as any;
             if (session?.user) {
               // Get full user data from database if we have a session
-              if (isDatabaseAvailable()) {
-                const { db } = await import('@/lib/db');
-                const dbUser = await db.client.user.findUnique({
-                  where: { email: session.user.email },
-                  include: { organization: true }
-                });
-                
-                if (dbUser) {
-                  user = {
-                    id: dbUser.id,
-                    email: dbUser.email,
-                    firstName: dbUser.firstName || '',
-                    lastName: dbUser.lastName || '',
-                    role: dbUser.role,
-                    organizationId: dbUser.organizationId || '',
-                    permissions: dbUser.role === 'ADMIN' ? ['*'] : [],
-                    avatar: dbUser.avatar || '',
-                    isActive: dbUser.isActive,
-                    lastLoginAt: dbUser.lastLogin || undefined
-                  };
+              // Extract user data from session token or database
+              if (session.user.id && session.user.organizationId) {
+                // User data is already in the session token
+                user = {
+                  id: session.user.id,
+                  email: session.user.email,
+                  firstName: session.user.firstName || session.user.name?.split(' ')[0] || '',
+                  lastName: session.user.lastName || session.user.name?.split(' ')[1] || '',
+                  role: session.user.role || 'USER',
+                  organizationId: session.user.organizationId,
+                  permissions: session.user.role === 'ADMIN' ? ['*'] : [],
+                  avatar: session.user.avatar || session.user.image || '',
+                  isActive: session.user.isActive !== false,
+                  lastLoginAt: new Date()
+                };
+              } else if (isDatabaseAvailable()) {
+                // Fall back to database lookup if token doesn't have complete data
+                try {
+                  const { db } = await import('@/lib/db');
+                  const dbUser = await db.client.user.findUnique({
+                    where: { email: session.user.email },
+                    include: { organization: true }
+                  });
+                  
+                  if (dbUser) {
+                    user = {
+                      id: dbUser.id,
+                      email: dbUser.email,
+                      firstName: dbUser.firstName || '',
+                      lastName: dbUser.lastName || '',
+                      role: dbUser.role,
+                      organizationId: dbUser.organizationId || '',
+                      permissions: dbUser.role === 'ADMIN' ? ['*'] : [],
+                      avatar: dbUser.avatar || '',
+                      isActive: dbUser.isActive,
+                      lastLoginAt: dbUser.lastLogin || undefined
+                    };
+                  }
+                } catch (dbError) {
+                  console.error('[API Middleware] Database lookup failed:', dbError);
                 }
-              } else {
-                // Use session data directly if database is not available
+              }
+              
+              // Final fallback - use basic session info
+              if (!user) {
                 user = {
                   id: session.user.id || session.user.email,
                   email: session.user.email,
                   firstName: session.user.name?.split(' ')[0] || '',
                   lastName: session.user.name?.split(' ')[1] || '',
-                  role: session.user.role || 'USER',
-                  organizationId: session.user.organizationId || '',
-                  permissions: session.user.role === 'ADMIN' ? ['*'] : [],
+                  role: 'USER',
+                  organizationId: '',
+                  permissions: [],
                   avatar: session.user.image || '',
                   isActive: true,
                   lastLoginAt: new Date()
@@ -703,7 +725,13 @@ export function withAPI(
           }
           
           if (!user) {
-            throw new AuthenticationError();
+            console.log('[API Middleware] No authenticated user found');
+            throw new AuthenticationError('No authenticated user');
+          }
+          
+          if (!user.organizationId) {
+            console.log('[API Middleware] User has no organization:', user.email);
+            throw new AuthenticationError('User must belong to an organization');
           }
 
           // Attach authenticated user to request for downstream handlers

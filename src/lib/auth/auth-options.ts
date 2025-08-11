@@ -10,7 +10,7 @@ import jwt from 'jsonwebtoken';
 import { generateAccessToken } from './jwt';
 import { createSession, validateSession } from './session';
 import { ROLE_PERMISSIONS } from './index';
-import { db } from '@/lib/db';
+import { db, isDatabaseAvailable } from '@/lib/db';
 
 // Build providers array conditionally based on available credentials
 const providers: any[] = [];
@@ -131,30 +131,11 @@ try {
 export const authOptions: NextAuthOptions = {
   ...(dbAdapter ? { adapter: dbAdapter } : {}),
   providers,
-  debug: true, // Enable debug mode
-  secret: env.NEXTAUTH_SECRET || env.JWT_ACCESS_SECRET, // Add explicit secret
+  debug: process.env.NODE_ENV === 'development',
+  secret: env.NEXTAUTH_SECRET,
   session: {
     strategy: 'jwt',
     maxAge: 30 * 24 * 60 * 60, // 30 days
-  },
-  jwt: {
-    secret: env.JWT_ACCESS_SECRET,
-    maxAge: 30 * 24 * 60 * 60, // 30 days
-    encode: async ({ secret, token }) => {
-      const payload = {
-        ...token,
-        iat: Math.floor(Date.now() / 1000),
-        exp: Math.floor(Date.now() / 1000) + (30 * 24 * 60 * 60),
-      };
-      return jwt.sign(payload, secret, { algorithm: 'HS256' });
-    },
-    decode: async ({ secret, token }) => {
-      try {
-        return jwt.verify(token!, secret) as any;
-      } catch (error) {
-        return null;
-      }
-    },
   },
   logger: {
     error(code, metadata) {
@@ -169,95 +150,95 @@ export const authOptions: NextAuthOptions = {
   },
   callbacks: {
     async signIn({ user, account, profile }) {
-      console.log('[NextAuth] signIn callback:', {
-        provider: account?.provider,
-        email: user?.email,
-        accountId: account?.providerAccountId,
-      });
-      
-      // Handle Google OAuth sign-in
-      if (account?.provider === 'google') {
-        try {
-          // Check if user exists
-          const existingUser = await db.client.user.findUnique({
-            where: { email: user.email! }
-          });
-
-          if (!existingUser) {
-            console.log('[NextAuth] No existing user found for email:', user.email);
-            // For OAuth, we need an organization invite or allow self-registration
-            // For now, prevent OAuth registration without existing account
-            return `/auth/error?error=NoInvite`;
-          }
-
-          // Link OAuth account to existing user
-          await db.client.user.update({
-            where: { email: user.email! },
-            data: {
-              emailVerified: new Date(),
-              lastLogin: new Date(),
-            },
-          });
-
-          return true;
-        } catch (error) {
-          console.error('OAuth sign-in error:', error);
-          return false;
-        }
-      }
-
-      return true;
-    },
-    async jwt({ token, user, account }) {
-      // Add organization and role info to JWT token
-      if (user) {
-        // Get user data from database for JWT
-        const dbUser = await db.client.user.findUnique({
-          where: { id: user.id },
-          include: { organization: true },
+      try {
+        console.log('[NextAuth] signIn callback:', {
+          provider: account?.provider,
+          email: user?.email,
         });
         
-        if (dbUser) {
-          token.id = dbUser.id;
-          token.role = dbUser.role;
-          token.organizationId = dbUser.organizationId;
-          token.permissions = dbUser.permissions;
-          token.firstName = dbUser.firstName;
-          token.lastName = dbUser.lastName;
-          token.avatar = dbUser.avatar;
+        // For credentials, user is already validated in authorize function
+        if (account?.provider === 'credentials') {
+          return true;
         }
-      }
-
-      // Refresh user data periodically
-      if (token.id && (!token.lastRefresh || Date.now() - (token.lastRefresh as number) > 5 * 60 * 1000)) {
-        try {
-          const dbUser = await db.client.user.findUnique({
-            where: { id: token.id as string },
-            include: { organization: true },
-          });
-
-          if (dbUser) {
-            token.role = dbUser.role;
-            token.organizationId = dbUser.organizationId;
-            token.permissions = dbUser.permissions;
-            token.firstName = dbUser.firstName;
-            token.lastName = dbUser.lastName;
-            token.avatar = dbUser.avatar;
-            token.isActive = dbUser.isActive;
-            token.organization = dbUser.organization;
-            token.lastRefresh = Date.now();
+        
+        // Handle Google OAuth sign-in
+        if (account?.provider === 'google') {
+          // Check if database is available
+          if (!isDatabaseAvailable()) {
+            console.warn('[NextAuth] Database not available for OAuth verification');
+            return false;
           }
-        } catch (error) {
-          console.error('Token refresh error:', error);
+          
+          try {
+            // Check if user exists
+            const existingUser = await db.client.user.findUnique({
+              where: { email: user.email! }
+            });
+
+            if (!existingUser) {
+              console.log('[NextAuth] No existing user found for email:', user.email);
+              return false;
+            }
+
+            // Update last login
+            await db.client.user.update({
+              where: { email: user.email! },
+              data: {
+                emailVerified: new Date(),
+                lastLogin: new Date(),
+              },
+            });
+
+            return true;
+          } catch (error) {
+            console.error('OAuth sign-in error:', error);
+            return false;
+          }
         }
+
+        return true;
+      } catch (error) {
+        console.error('[NextAuth] SignIn callback error:', error);
+        return false;
       }
+    },
+    async jwt({ token, user }) {
+      try {
+        // Add user info to JWT token on first sign-in
+        if (user) {
+          token.id = user.id;
+          token.email = user.email;
+          token.name = user.name;
+          
+          // Try to get additional user data from database if available
+          if (isDatabaseAvailable()) {
+            try {
+              const dbUser = await db.client.user.findUnique({
+                where: { email: user.email! },
+                include: { organization: true },
+              });
+              
+              if (dbUser) {
+                token.id = dbUser.id;
+                token.role = dbUser.role;
+                token.organizationId = dbUser.organizationId;
+                token.firstName = dbUser.firstName;
+                token.lastName = dbUser.lastName;
+                token.avatar = dbUser.avatar;
+                token.isActive = dbUser.isActive;
+              }
+            } catch (dbError) {
+              console.error('[NextAuth] Database error in JWT callback:', dbError);
+              // Continue with basic token info
+            }
+          }
+        }
 
-      // TODO: Create session record for enhanced security
-      // if (account && token.organizationId) {
-      //   await createSession({...});
-      // }
-
-      return token;
+        return token;
+      } catch (error) {
+        console.error('[NextAuth] JWT callback error:', error);
+        return token;
+      }
     },
     async session({ session, token }) {
       // Send properties to the client
