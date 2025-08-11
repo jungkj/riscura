@@ -410,13 +410,26 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       // First priority: Check for Google OAuth session (cookie-based)
       try {
         console.log('[AuthContext] Checking for OAuth session cookie...');
+        
+        // Add a small delay if we're coming from OAuth redirect
+        const urlParams = new URLSearchParams(window.location.search);
+        const fromOAuth = urlParams.get('oauth') === 'success' || window.location.pathname === '/dashboard';
+        if (fromOAuth) {
+          console.log('[AuthContext] Detected OAuth redirect, waiting for cookie to settle...');
+          await new Promise(resolve => setTimeout(resolve, 100));
+        }
+        
         const oauthResponse = await fetch('/api/google-oauth/session', {
-          credentials: 'include' // Ensure cookies are included
+          credentials: 'include', // Ensure cookies are included
+          cache: 'no-cache' // Don't cache this request
         });
         
         if (oauthResponse.ok) {
           const oauthData = await oauthResponse.json();
-          console.log('[AuthContext] OAuth session found:', { user: oauthData?.user?.email });
+          console.log('[AuthContext] OAuth session response:', { 
+            hasUser: !!oauthData?.user,
+            userEmail: oauthData?.user?.email 
+          });
           
           if (oauthData && oauthData.user) {
             // Convert OAuth user to AuthUser format
@@ -436,15 +449,19 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
               lastLogin: new Date().toISOString(),
             };
             
-            console.log('[AuthContext] OAuth user initialized:', { id: authUser.id, email: authUser.email, role: authUser.role });
+            console.log('[AuthContext] OAuth user initialized successfully:', { 
+              id: authUser.id, 
+              email: authUser.email, 
+              role: authUser.role 
+            });
             dispatch({ type: 'AUTH_INITIALIZE', payload: { user: authUser, token: 'oauth-session' } });
             return;
           }
         } else {
-          console.log('[AuthContext] No valid OAuth session found');
+          console.log('[AuthContext] OAuth session check returned non-OK status:', oauthResponse.status);
         }
       } catch (error) {
-        console.log('[AuthContext] OAuth session check failed:', error);
+        console.error('[AuthContext] OAuth session check failed with error:', error);
       }
 
       // Second priority: Check localStorage and sessionStorage for regular auth tokens

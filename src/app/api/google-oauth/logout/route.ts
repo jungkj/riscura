@@ -8,13 +8,20 @@ export async function POST(req: NextRequest) {
     const response = NextResponse.json({ success: true, message: 'Logged out successfully' });
     
     // Clear session cookie with proper options
-    response.cookies.set('session-token', '', {
+    const cookieOptions: any = {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
       maxAge: 0,
       path: '/',
-    });
+    };
+    
+    // In production, set domain to handle subdomains
+    if (process.env.NODE_ENV === 'production') {
+      cookieOptions.domain = '.riscura.app';
+    }
+    
+    response.cookies.set('session-token', '', cookieOptions);
     
     // Also clear any NextAuth cookies that might exist
     response.cookies.delete('next-auth.session-token');
@@ -39,14 +46,21 @@ export async function GET() {
   const baseUrl = process.env.NEXTAUTH_URL || process.env.APP_URL || 'https://riscura.app';
   const response = NextResponse.redirect(`${baseUrl}/auth/login?message=Logged out successfully`);
   
-  // Clear session cookie
-  response.cookies.set('session-token', '', {
+  // Clear session cookie with proper options
+  const cookieOptions: any = {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
     sameSite: 'lax',
     maxAge: 0,
     path: '/',
-  });
+  };
+  
+  // In production, set domain to handle subdomains
+  if (process.env.NODE_ENV === 'production') {
+    cookieOptions.domain = '.riscura.app';
+  }
+  
+  response.cookies.set('session-token', '', cookieOptions);
   
   return response;
 }
