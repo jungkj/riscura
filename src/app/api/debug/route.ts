@@ -10,12 +10,12 @@ export async function GET(req: NextRequest) {
       hasJwtSecret: !!process.env.JWT_ACCESS_SECRET,
       hasDatabaseUrl: !!process.env.DATABASE_URL,
       nextAuthUrl: process.env.NEXTAUTH_URL,
-      cookies: Object.fromEntries(
-        Array.from(req.cookies.entries()).map(([name, cookie]) => [
+      cookies: req.cookies ? Object.fromEntries(
+        Array.from(req.cookies).map(([name, cookie]) => [
           name, 
-          cookie.value.length > 50 ? `${cookie.value.substring(0, 50)}...` : cookie.value
+          cookie.value && cookie.value.length > 50 ? `${cookie.value.substring(0, 50)}...` : cookie.value
         ])
-      ),
+      ) : {},
       headers: {
         host: req.headers.get('host'),
         userAgent: req.headers.get('user-agent'),
