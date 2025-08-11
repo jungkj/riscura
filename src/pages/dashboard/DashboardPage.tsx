@@ -184,68 +184,75 @@ export default function DashboardPage() {
         if (dashboardRes && dashboardRes.ok) {
           const dashboardData = await dashboardRes.json();
           if (dashboardData.success && dashboardData.data) {
-            const metrics = dashboardData.data.metrics;
-            
-            // Get risk details from risks API
+            const metrics = dashboardData.data?.metrics || {};
+
+            // Parse risks JSON once and keep in outer scope
+            let risksJson: any | null = null;
+            if (risksRes && risksRes.ok) {
+              try {
+                risksJson = await risksRes.json();
+              } catch (_) {
+                risksJson = null;
+              }
+            }
+
+            // Derive risk counters from risks API
             let highRiskCount = 0;
             let criticalCount = 0;
             let mediumCount = 0;
             let lowCount = 0;
             let totalRisksFromAPI = 0;
-            
-            if (risksRes && risksRes.ok) {
-              const risksData = await risksRes.json();
-              if (risksData.success && risksData.data) {
-                console.log('Dashboard processing risks:', risksData.data.length);
-                totalRisksFromAPI = risksData.data.length;
-                
-                risksData.data.forEach((risk: any) => {
-                  const riskLevel = risk.riskLevel?.toLowerCase() || 'low';
-                  const riskScore = risk.riskScore || (risk.likelihood || 0) * (risk.impact || 0);
-                  
-                  // Count by actual risk level from RCSA data
-                  if (riskLevel === 'critical') {
-                    criticalCount++;
-                    highRiskCount++; // Critical risks are also counted as high priority
-                  } else if (riskLevel === 'high') {
-                    highRiskCount++;
-                  } else if (riskLevel === 'medium') {
-                    mediumCount++;
-                  } else {
-                    lowCount++;
-                  }
-                });
-                console.log('Risk counts - Critical:', criticalCount, 'High:', highRiskCount, 'Medium:', mediumCount, 'Low:', lowCount);
-              }
+
+            if (risksJson?.success && Array.isArray(risksJson.data)) {
+              const risksArray = risksJson.data as any[];
+              totalRisksFromAPI = risksArray.length;
+
+              risksArray.forEach((risk) => {
+                const riskLevel = String(risk.riskLevel || '').toLowerCase();
+                if (riskLevel === 'critical') {
+                  criticalCount++;
+                  highRiskCount++;
+                } else if (riskLevel === 'high') {
+                  highRiskCount++;
+                } else if (riskLevel === 'medium') {
+                  mediumCount++;
+                } else {
+                  lowCount++;
+                }
+              });
+              console.log('Risk counts - Critical:', criticalCount, 'High:', highRiskCount, 'Medium:', mediumCount, 'Low:', lowCount);
             }
-            
+
             setCriticalRisks(criticalCount);
             setMediumRisks(mediumCount);
             setLowRisks(lowCount);
-            
-            // Set open items (high and critical risks)
-            if (risksData.data) {
-              const highPriorityRisks = risksData.data
-                .filter((r: any) => r.riskLevel === 'CRITICAL' || r.riskLevel === 'HIGH')
+
+            // Set stats first, regardless of open items rendering
+            setStats({
+              totalRisks: Number(metrics.totalRisks) || totalRisksFromAPI || 0,
+              highRisks: Number(metrics.highRisks) || highRiskCount || 0,
+              complianceScore: Number(metrics.complianceScore) || 0,
+              activeControls: Number(metrics.activeControls) || Number(metrics.totalControls) || 0,
+              pendingActions: Number(metrics.openTasks) || Number(metrics.overdueItems) || 0,
+            });
+
+            // Then compute open items safely from risksJson
+            if (risksJson?.success && Array.isArray(risksJson.data)) {
+              const highPriorityRisks = (risksJson.data as any[])
+                .filter((r) => r.riskLevel === 'CRITICAL' || r.riskLevel === 'HIGH')
                 .slice(0, 5)
                 .map((r: any) => ({
                   id: r.id,
                   title: r.title || r.riskName,
-                  severity: r.riskLevel?.toLowerCase() || 'high',
+                  severity: String(r.riskLevel || 'HIGH').toLowerCase(),
                   category: r.category || 'Operational',
                   status: r.status || 'Open',
-                  owner: r.assignedTo || 'Unassigned'
+                  owner: r.assignedTo || 'Unassigned',
                 }));
               setOpenItems(highPriorityRisks);
+            } else {
+              setOpenItems([]);
             }
-            
-            setStats({
-              totalRisks: metrics.totalRisks || totalRisksFromAPI,
-              highRisks: highRiskCount || metrics.highRisks || 0,
-              complianceScore: metrics.complianceScore || 0,
-              activeControls: metrics.activeControls || metrics.totalControls || 0,
-              pendingActions: metrics.openTasks || metrics.overdueItems || 0
-            });
             
             // Set recent activity
             if (dashboardData.data.recentActivity) {

@@ -50,34 +50,6 @@ export async function withAuth(
 ) {
   return async (req: NextRequest): Promise<NextResponse> => {
     try {
-      // Check for demo user cookie first
-      const demoUserCookie = req.cookies.get('demo-user');
-      if (demoUserCookie?.value) {
-        try {
-          const demoUser = JSON.parse(demoUserCookie.value);
-          // Create authenticated user object for demo user
-          const authenticatedUser: AuthenticatedUser = {
-            id: demoUser.id || 'demo-admin-id',
-            email: demoUser.email || 'admin@riscura.com',
-            firstName: 'Demo',
-            lastName: 'Admin',
-            role: demoUser.role || 'ADMIN',
-            organizationId: 'demo-org-id',
-            permissions: demoUser.permissions || ['*'],
-            isActive: true,
-            lastLoginAt: new Date(),
-          };
-
-          // Add user to request
-          const authReq = req as AuthenticatedRequest;
-          authReq.user = authenticatedUser;
-
-          return handler(authReq);
-        } catch (parseError) {
-          console.warn('Failed to parse demo user cookie:', parseError);
-        }
-      }
-
       // Get session from NextAuth
       const session = await getServerSession(authOptions) as any;
 
@@ -294,30 +266,6 @@ export function getAuthenticatedUser(req: AuthenticatedRequest): AuthenticatedUs
   // Check for existing user in request (from session auth)
   if (req.user) {
     return req.user;
-  }
-
-  // Check for demo user cookie
-  const demoUserCookie = req.cookies.get('demo-user');
-  if (demoUserCookie) {
-    try {
-      const demoUser = JSON.parse(demoUserCookie.value);
-      // Validate demo user structure
-      if (demoUser.id && demoUser.email && demoUser.role && demoUser.permissions) {
-        return {
-          id: demoUser.id,
-          email: demoUser.email,
-          firstName: demoUser.firstName || 'Demo',
-          lastName: demoUser.lastName || 'User', 
-          role: demoUser.role,
-          organizationId: 'demo-org-id',
-          permissions: demoUser.permissions,
-          isActive: true,
-          avatar: demoUser.avatar
-        };
-      }
-    } catch (error) {
-      console.warn('Failed to parse demo user cookie:', error);
-    }
   }
 
   return null;

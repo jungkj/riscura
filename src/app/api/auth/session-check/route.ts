@@ -15,14 +15,15 @@ export async function GET(request: NextRequest) {
       timestamp: new Date().toISOString(),
     });
   } catch (error) {
-    console.error('Session check error:', error);
+    console.error('[Session-Check] Error:', error);
+    // Return false authentication instead of 500 error
     return NextResponse.json(
       { 
         authenticated: false, 
-        error: 'Session check failed',
+        error: 'Session check error',
         timestamp: new Date().toISOString(),
       },
-      { status: 500 }
+      { status: 200 } // Return 200 instead of 500 to prevent errors
     );
   }
 } 

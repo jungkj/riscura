@@ -3,7 +3,7 @@ import { z, ZodError } from 'zod';
 import { withAuth, rateLimit, type AuthenticatedRequest } from '@/lib/auth/middleware';
 import { isDatabaseAvailable } from '@/lib/db';
 import { env } from '@/config/env';
-import { unstable_getServerSession } from 'next-auth/next';
+import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/auth/auth-options';
 import { 
   ApiResponseFormatter, 
@@ -649,27 +649,57 @@ export function withAPI(
       // Authentication
       if (options.requireAuth) {
         try {
-          let user = getAuthenticatedUser(req as any);
+          let user = null;
           
-          // Development mode bypass: Use demo user for testing
-          if (!user && process.env.NODE_ENV === 'development') {
-            console.log('🔧 Development mode: Using demo authentication');
-            const mockUser = {
-              id: 'demo-admin-id',
-              email: 'admin@riscura.com',
-              firstName: 'Demo',
-              lastName: 'Admin',
-              role: 'ADMIN',
-              organizationId: 'demo-org-id',
-              permissions: ['*'], // All permissions for demo
-              avatar: '',
-              isActive: true,
-              lastLoginAt: new Date()
-            };
-            
-            // Add mock user to request
-            (req as any).user = mockUser;
-            user = mockUser;
+          // First try to get NextAuth session
+          try {
+            const session = await getServerSession(authOptions) as any;
+            if (session?.user) {
+              // Get full user data from database if we have a session
+              if (isDatabaseAvailable()) {
+                const { db } = await import('@/lib/db');
+                const dbUser = await db.client.user.findUnique({
+                  where: { email: session.user.email },
+                  include: { organization: true }
+                });
+                
+                if (dbUser) {
+                  user = {
+                    id: dbUser.id,
+                    email: dbUser.email,
+                    firstName: dbUser.firstName || '',
+                    lastName: dbUser.lastName || '',
+                    role: dbUser.role,
+                    organizationId: dbUser.organizationId || '',
+                    permissions: dbUser.role === 'ADMIN' ? ['*'] : [],
+                    avatar: dbUser.avatar || '',
+                    isActive: dbUser.isActive,
+                    lastLoginAt: dbUser.lastLogin || undefined
+                  };
+                }
+              } else {
+                // Use session data directly if database is not available
+                user = {
+                  id: session.user.id || session.user.email,
+                  email: session.user.email,
+                  firstName: session.user.name?.split(' ')[0] || '',
+                  lastName: session.user.name?.split(' ')[1] || '',
+                  role: session.user.role || 'USER',
+                  organizationId: session.user.organizationId || '',
+                  permissions: session.user.role === 'ADMIN' ? ['*'] : [],
+                  avatar: session.user.image || '',
+                  isActive: true,
+                  lastLoginAt: new Date()
+                };
+              }
+            }
+          } catch (sessionError) {
+            console.log('[API Middleware] NextAuth session check failed:', sessionError);
+          }
+          
+          // If no session, check for authenticated user from middleware (OAuth, etc)
+          if (!user) {
+            user = getAuthenticatedUser(req as any);
           }
           
           if (!user) {

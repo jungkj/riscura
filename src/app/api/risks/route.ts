@@ -3,7 +3,6 @@ import { withApiMiddleware } from '@/lib/api/middleware';
 import { db } from '@/lib/db';
 import { z } from 'zod';
 import { RiskCategory, RiskLevel, RiskStatus } from '@prisma/client';
-import { getDemoData, isDemoUser } from '@/lib/demo-data';
 
 const CreateRiskSchema = z.object({
   title: z.string().min(1),
@@ -19,48 +18,12 @@ export const GET = withApiMiddleware(
   async (req: NextRequest) => {
     const user = (req as any).user;
     
-    console.log('[Risks API] User object received:', {
-      user: user ? {
-        id: user.id,
-        email: user.email,
-        organizationId: user.organizationId,
-        role: user.role
-      } : null,
-      isDemoUserResult: user ? isDemoUser(user.id) : false
-    });
-    
     if (!user || !user.organizationId) {
       console.warn('[Risks API] Missing user or organizationId', { user });
       return NextResponse.json(
         { success: false, error: 'Organization context required' },
         { status: 403 }
       );
-    }
-
-    // Check if this is a demo user
-    if (isDemoUser(user.id) || user.organizationId === 'demo-org-id') {
-      console.log('[Risks API] Serving demo data for demo user');
-      const demoRisks = getDemoData('risks', user.organizationId);
-      
-      const { searchParams } = new URL(req.url);
-      const page = parseInt(searchParams.get('page') || '1');
-      const limit = parseInt(searchParams.get('limit') || '50');
-      const offset = (page - 1) * limit;
-      
-      const paginatedRisks = demoRisks?.slice(offset, offset + limit) || [];
-      const totalCount = demoRisks?.length || 0;
-      
-      return NextResponse.json({
-        success: true,
-        data: paginatedRisks,
-        pagination: {
-          page,
-          limit,
-          total: totalCount,
-          totalPages: Math.ceil(totalCount / limit)
-        },
-        demoMode: true
-      });
     }
 
     try {

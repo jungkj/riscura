@@ -59,20 +59,6 @@ providers.push(
         }
 
         try {
-          // Check for demo credentials first
-          if (credentials.email === 'admin@riscura.com' && credentials.password === 'admin123') {
-            return {
-              id: 'demo-admin-id',
-              email: 'admin@riscura.com',
-              name: 'Demo Admin',
-              firstName: 'Demo',
-              lastName: 'Admin',
-              role: 'ADMIN',
-              organizationId: 'demo-org-id',
-              permissions: ['*'],
-            };
-          }
-
           // Database authentication
           const user = await db.client.user.findUnique({
             where: { email: credentials.email.toLowerCase() },
@@ -118,7 +104,7 @@ providers.push(
     })
 );
 
-// Initialize database adapter
+// Initialize database adapter with better error handling
 let dbAdapter;
 try {
   // During build time, skip database initialization
@@ -127,10 +113,17 @@ try {
     dbAdapter = null;
   } else if (typeof window === 'undefined') {
     // Only initialize on server side
-    dbAdapter = PrismaAdapter(db.client);
+    try {
+      dbAdapter = PrismaAdapter(db.client);
+      console.log('[NextAuth] Database adapter initialized successfully');
+    } catch (adapterError) {
+      console.error('[NextAuth] Failed to initialize Prisma adapter:', adapterError);
+      console.warn('[NextAuth] Continuing without database adapter - using JWT-only sessions');
+      dbAdapter = null;
+    }
   }
 } catch (error) {
-  console.error('[NextAuth] Failed to initialize database adapter:', error);
+  console.error('[NextAuth] Unexpected error during adapter initialization:', error);
   console.warn('[NextAuth] Running without database adapter - OAuth may not persist sessions');
   dbAdapter = null;
 }
