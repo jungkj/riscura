@@ -41,7 +41,15 @@
       "mcp__supabase__get_anon_key",
       "mcp__supabase__execute_sql",
       "mcp__supabase__list_extensions",
-      "Bash(timeout 30s npm run dev:*)"
+      "Bash(timeout 30s npm run dev:*)",
+      "mcp__supabase__list_tables",
+      "Bash(timeout:*)",
+      "Bash(bash:*)",
+      "Bash(node:*)",
+      "Bash(chmod:*)",
+      "Bash(./test-website.sh:*)",
+      "Bash(./cleanup-markdown.sh:*)",
+      "Bash(./cleanup-api.sh:*)"
     ],
     "deny": []
   },

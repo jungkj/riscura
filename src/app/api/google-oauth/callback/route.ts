@@ -185,8 +185,8 @@ export async function GET(req: NextRequest) {
     
     const response = NextResponse.redirect(redirectUrl);
     
-    // Set session cookie with appropriate expiration
-    const cookieOptions = {
+    // Set session cookie with appropriate expiration and domain
+    const cookieOptions: any = {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax' as const,
@@ -194,15 +194,19 @@ export async function GET(req: NextRequest) {
       path: '/', // Ensure cookie is available site-wide
     };
     
-    // In production, we might need to set the domain explicitly
-    if (process.env.NODE_ENV === 'production' && process.env.COOKIE_DOMAIN) {
-      (cookieOptions as any).domain = process.env.COOKIE_DOMAIN;
+    // Set domain for production to ensure cookies work across subdomains
+    if (process.env.NODE_ENV === 'production') {
+      // Use COOKIE_DOMAIN if set, otherwise derive from APP_URL
+      if (process.env.COOKIE_DOMAIN) {
+        cookieOptions.domain = process.env.COOKIE_DOMAIN;
+      } else if (process.env.APP_URL && process.env.APP_URL.includes('riscura.app')) {
+        cookieOptions.domain = '.riscura.app'; // Allow cookies across all subdomains
+      }
     }
     
-    // For localhost development, ensure cookie works properly
+    // For localhost development, don't set domain to avoid cookie issues
     if (process.env.NODE_ENV === 'development') {
-      // Don't set domain for localhost to avoid cookie issues
-      delete (cookieOptions as any).domain;
+      delete cookieOptions.domain;
     }
     
     console.log('[Google OAuth] Setting cookie with options:', {
