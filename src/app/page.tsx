@@ -51,8 +51,8 @@ function StaticHeadline() {
         <ContainerTextFlip 
           words={words}
           interval={2500}
-          className="text-[#191919] bg-gradient-to-b from-[#199BEC]/10 to-[#199BEC]/20 shadow-[inset_0_-1px_theme(colors.blue.300),inset_0_1px_theme(colors.white)]"
-          textClassName="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold bg-gradient-to-r from-[#199BEC] to-[#0066CC]"
+          className=""
+          textClassName="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold text-[#199BEC]"
           animationDuration={0.5}
         />
       </div>

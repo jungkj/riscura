@@ -37,7 +37,7 @@ export function ContainerTextFlip({
       });
       
       measureRef.current.textContent = originalText;
-      setContainerWidth(`${maxWidth + 40}px`); // Add padding
+      setContainerWidth(`${maxWidth}px`); // No extra padding needed
     }
   }, [words]);
 
@@ -63,7 +63,7 @@ export function ContainerTextFlip({
       <span
         ref={measureRef}
         className={cn(
-          "invisible absolute whitespace-nowrap px-4",
+          "invisible absolute whitespace-nowrap",
           textClassName
         )}
         aria-hidden="true"
@@ -80,11 +80,7 @@ export function ContainerTextFlip({
           ease: "easeInOut"
         }}
         className={cn(
-          "relative inline-flex items-center justify-center rounded-lg pt-2 pb-3 font-bold overflow-hidden",
-          "bg-gradient-to-b from-gray-100 to-gray-200",
-          "shadow-[inset_0_-1px_theme(colors.gray.300),inset_0_1px_theme(colors.white)]",
-          "dark:bg-gradient-to-b dark:from-gray-800 dark:to-gray-900",
-          "dark:shadow-[inset_0_-1px_theme(colors.gray.600),inset_0_1px_theme(colors.gray.700)]",
+          "relative inline-flex items-center justify-center font-bold overflow-hidden",
           className
         )}
       >
@@ -99,7 +95,7 @@ export function ContainerTextFlip({
               ease: "easeInOut"
             }}
             className={cn(
-              "px-4 text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-blue-800 dark:from-blue-400 dark:to-blue-600 whitespace-nowrap",
+              "whitespace-nowrap",
               textClassName
             )}
           >
