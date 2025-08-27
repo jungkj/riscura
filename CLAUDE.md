@@ -8,8 +8,6 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ```bash
 npm run dev                # Start development server
 npm run dev:setup         # Run development setup (installs deps, generates Prisma, seeds DB)
-npm run dev:check         # Check development environment
-npm run dev:test          # Push DB schema and start dev server
 ./test-website.sh         # Full stack website testing script
 ```
 
@@ -26,11 +24,9 @@ npm run precommit         # Run both type-check:full and lint (use before commit
 ### Building & Production
 ```bash
 npm run build             # Build for production
-npm run build:prod        # Standard production build
 npm run build:vercel      # Build with increased memory for Vercel
 npm run start             # Start production server
 npm run production:ready  # Full production validation
-npm run production:deploy # Full production deployment with monitoring
 ```
 
 ### Database
@@ -54,32 +50,26 @@ npm run test:e2e:ui      # Playwright UI mode
 npm run test:unit        # Unit tests only
 npm run test:integration # Integration tests only
 npm run test:components  # Component tests only
-npm run test:ai-services # AI service tests only
+npm run test:performance # Performance tests only
+npm run test:multi-tenant # Multi-tenant tests only
 npm run test:all         # All test suites
-npm run test:full-suite  # Complete test suite including performance
 npm run test:auth-flow   # Test authentication flow manually
-npm run test:full-stack  # Full stack testing (tsx src/scripts/test-full-stack.ts)
+npm run test:full-stack  # Full stack testing
 
 # Run a single test file
 npm test -- path/to/test.spec.ts
-jest path/to/test.spec.ts --watch
 
 # Test shell scripts
-./test-website.sh            # Full stack website testing
-./test-oauth-deployment.sh   # OAuth deployment verification
-./test-auth-endpoints.sh     # Authentication endpoint testing
-./scripts/test-redis.sh      # Redis connection testing
-./scripts/test-email.sh      # Email service testing
+./test-website.sh        # Full stack website testing
 ```
 
 ### Performance & Security
 ```bash
 npm run performance:analyze  # Bundle analysis
-npm run bundle:analyze      # Webpack bundle analyzer
-npm run bundle:optimize     # Optimize and analyze bundle
 npm run security:check      # Security configuration check
 npm run security:audit      # Full security audit
-npm run optimize:images     # Optimize image assets
+npm run audit:security      # NPM security audit
+npm run audit:fix           # Auto-fix security vulnerabilities
 ```
 
 ### Development Utilities
@@ -88,20 +78,15 @@ npm run verify           # Full verification: generate, type-check, lint, build
 npm run verify:quick     # Quick verification: generate and lint only
 npm run clean            # Clean Next.js build cache
 npm run clean:all        # Full clean including node_modules
-npm run cache:clear      # Clear application cache
-npm run config:verify    # Verify environment configuration
 npm run generate-secrets # Generate secure secrets
 npm run debug:login      # Debug login issues
+npm run setup            # Environment setup
 ```
 
-### Monitoring & Documentation
+### Documentation
 ```bash
-npm run monitoring:init     # Initialize monitoring systems
-npm run monitoring:verify   # Verify monitoring configuration
-npm run docs:generate       # Generate API documentation
-npm run docs:serve         # Serve docs on port 8080
-npm run support:init       # Initialize support system
-npm run alerts:test        # Test alert system
+npm run docs:generate    # Generate API documentation
+npm run docs:serve      # Serve docs on port 8080
 ```
 
 ## Architecture Overview
@@ -110,7 +95,7 @@ npm run alerts:test        # Test alert system
 - **Framework**: Next.js 15 App Router with React 18
 - **Language**: TypeScript (strict mode currently disabled)
 - **Database**: PostgreSQL via Prisma ORM (Supabase hosted)
-- **Authentication**: NextAuth.js with SAML/OAuth support
+- **Authentication**: NextAuth.js v4 with Google OAuth and credentials providers (fully consolidated)
 - **Styling**: Tailwind CSS with custom enterprise design system
 - **State Management**: React Context API and Zustand
 - **Caching**: Redis with multi-layer caching strategy
@@ -340,5 +325,51 @@ The codebase currently has TypeScript strict mode disabled with ongoing migratio
 
 ### Shell Test Scripts
 - `./test-website.sh` - Full stack website testing
-- `./test-oauth-deployment.sh` - OAuth deployment verification
-- `./test-auth-endpoints.sh` - Authentication endpoint testing
+
+## Current Status & Recent Changes
+
+### ✅ Recently Completed
+- **Authentication Consolidation**: Migrated from dual custom OAuth + NextAuth to NextAuth.js exclusively
+- **Script Cleanup**: Removed 60+ unnecessary scripts, keeping only essential commands
+- **Codebase Cleanup**: Removed backup directories, legacy test files, and duplicate components
+- **API Cleanup**: Removed redundant API backup directories and test endpoints
+
+### 🚧 Current Development Phase
+**Phase 2**: Technical debt resolution and production readiness
+- **Priority**: TypeScript strict mode migration (~785 errors across 165 files)
+- **Focus Areas**:
+  1. Database model updates and Prisma schema alignment
+  2. Enum standardization (case sensitivity issues)
+  3. Missing interface properties
+  4. Gradual TypeScript strict mode re-enablement
+
+### 🎯 Current To-Do Items
+1. **Authentication Testing**: Verify NextAuth consolidation works properly
+2. **TypeScript Cleanup**: Systematic reduction of TypeScript errors
+3. **Environment Configuration**: Ensure all required env vars are documented
+4. **Performance Optimization**: Bundle analysis and core web vitals improvements
+5. **Test Coverage**: Expand test coverage for critical business logic
+
+### 📊 Tech Stack Status
+- **Authentication**: ✅ Fully consolidated to NextAuth.js
+- **Database**: ✅ Supabase PostgreSQL with Prisma ORM
+- **Caching**: 🚧 Redis integration (partially implemented)
+- **AI Services**: ✅ OpenAI GPT-4 and Anthropic Claude integrated
+- **Testing**: 🚧 Jest + Playwright (expanding coverage)
+- **TypeScript**: 🚧 Strict mode disabled (migration in progress)
+
+### 🔧 Missing Implementations/Features
+1. **Email System**: SendGrid integration partially implemented
+2. **File Storage**: S3 integration needs completion
+3. **Monitoring**: Production monitoring and alerting setup
+4. **Advanced Security**: Multi-factor authentication
+5. **Performance**: Redis caching full implementation
+6. **Mobile PWA**: Progressive web app features
+
+### 📈 Next Phase Priorities
+**Phase 3** (Planned): Scale optimization and enterprise features
+- TypeScript strict mode enablement
+- Advanced caching implementation
+- Production monitoring setup
+- Mobile PWA features
+- Enterprise security features

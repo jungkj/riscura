@@ -704,7 +704,7 @@ export default function DashboardPage() {
         <div>
           <div className="flex items-center gap-3 mb-2">
             <h1 className="text-3xl font-bold text-[#191919]">Dashboard</h1>
-            <Badge variant="secondary" className="bg-[#D8C3A5] text-[#191919] font-semibold">
+            <Badge variant="secondary" className="bg-[#199BEC]/10 text-[#199BEC] font-semibold">
               Live
             </Badge>
           </div>
@@ -714,14 +714,14 @@ export default function DashboardPage() {
           <Button 
             variant="secondary" 
             onClick={() => setShowTour(true)}
-            className="text-sm border-[#D8C3A5] text-[#191919] hover:bg-[#D8C3A5]"
+            className="text-sm border-[#199BEC]/30 text-[#199BEC] hover:bg-[#199BEC]/10"
           >
             <Lightbulb className="h-4 w-4 mr-2" />
             Take Tour
           </Button>
           <Button 
             onClick={() => router.push('/dashboard/risks/new')}
-            className="bg-[#191919] text-white hover:bg-[#333333]"
+            className="bg-[#199BEC] text-white hover:bg-[#199BEC]/80"
           >
             <Plus className="h-4 w-4 mr-2" />
             Add Risk

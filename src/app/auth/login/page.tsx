@@ -62,15 +62,14 @@ function LoginForm() {
 
   const handleGoogleLogin = async () => {
     try {
-      // Store the redirect URL in session storage
-      sessionStorage.setItem('oauth_redirect', redirectTo);
+      // Import signIn from next-auth/react
+      const { signIn } = await import('next-auth/react');
       
-      // Use our working simple OAuth implementation with remember me preference and redirect
-      const redirectParam = encodeURIComponent(redirectTo);
-      window.location.href = `/api/google-oauth/login?remember=${formData.rememberMe}&redirect=${redirectParam}`;
-      
-      // Note: This won't return since we're redirecting
-      return;
+      // Use NextAuth Google provider
+      await signIn('google', {
+        callbackUrl: redirectTo,
+        redirect: true
+      });
     } catch (err) {
       setError('Google login failed. Please try again.');
     }

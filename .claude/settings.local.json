@@ -50,12 +50,24 @@
       "Bash(./test-website.sh:*)",
       "Bash(./cleanup-markdown.sh:*)",
       "Bash(./cleanup-api.sh:*)",
-      "Bash(git pull:*)"
+      "mcp__supabase__apply_migration",
+      "mcp__supabase__get_advisors",
+      "Bash(git pull:*)",
+      "mcp__supabase__list_tables",
+      "Bash(./test-website.sh)",
+      "Bash(node:*)",
+      "WebSearch",
+      "Bash(claude mcp:*)",
+      "Bash(where claude)",
+      "Bash(cmd /c \"npx playwright install\")",
+      "mcp__playwright__*",
+      "Bash(npm --version)"
     ],
     "deny": []
   },
   "enableAllProjectMcpServers": true,
   "enabledMcpjsonServers": [
-    "supabase"
+    "supabase",
+    "playwright"
   ]
 }

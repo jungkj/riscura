@@ -106,7 +106,7 @@ export const DashboardStatsModal: React.FC<DashboardStatsModalProps> = ({
             <span className="font-bold">{data.title}</span>
             <Badge 
               variant="outline" 
-              className="ml-2 text-lg px-3 py-1 border-[#D8C3A5] text-[#191919] bg-[#FAFAFA]"
+              className="ml-2 text-lg px-3 py-1 border-[#199BEC]/20 text-[#199BEC] bg-[#199BEC]/5"
             >
               {data.value}
             </Badge>
@@ -119,7 +119,7 @@ export const DashboardStatsModal: React.FC<DashboardStatsModalProps> = ({
         <ScrollArea className="max-h-[60vh] pr-4">
           <div className="space-y-6">
             {/* Overview Section */}
-            <Card className="border-2 border-[#D8C3A5] bg-[#FAFAFA]">
+            <Card className="border-2 border-[#199BEC]/20 bg-[#199BEC]/5">
               <CardHeader>
                 <CardTitle className="text-[#191919] font-bold flex items-center">
                   <Eye className="w-5 h-5 mr-2" />
@@ -127,7 +127,7 @@ export const DashboardStatsModal: React.FC<DashboardStatsModalProps> = ({
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-[#191919] font-semibold leading-relaxed">
+                <p className="text-gray-700 font-semibold leading-relaxed">
                   {data.details.overview}
                 </p>
               </CardContent>
@@ -135,7 +135,7 @@ export const DashboardStatsModal: React.FC<DashboardStatsModalProps> = ({
 
             {/* Breakdown Section */}
             {data.details.breakdown && (
-              <Card className="border-2 border-[#D8C3A5] bg-[#FAFAFA]">
+              <Card className="border-2 border-[#199BEC]/20 bg-[#199BEC]/5">
                 <CardHeader>
                   <CardTitle className="text-[#191919] font-bold flex items-center">
                     <TrendingUp className="w-5 h-5 mr-2" />
@@ -147,11 +147,11 @@ export const DashboardStatsModal: React.FC<DashboardStatsModalProps> = ({
                     {data.details.breakdown.map((item, index) => (
                       <div key={index} className="space-y-2">
                         <div className="flex justify-between items-center">
-                          <span className="text-[#191919] font-semibold">{item.label}</span>
+                          <span className="text-gray-700 font-semibold">{item.label}</span>
                           <div className="flex items-center space-x-2">
-                            <span className="text-[#191919] font-bold">{item.value}</span>
+                            <span className="text-[#199BEC] font-bold">{item.value}</span>
                             {item.percentage && (
-                              <Badge variant="outline" className="border-[#D8C3A5] text-[#191919]">
+                              <Badge variant="outline" className="border-[#199BEC]/20 text-[#199BEC]">
                                 {item.percentage}%
                               </Badge>
                             )}
@@ -173,7 +173,7 @@ export const DashboardStatsModal: React.FC<DashboardStatsModalProps> = ({
 
             {/* Recent Items */}
             {data.details.recentItems && (
-              <Card className="border-2 border-[#D8C3A5] bg-[#FAFAFA]">
+              <Card className="border-2 border-[#199BEC]/20 bg-[#199BEC]/5">
                 <CardHeader>
                   <CardTitle className="text-[#191919] font-bold flex items-center">
                     <Activity className="w-5 h-5 mr-2" />
@@ -183,9 +183,9 @@ export const DashboardStatsModal: React.FC<DashboardStatsModalProps> = ({
                 <CardContent>
                   <div className="space-y-3">
                     {data.details.recentItems.map((item, index) => (
-                      <div key={index} className="flex items-center justify-between p-3 border border-[#D8C3A5] rounded-lg bg-white">
+                      <div key={index} className="flex items-center justify-between p-3 border border-[#199BEC]/20 rounded-lg bg-white">
                         <div className="flex-1">
-                          <h4 className="text-[#191919] font-semibold">{item.title}</h4>
+                          <h4 className="text-gray-700 font-semibold">{item.title}</h4>
                           <p className="text-[#A8A8A8] text-sm font-medium">{item.date}</p>
                         </div>
                         <div className="flex items-center space-x-2">
@@ -197,7 +197,7 @@ export const DashboardStatsModal: React.FC<DashboardStatsModalProps> = ({
                               {item.priority}
                             </Badge>
                           )}
-                          <Badge variant="outline" className="border-[#D8C3A5] text-[#191919]">
+                          <Badge variant="outline" className="border-[#199BEC]/20 text-[#199BEC]">
                             {item.status}
                           </Badge>
                         </div>
@@ -210,7 +210,7 @@ export const DashboardStatsModal: React.FC<DashboardStatsModalProps> = ({
 
             {/* Insights */}
             {data.details.insights && (
-              <Card className="border-2 border-[#D8C3A5] bg-[#FAFAFA]">
+              <Card className="border-2 border-[#199BEC]/20 bg-[#199BEC]/5">
                 <CardHeader>
                   <CardTitle className="text-[#191919] font-bold flex items-center">
                     <FileText className="w-5 h-5 mr-2" />
@@ -225,14 +225,14 @@ export const DashboardStatsModal: React.FC<DashboardStatsModalProps> = ({
                         className={`p-3 rounded-lg border ${
                           insight.type === 'positive' ? 'border-green-200 bg-green-50' :
                           insight.type === 'negative' ? 'border-red-200 bg-red-50' :
-                          'border-[#D8C3A5] bg-white'
+                          'border-[#199BEC]/20 bg-white'
                         }`}
                       >
                         <div className="flex items-start space-x-2">
                           {insight.type === 'positive' && <TrendingUp className="w-4 h-4 text-green-600 mt-0.5" />}
                           {insight.type === 'negative' && <TrendingDown className="w-4 h-4 text-red-600 mt-0.5" />}
-                          {insight.type === 'neutral' && <Activity className="w-4 h-4 text-[#191919] mt-0.5" />}
-                          <p className="text-[#191919] font-semibold text-sm">{insight.text}</p>
+                          {insight.type === 'neutral' && <Activity className="w-4 h-4 text-[#199BEC] mt-0.5" />}
+                          <p className="text-gray-700 font-semibold text-sm">{insight.text}</p>
                         </div>
                       </div>
                     ))}
@@ -244,7 +244,7 @@ export const DashboardStatsModal: React.FC<DashboardStatsModalProps> = ({
         </ScrollArea>
 
         {/* Action Buttons */}
-        <div className="flex flex-wrap gap-3 pt-4 border-t border-[#D8C3A5]">
+        <div className="flex flex-wrap gap-3 pt-4 border-t border-[#199BEC]/20">
           {data.actions.map((action, index) => (
             <Button
               key={index}
@@ -252,7 +252,7 @@ export const DashboardStatsModal: React.FC<DashboardStatsModalProps> = ({
               onClick={() => handleNavigation(action.href)}
               className={`font-semibold ${
                 action.variant === 'primary' ? 'bg-[#191919] text-[#FAFAFA] hover:bg-[#333333]' :
-                action.variant === 'secondary' ? 'border-[#191919] text-[#191919] hover:bg-[#D8C3A5]' :
+                action.variant === 'secondary' ? 'border-[#191919] text-[#199BEC] hover:bg-[#199BEC]/10' :
                 ''
               }`}
             >

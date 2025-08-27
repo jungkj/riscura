@@ -89,12 +89,9 @@ export async function middleware(request: NextRequest) {
     pathname.startsWith('/favicon.ico') ||
     pathname === '/api/health' ||
     pathname.startsWith('/api/test') ||
-    pathname.startsWith('/api/google-oauth/') ||
     pathname.startsWith('/sw.js') ||
     pathname === '/manifest.json' ||
-    pathname.startsWith('/api/auth/login') ||
-    pathname.startsWith('/api/auth/refresh') ||
-    pathname.startsWith('/api/auth/session')
+    pathname.startsWith('/api/auth/')  // Let NextAuth handle all auth routes
   ) {
     return NextResponse.next();
   }
@@ -153,80 +150,22 @@ export async function middleware(request: NextRequest) {
     
     // Authentication check for protected routes
     if (pathname.startsWith('/dashboard') || pathname.startsWith('/admin')) {
-      // Check for various session tokens
+      // Check for NextAuth session token
       const nextAuthToken = request.cookies.get('next-auth.session-token')?.value || 
                            request.cookies.get('__Secure-next-auth.session-token')?.value;
-      const oauthToken = request.cookies.get('session-token')?.value;
-      const demoUserCookie = request.cookies.get('demo-user')?.value;
       
       console.log(`[Middleware] Auth check for ${pathname}:`, {
         hasNextAuthToken: !!nextAuthToken,
-        hasOAuthToken: !!oauthToken,
         allCookies: request.cookies.getAll().map(c => c.name),
       });
       
-      // If no tokens found, redirect to login
-      if (!nextAuthToken && !oauthToken && !demoUserCookie) {
-        console.log(`[Middleware] No valid session found, redirecting to login`);
+      // If no NextAuth token found, redirect to login
+      if (!nextAuthToken) {
+        console.log(`[Middleware] No valid NextAuth session found, redirecting to login`);
         const url = request.nextUrl.clone();
         url.pathname = '/auth/login';
-        url.searchParams.set('from', pathname); // Use 'from' parameter for consistency
+        url.searchParams.set('from', pathname);
         return NextResponse.redirect(url);
-      }
-      
-      // Validate OAuth session token if present
-      if (oauthToken && !nextAuthToken) {
-        try {
-          const sessionData = JSON.parse(Buffer.from(oauthToken, 'base64').toString());
-          const isExpired = new Date(sessionData.expires) < new Date();
-          
-          console.log(`[Middleware] OAuth session validation:`, {
-            userEmail: sessionData.user?.email,
-            expires: sessionData.expires,
-            isExpired,
-            now: new Date().toISOString(),
-          });
-          
-          if (isExpired) {
-            console.log(`[Middleware] OAuth session expired, clearing and redirecting`);
-            const url = request.nextUrl.clone();
-            url.pathname = '/auth/login';
-            url.searchParams.set('from', pathname);
-            url.searchParams.set('reason', 'session_expired');
-            response = NextResponse.redirect(url);
-            
-            // Clear expired session cookie
-            response.cookies.set('session-token', '', {
-              httpOnly: true,
-              secure: process.env.NODE_ENV === 'production',
-              sameSite: 'lax',
-              maxAge: 0,
-              path: '/',
-            });
-            
-            return response;
-          } else {
-            console.log(`[Middleware] Valid OAuth session found for ${sessionData.user?.email}`);
-          }
-        } catch (error) {
-          console.error('[Middleware] Failed to validate OAuth session:', error);
-          // Clear invalid session token
-          const url = request.nextUrl.clone();
-          url.pathname = '/auth/login';
-          url.searchParams.set('from', pathname);
-          url.searchParams.set('reason', 'invalid_session');
-          response = NextResponse.redirect(url);
-          
-          response.cookies.set('session-token', '', {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
-            sameSite: 'lax',
-            maxAge: 0,
-            path: '/',
-          });
-          
-          return response;
-        }
       }
       
       console.log(`[Middleware] Authentication passed for ${pathname}`);

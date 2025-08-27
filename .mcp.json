@@ -12,6 +12,15 @@
       "env": {
         "SUPABASE_ACCESS_TOKEN": "sbp_3fc89c44813ec40157aa50b135c57a56e7bd1e87"
       }
+    },
+    "playwright": {
+      "command": "cmd",
+      "args": [
+        "/c",
+        "npx",
+        "-y",
+        "@executeautomation/playwright-mcp-server"
+      ]
     }
   }
 }

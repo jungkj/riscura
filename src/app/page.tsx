@@ -439,7 +439,7 @@ export default function HomePage() {
                 transition={{ duration: 0.6, delay: index * 0.1 }}
                 viewport={{ once: true }}
               >
-                <Card className="bg-white border border-[#D8C3A5]/30 h-full hover:shadow-xl hover:border-[#D8C3A5]/60 transition-all duration-300 group rounded-2xl">
+                <Card className="bg-white border border-gray-200 h-full hover:shadow-xl hover:border-[#199BEC]/40 transition-all duration-300 group rounded-2xl">
                   <CardContent className="p-8">
                     <div className="w-14 h-14 rounded-2xl bg-[#199BEC]/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
                       <feature.icon className="h-7 w-7 text-[#199BEC]" />
@@ -535,7 +535,7 @@ export default function HomePage() {
       </section>
 
       {/* Enhanced Footer */}
-      <footer className="bg-[#FAFAFA] border-t border-[#D8C3A5]/30 py-16">
+      <footer className="bg-[#FAFAFA] border-t border-gray-200 py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <div className="flex items-center justify-center space-x-3 mb-6">
@@ -552,13 +552,13 @@ export default function HomePage() {
               Enterprise risk management platform powered by AI. Secure your business with intelligent automation.
             </p>
             <div className="flex items-center justify-center space-x-6 mb-8">
-              <Badge variant="outline" className="border-[#D8C3A5]/60 text-[#A8A8A8] bg-[#F5F1E9]">
+              <Badge variant="outline" className="border-gray-300 text-[#A8A8A8] bg-gray-50">
                 SOC 2 Type II
               </Badge>
-              <Badge variant="outline" className="border-[#D8C3A5]/60 text-[#A8A8A8] bg-[#F5F1E9]">
+              <Badge variant="outline" className="border-gray-300 text-[#A8A8A8] bg-gray-50">
                 ISO 27001
               </Badge>
-              <Badge variant="outline" className="border-[#D8C3A5]/60 text-[#A8A8A8] bg-[#F5F1E9]">
+              <Badge variant="outline" className="border-gray-300 text-[#A8A8A8] bg-gray-50">
                 GDPR Ready
               </Badge>
             </div>

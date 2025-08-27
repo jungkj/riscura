@@ -8,28 +8,31 @@ import { Toaster } from '@/components/ui/sonner';
 import ClientProvider from '@/components/providers/ClientProvider';
 import { PerformanceProvider } from '@/components/providers/PerformanceProvider';
 import { AuthDebugger } from '@/components/debug/AuthDebugger';
+import { SessionProvider } from 'next-auth/react';
 
 export default function Providers({ children }: { children: React.ReactNode }) {
   return (
     <ClientProvider>
-      <PerformanceProvider>
-        <ThemeProvider 
-          attribute="class" 
-          defaultTheme="light" 
-          enableSystem={false}
-          storageKey="riscura-theme"
-        >
-          <TooltipProvider>
-            <AuthProvider>
-              <AIProvider>
-                {children}
-                <Toaster />
-                <AuthDebugger />
-              </AIProvider>
-            </AuthProvider>
-          </TooltipProvider>
-        </ThemeProvider>
-      </PerformanceProvider>
+      <SessionProvider>
+        <PerformanceProvider>
+          <ThemeProvider 
+            attribute="class" 
+            defaultTheme="light" 
+            enableSystem={false}
+            storageKey="riscura-theme"
+          >
+            <TooltipProvider>
+              <AuthProvider>
+                <AIProvider>
+                  {children}
+                  <Toaster />
+                  <AuthDebugger />
+                </AIProvider>
+              </AuthProvider>
+            </TooltipProvider>
+          </ThemeProvider>
+        </PerformanceProvider>
+      </SessionProvider>
     </ClientProvider>
   );
 } 
