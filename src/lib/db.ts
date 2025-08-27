@@ -1,5 +1,4 @@
 import { PrismaClient } from '@prisma/client';
-import { getProductionDatabaseUrl } from './db-config';
 
 // Extend PrismaClient for global typing
 declare global {
@@ -46,15 +45,11 @@ function getDatabaseConfig(): DatabaseConfig | null {
 
   // Check for both uppercase and lowercase versions (Vercel might use lowercase)
   // Also check for other common Vercel database env var names
-  // Use the production override if applicable
-  let databaseUrl = getProductionDatabaseUrl() || 
-                   process.env.DATABASE_URL || 
+  let databaseUrl = process.env.DATABASE_URL || 
                    process.env.database_url || 
                    process.env.POSTGRES_URL ||
                    process.env.POSTGRES_PRISMA_URL ||
                    process.env.POSTGRES_URL_NON_POOLING;
-  
-  // The production override is now handled by getProductionDatabaseUrl()
   
   // Check if URL is already a pooled URL (contains pooler.supabase.com)
   const isAlreadyPooled = databaseUrl?.includes('pooler.supabase.com');
