@@ -12,7 +12,7 @@ import { TimeSavingChart } from '@/components/charts/TimeSavingChart';
 import { FloatingNav, StaticNav } from '@/components/ui/floating-navbar';
 import { IntegrationsCarousel } from '@/components/landing/IntegrationsCarousel';
 import { ContainerTextFlip } from '@/components/ui/container-text-flip';
-import { ScrollStepProcess } from '@/components/landing/ScrollStepProcess';
+// import { ScrollStepProcess } from '@/components/landing/ScrollStepProcess';
 
 // Icons
 import {
@@ -203,8 +203,44 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Scroll-Based Step Process */}
-      <ScrollStepProcess />
+      {/* Scroll-Based Step Process - Temporarily Disabled */}
+      <div className="py-24 px-4 sm:px-6 lg:px-8 bg-white">
+        <div className="max-w-7xl mx-auto text-center">
+          <Badge className="bg-[#199BEC] text-white px-4 py-2 text-zeroeval-caption mb-4">
+            How It Works
+          </Badge>
+          <h2 className="text-zeroeval-4xl sm:text-zeroeval-5xl lg:text-zeroeval-6xl text-gray-900 mb-6">
+            From data to insights<br />in minutes
+          </h2>
+          <p className="text-zeroeval-xl text-gray-600 max-w-3xl mx-auto mb-16">
+            Our AI-powered platform transforms your existing risk documents into 
+            comprehensive, actionable risk intelligence.
+          </p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="text-center p-6">
+              <div className="w-16 h-16 bg-[#199BEC]/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Upload className="w-8 h-8 text-[#199BEC]" />
+              </div>
+              <h3 className="text-zeroeval-h5 text-gray-900 mb-2">Document Upload</h3>
+              <p className="text-zeroeval-body-sm text-gray-600">Upload your risk documents and let AI do the work.</p>
+            </div>
+            <div className="text-center p-6">
+              <div className="w-16 h-16 bg-[#199BEC]/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Brain className="w-8 h-8 text-[#199BEC]" />
+              </div>
+              <h3 className="text-zeroeval-h5 text-gray-900 mb-2">AI Analysis</h3>
+              <p className="text-zeroeval-body-sm text-gray-600">Advanced algorithms analyze and score your risks.</p>
+            </div>
+            <div className="text-center p-6">
+              <div className="w-16 h-16 bg-[#199BEC]/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                <BarChart3 className="w-8 h-8 text-[#199BEC]" />
+              </div>
+              <h3 className="text-zeroeval-h5 text-gray-900 mb-2">Risk Dashboard</h3>
+              <p className="text-zeroeval-body-sm text-gray-600">Get actionable insights and real-time visibility.</p>
+            </div>
+          </div>
+        </div>
+      </div>
 
       {/* Integrations Carousel */}
       <IntegrationsCarousel />
