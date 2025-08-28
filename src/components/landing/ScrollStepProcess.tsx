@@ -210,42 +210,32 @@ const processSteps: ProcessStep[] = [
 export function ScrollStepProcess() {
   const containerRef = useRef<HTMLDivElement>(null);
   const [activeStep, setActiveStep] = useState(0);
-  const [stepRefs, setStepRefs] = useState<(HTMLDivElement | null)[]>([]);
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
-    offset: ["start center", "end center"]
+    offset: ["start start", "end start"]
   });
 
-  const progress = useTransform(scrollYProgress, [0, 1], [0, processSteps.length - 1]);
+  // Calculate step transitions based on scroll progress
+  // Each step should occupy 1/3 of the scroll area
+  const stepProgress = useTransform(scrollYProgress, [0, 1], [0, processSteps.length]);
 
   useEffect(() => {
-    const unsubscribe = progress.onChange((value) => {
-      const newActiveStep = Math.min(Math.floor(value), processSteps.length - 1);
-      if (newActiveStep !== activeStep && newActiveStep >= 0) {
+    const unsubscribe = stepProgress.onChange((value) => {
+      const newActiveStep = Math.min(Math.max(0, Math.floor(value)), processSteps.length - 1);
+      if (newActiveStep !== activeStep) {
         setActiveStep(newActiveStep);
       }
     });
 
     return () => unsubscribe();
-  }, [progress, activeStep]);
-
-  useEffect(() => {
-    setStepRefs(new Array(processSteps.length).fill(null));
-  }, []);
-
-  const setStepRef = (index: number) => (ref: HTMLDivElement | null) => {
-    setStepRefs(prev => {
-      const newRefs = [...prev];
-      newRefs[index] = ref;
-      return newRefs;
-    });
-  };
+  }, [stepProgress, activeStep]);
 
   return (
-    <div className="py-24 px-4 sm:px-6 lg:px-8 bg-white relative overflow-hidden">
-      <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-16">
+    <div className="relative">
+      {/* Header section */}
+      <div className="py-24 px-4 sm:px-6 lg:px-8 bg-white">
+        <div className="max-w-7xl mx-auto text-center">
           <Badge className="bg-[#199BEC] text-white px-4 py-2 text-zeroeval-caption mb-4">
             How It Works
           </Badge>
@@ -257,130 +247,114 @@ export function ScrollStepProcess() {
             comprehensive, actionable risk intelligence.
           </p>
         </div>
+      </div>
 
-        <div ref={containerRef} className="relative">
-          <div className="lg:grid lg:grid-cols-2 lg:gap-16 lg:items-start">
-            <div className="lg:sticky lg:top-32">
-              <div className="space-y-8">
-                {processSteps.map((step, index) => (
-                  <motion.div
-                    key={step.id}
-                    ref={setStepRef(index)}
-                    className={`relative p-6 rounded-2xl border transition-all duration-500 cursor-pointer ${
-                      activeStep === index 
-                        ? 'border-[#199BEC] bg-[#199BEC]/5 shadow-lg' 
-                        : 'border-gray-200 bg-white hover:border-[#199BEC]/50'
-                    }`}
-                    animate={{
-                      scale: activeStep === index ? 1.02 : 1,
-                      opacity: activeStep === index ? 1 : 0.7
-                    }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    <div className="flex items-start space-x-4">
-                      <div className={`flex-shrink-0 w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-300 ${
-                        activeStep === index 
-                          ? 'bg-[#199BEC] text-white' 
-                          : 'bg-gray-100 text-gray-600'
-                      }`}>
-                        <step.icon className="w-6 h-6" />
-                      </div>
-
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center justify-between mb-2">
-                          <h3 className={`text-zeroeval-h5 transition-colors duration-300 ${
-                            activeStep === index ? 'text-[#199BEC]' : 'text-gray-900'
-                          }`}>
-                            {step.title}
-                          </h3>
-                          <Badge 
-                            variant="outline" 
-                            className={`text-zeroeval-caption ${
-                              activeStep === index 
-                                ? 'border-[#199BEC] text-[#199BEC]' 
-                                : 'border-gray-300 text-gray-600'
-                            }`}
-                          >
-                            {step.duration}
+      {/* Fixed scroll section - height determines scroll distance */}
+      <div ref={containerRef} className="relative" style={{ height: `${processSteps.length * 100}vh` }}>
+        <div className="sticky top-0 h-screen flex items-center">
+          <div className="w-full px-4 sm:px-6 lg:px-8">
+            <div className="max-w-7xl mx-auto">
+              <div className="grid lg:grid-cols-2 gap-16 items-center">
+                
+                {/* Left side - Step content */}
+                <div className="space-y-8">
+                  <AnimatePresence mode="wait">
+                    <motion.div
+                      key={activeStep}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -20 }}
+                      transition={{ duration: 0.6 }}
+                      className="space-y-6"
+                    >
+                      <div className="flex items-center space-x-4">
+                        <div className="w-16 h-16 rounded-2xl bg-[#199BEC] flex items-center justify-center">
+                          {React.createElement(processSteps[activeStep].icon, { 
+                            className: "w-8 h-8 text-white" 
+                          })}
+                        </div>
+                        <div>
+                          <Badge className="bg-[#199BEC]/10 text-[#199BEC] mb-2">
+                            {processSteps[activeStep].duration}
                           </Badge>
+                          <h3 className="text-zeroeval-4xl font-bold text-gray-900">
+                            {processSteps[activeStep].title}
+                          </h3>
                         </div>
-                        
-                        <p className={`text-zeroeval-body-sm transition-colors duration-300 ${
-                          activeStep === index ? 'text-gray-900' : 'text-gray-600'
-                        }`}>
-                          {step.subtitle}
-                        </p>
-                        
-                        <p className={`text-zeroeval-body-sm transition-colors duration-300 ${
-                          activeStep === index ? 'text-gray-700' : 'text-gray-500'
-                        }`}>
-                          {step.description}
+                      </div>
+                      
+                      <div className="space-y-4">
+                        <h4 className="text-zeroeval-2xl text-gray-900 font-semibold">
+                          {processSteps[activeStep].subtitle}
+                        </h4>
+                        <p className="text-zeroeval-xl text-gray-600 leading-relaxed">
+                          {processSteps[activeStep].description}
                         </p>
                       </div>
-                    </div>
 
-                    {index < processSteps.length - 1 && (
-                      <div className="absolute left-10 top-20 w-0.5 h-16 bg-gray-200">
-                        <motion.div
-                          className="w-full bg-[#199BEC]"
-                          initial={{ height: 0 }}
-                          animate={{ 
-                            height: activeStep > index ? '100%' : '0%' 
-                          }}
-                          transition={{ duration: 0.5 }}
-                        />
+                      {/* Step indicator */}
+                      <div className="flex space-x-2">
+                        {processSteps.map((_, index) => (
+                          <div
+                            key={index}
+                            className={`h-1 rounded-full transition-all duration-300 ${
+                              index === activeStep 
+                                ? 'bg-[#199BEC] w-12' 
+                                : 'bg-gray-300 w-4'
+                            }`}
+                          />
+                        ))}
                       </div>
-                    )}
-                  </motion.div>
-                ))}
-              </div>
-            </div>
+                    </motion.div>
+                  </AnimatePresence>
+                </div>
 
-            <div className="mt-16 lg:mt-0">
-              <div className="lg:sticky lg:top-32">
-                <Card className="bg-white border border-gray-200 shadow-2xl overflow-hidden">
-                  <CardContent className="p-0">
-                    <div className="bg-gray-50 px-6 py-3 border-b border-gray-200">
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center space-x-2">
-                          <div className="w-3 h-3 bg-red-500 rounded-full"></div>
-                          <div className="w-3 h-3 bg-orange-500 rounded-full"></div>
-                          <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                {/* Right side - Visual content */}
+                <div className="relative">
+                  <Card className="bg-white border border-gray-200 shadow-2xl overflow-hidden">
+                    <CardContent className="p-0">
+                      <div className="bg-gray-50 px-6 py-3 border-b border-gray-200">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center space-x-2">
+                            <div className="w-3 h-3 bg-red-500 rounded-full"></div>
+                            <div className="w-3 h-3 bg-orange-500 rounded-full"></div>
+                            <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                          </div>
+                          <div className="text-zeroeval-caption text-gray-500 font-mono">app.riscura.com</div>
                         </div>
-                        <div className="text-zeroeval-caption text-gray-500 font-mono">app.riscura.com</div>
                       </div>
-                    </div>
 
-                    <div className="min-h-[500px]">
-                      <AnimatePresence mode="wait">
-                        <motion.div
-                          key={activeStep}
-                          initial={{ opacity: 0, x: 20 }}
-                          animate={{ opacity: 1, x: 0 }}
-                          exit={{ opacity: 0, x: -20 }}
-                          transition={{ duration: 0.4 }}
-                          className={`p-6 ${processSteps[activeStep].bgColor}`}
-                        >
-                          <div className="mb-6">
-                            <div className="flex items-center space-x-3 mb-2">
-                              <div className="w-8 h-8 rounded-lg bg-white border flex items-center justify-center">
-                                {React.createElement(processSteps[activeStep].icon, { 
-                                  className: `w-5 h-5 ${processSteps[activeStep].color}` 
-                                })}
-                              </div>
-                              <div>
-                                <h4 className="text-zeroeval-h6 text-gray-900">{processSteps[activeStep].title}</h4>
-                                <p className="text-zeroeval-body-sm text-gray-600">{processSteps[activeStep].subtitle}</p>
+                      <div className="min-h-[500px]">
+                        <AnimatePresence mode="wait">
+                          <motion.div
+                            key={activeStep}
+                            initial={{ opacity: 0, scale: 0.95 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            exit={{ opacity: 0, scale: 1.05 }}
+                            transition={{ duration: 0.5 }}
+                            className={`p-6 ${processSteps[activeStep].bgColor}`}
+                          >
+                            <div className="mb-6">
+                              <div className="flex items-center space-x-3 mb-2">
+                                <div className="w-8 h-8 rounded-lg bg-white border flex items-center justify-center">
+                                  {React.createElement(processSteps[activeStep].icon, { 
+                                    className: `w-5 h-5 ${processSteps[activeStep].color}` 
+                                  })}
+                                </div>
+                                <div>
+                                  <h4 className="text-zeroeval-h6 text-gray-900">{processSteps[activeStep].title}</h4>
+                                  <p className="text-zeroeval-body-sm text-gray-600">{processSteps[activeStep].subtitle}</p>
+                                </div>
                               </div>
                             </div>
-                          </div>
-                          
-                          {processSteps[activeStep].content}
-                        </motion.div>
-                      </AnimatePresence>
-                    </div>
-                  </CardContent>
-                </Card>
+                            
+                            {processSteps[activeStep].content}
+                          </motion.div>
+                        </AnimatePresence>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
               </div>
             </div>
           </div>

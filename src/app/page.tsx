@@ -83,17 +83,6 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen font-inter" style={{ backgroundColor: '#FFFFFF' }}>
-      {/* Unicorn Studio Script */}
-      <Script 
-        src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v1.4.29/dist/unicornStudio.umd.js"
-        strategy="afterInteractive"
-        onLoad={() => {
-          if (window.UnicornStudio && !window.UnicornStudio.isInitialized) {
-            window.UnicornStudio.init();
-            window.UnicornStudio.isInitialized = true;
-          }
-        }}
-      />
       
       {/* Static Navbar */}
       <StaticNav />
@@ -101,40 +90,122 @@ export default function HomePage() {
       {/* Floating Navbar */}
       <FloatingNav navItems={navItems} />
 
-      {/* Enhanced Hero Section */}
-      <section className="pt-36 pb-24 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
-        {/* Unicorn Studio Interactive Background */}
-        <div 
-          data-us-project="IRWbk402q4OXq2TWpE10" 
-          className="absolute inset-0 z-0"
-          style={{
-            width: '100%',
-            height: '100%',
-            minHeight: '900px'
-          }}
-        />
-        
-        <div className="max-w-7xl mx-auto relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-            {/* Left Column - Content */}
-            <div className="text-center lg:text-left space-y-6 md:space-y-8">
+      {/* Palace.so Inspired Hero Section with Moving Sky Background */}
+      <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+        {/* Animated Sky Background */}
+        <div className="absolute inset-0">
+          {/* Base gradient sky */}
+          <div className="absolute inset-0 bg-gradient-to-b from-blue-100 via-blue-50 to-white" />
+          
+          {/* Animated clouds */}
+          <div className="absolute inset-0">
+            {/* Cloud layer 1 - slow moving */}
+            <motion.div
+              className="absolute top-1/4 left-0 w-96 h-32 opacity-20"
+              animate={{
+                x: [-100, window?.innerWidth ? window.innerWidth + 100 : 1400],
+              }}
+              transition={{
+                duration: 60,
+                repeat: Infinity,
+                ease: "linear"
+              }}
+            >
+              <div className="w-full h-full bg-white/40 rounded-full blur-xl" />
+            </motion.div>
+            
+            {/* Cloud layer 2 - medium speed */}
+            <motion.div
+              className="absolute top-1/3 right-0 w-64 h-24 opacity-30"
+              animate={{
+                x: [window?.innerWidth ? window.innerWidth + 100 : 1400, -200],
+              }}
+              transition={{
+                duration: 45,
+                repeat: Infinity,
+                ease: "linear"
+              }}
+            >
+              <div className="w-full h-full bg-white/50 rounded-full blur-lg" />
+            </motion.div>
+            
+            {/* Cloud layer 3 - fast moving */}
+            <motion.div
+              className="absolute top-1/5 left-1/3 w-48 h-20 opacity-25"
+              animate={{
+                x: [-150, window?.innerWidth ? window.innerWidth + 150 : 1500],
+              }}
+              transition={{
+                duration: 30,
+                repeat: Infinity,
+                ease: "linear"
+              }}
+            >
+              <div className="w-full h-full bg-white/60 rounded-full blur-md" />
+            </motion.div>
+          </div>
+
+          {/* Subtle animated particles */}
+          <div className="absolute inset-0">
+            {[...Array(8)].map((_, i) => (
+              <motion.div
+                key={i}
+                className="absolute w-1 h-1 bg-white/30 rounded-full"
+                style={{
+                  left: `${Math.random() * 100}%`,
+                  top: `${20 + Math.random() * 40}%`,
+                }}
+                animate={{
+                  y: [0, -20, 0],
+                  opacity: [0.3, 0.7, 0.3],
+                }}
+                transition={{
+                  duration: 3 + Math.random() * 2,
+                  repeat: Infinity,
+                  delay: Math.random() * 2,
+                }}
+              />
+            ))}
+          </div>
+        </div>
+
+        {/* Content Container */}
+        <div className="relative z-10 w-full px-4 sm:px-6 lg:px-8 pt-32 pb-24">
+          <div className="max-w-6xl mx-auto text-center">
+            {/* Main Hero Content */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+              className="space-y-8 mb-16"
+            >
               {/* Enhanced Headline */}
               <div>
                 <StaticHeadline />
               </div>
 
               {/* Strong Value Proposition */}
-              <p className="text-zeroeval-xl sm:text-zeroeval-2xl text-gray-600 max-w-2xl mx-auto lg:mx-0">
+              <motion.p
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.2 }}
+                className="text-zeroeval-xl sm:text-zeroeval-2xl text-gray-600 max-w-4xl mx-auto leading-relaxed"
+              >
                 Identify, assess, and mitigate enterprise risks with AI-powered intelligence. 
                 <span className="text-gray-900 font-medium"> Deploy in minutes, not months.</span>
-              </p>
+              </motion.p>
 
               {/* Primary CTA */}
-              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start items-center">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.4 }}
+                className="flex flex-col sm:flex-row gap-4 justify-center items-center"
+              >
                 <Button 
                   onClick={handleGetStarted}
                   size="lg" 
-                  className="px-10 py-5 text-zeroeval-button rounded-xl min-w-[200px] bg-[#199BEC] hover:bg-[#199BEC]/80"
+                  className="px-12 py-6 text-zeroeval-button rounded-xl min-w-[220px] bg-[#199BEC] hover:bg-[#199BEC]/80 shadow-lg hover:shadow-xl transition-all duration-300"
                 >
                   Start free trial
                   <ArrowRight className="ml-3 h-5 w-5" />
@@ -143,58 +214,71 @@ export default function HomePage() {
                   onClick={handleRequestDemo}
                   variant="outline"
                   size="lg"
-                  className="px-10 py-5 text-zeroeval-button rounded-xl min-w-[200px]"
+                  className="px-12 py-6 text-zeroeval-button rounded-xl min-w-[220px] bg-white/80 backdrop-blur-sm border-gray-300 hover:bg-white/90"
                 >
                   Book a demo
                 </Button>
-                </div>
+              </motion.div>
+            </motion.div>
 
-            </div>
-
-            {/* Right Column - Hero Visual */}
+            {/* Dashboard Screenshot with Enhanced Palace.so Style */}
             <motion.div
-              initial={{ opacity: 0, x: 30 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8, delay: 0.4 }}
-              className="relative"
+              initial={{ opacity: 0, y: 40 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1, delay: 0.6 }}
+              className="relative max-w-6xl mx-auto"
             >
-              {/* Placeholder for hero visual - could be a dashboard mockup */}
-              <div className="relative w-full max-w-2xl mx-auto">
-                <div className="bg-white/90 backdrop-blur-xl border border-gray-200/60 shadow-2xl rounded-2xl overflow-hidden">
-                  <div className="bg-gray-50 px-6 py-3 border-b border-gray-200">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center space-x-2">
-                        <div className="w-3 h-3 bg-red-500 rounded-full"></div>
-                        <div className="w-3 h-3 bg-orange-500 rounded-full"></div>
-                        <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+              {/* Glow effect behind dashboard */}
+              <div className="absolute inset-0 bg-[#199BEC]/20 blur-3xl rounded-3xl scale-110" />
+              
+              <div className="relative bg-white/95 backdrop-blur-xl border border-gray-200/60 shadow-2xl rounded-3xl overflow-hidden">
+                {/* Browser chrome */}
+                <div className="bg-gray-50/90 px-6 py-4 border-b border-gray-200/60">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-3">
+                      <div className="w-3 h-3 bg-red-500 rounded-full"></div>
+                      <div className="w-3 h-3 bg-orange-500 rounded-full"></div>
+                      <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <div className="bg-gray-100 rounded-lg px-4 py-1">
+                        <div className="text-sm text-gray-500 font-mono">app.riscura.com</div>
                       </div>
-                      <div className="text-sm text-gray-500 font-mono">app.riscura.com</div>
                     </div>
                   </div>
-                  <div className="p-8">
-                    <div className="text-center space-y-6">
-                      <div className="w-16 h-16 bg-[#199BEC]/10 rounded-2xl flex items-center justify-center mx-auto">
-                        <BarChart3 className="w-8 h-8 text-[#199BEC]" />
-                      </div>
-                      <div>
-                        <h3 className="text-zeroeval-h4 text-gray-900 mb-2">Risk Intelligence Dashboard</h3>
-                        <p className="text-zeroeval-body-sm text-gray-600">Transform your data into actionable insights</p>
-                      </div>
-                      <div className="grid grid-cols-3 gap-4">
-                        <div className="text-center p-4 bg-red-50 rounded-xl">
-                          <div className="text-2xl font-bold text-red-600">23</div>
-                          <div className="text-xs text-red-600">Critical</div>
-                        </div>
-                        <div className="text-center p-4 bg-orange-50 rounded-xl">
-                          <div className="text-2xl font-bold text-orange-600">45</div>
-                          <div className="text-xs text-orange-600">Medium</div>
-                        </div>
-                        <div className="text-center p-4 bg-green-50 rounded-xl">
-                          <div className="text-2xl font-bold text-green-600">67</div>
-                          <div className="text-xs text-green-600">Low</div>
-                        </div>
-                      </div>
+                </div>
+                
+                {/* Dashboard content area */}
+                <div className="aspect-video bg-gradient-to-br from-gray-50 to-white flex items-center justify-center relative">
+                  {/* Floating dashboard placeholder */}
+                  <motion.div
+                    animate={{ 
+                      y: [0, -10, 0],
+                    }}
+                    transition={{ 
+                      duration: 4,
+                      repeat: Infinity,
+                      ease: "easeInOut"
+                    }}
+                    className="text-center space-y-6"
+                  >
+                    <div className="w-24 h-24 bg-gradient-to-br from-[#199BEC]/20 to-[#199BEC]/5 rounded-3xl flex items-center justify-center mx-auto shadow-lg">
+                      <BarChart3 className="w-12 h-12 text-[#199BEC]" />
                     </div>
+                    <div className="space-y-2">
+                      <h3 className="text-zeroeval-h3 text-gray-900 font-semibold">Dashboard Screenshot Placeholder</h3>
+                      <p className="text-zeroeval-body-lg text-gray-500 max-w-md">
+                        Replace this with your dashboard screenshot to showcase your risk intelligence platform
+                      </p>
+                    </div>
+                  </motion.div>
+
+                  {/* Subtle grid pattern */}
+                  <div className="absolute inset-0 opacity-5">
+                    <div className="w-full h-full" style={{
+                      backgroundImage: 'linear-gradient(#199BEC 1px, transparent 1px), linear-gradient(90deg, #199BEC 1px, transparent 1px)',
+                      backgroundSize: '20px 20px'
+                    }} />
                   </div>
                 </div>
               </div>
