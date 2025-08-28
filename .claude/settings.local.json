@@ -62,7 +62,12 @@
       "Bash(cmd /c \"npx playwright install\")",
       "mcp__playwright__*",
       "Bash(npm --version)",
-      "Bash(git fetch:*)"
+      "Bash(git fetch:*)",
+      "Read(/Users/andyjung/.claude/agents/**)",
+      "mcp__playwright__playwright_navigate",
+      "mcp__playwright__playwright_screenshot",
+      "mcp__playwright__playwright_get_visible_html",
+      "Bash(git checkout:*)"
     ],
     "deny": []
   },

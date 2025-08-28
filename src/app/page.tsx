@@ -369,24 +369,25 @@ export default function HomePage() {
       {/* Time Savings Chart Section */}
       <TimeSavingChart />
 
-      {/* Enhanced Features Section */}
-      <section className="py-24 px-4 sm:px-6 lg:px-8 bg-[#FAFAFA]">
+      {/* Premium Features Section */}
+      <section className="py-32 px-4 sm:px-6 lg:px-8 bg-white relative">
           <div className="max-w-7xl mx-auto">
-            <div className="text-center mb-16 md:mb-20">
+            <div className="text-center mb-20">
               <motion.div
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8 }}
               viewport={{ once: true }}
-              className="space-y-6 md:space-y-8"
+              className="space-y-8"
             >
-              <Badge className="bg-[#191919] text-[#FAFAFA] px-4 py-2 text-sm font-inter">
+              <Badge className="bg-gray-100 text-gray-700 px-6 py-3 text-sm font-medium rounded-full">
                 Enterprise Platform
               </Badge>
-              <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-[#191919] font-inter leading-tight">
-                Built for modern<br />enterprise security
+              <h2 className="text-4xl sm:text-5xl lg:text-6xl font-light text-gray-900 leading-tight tracking-tight">
+                Built for modern<br />
+                <span className="font-semibold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">enterprise security</span>
               </h2>
-              <p className="text-xl text-[#A8A8A8] max-w-3xl mx-auto font-inter leading-relaxed">
+              <p className="text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed font-light">
                 Comprehensive risk management platform designed for Fortune 500 companies 
                 with enterprise-grade security, compliance, and AI-powered automation.
               </p>
@@ -439,22 +440,22 @@ export default function HomePage() {
                 transition={{ duration: 0.6, delay: index * 0.1 }}
                 viewport={{ once: true }}
               >
-                <Card className="bg-white border border-gray-200 h-full hover:shadow-xl hover:border-[#199BEC]/40 transition-all duration-300 group rounded-2xl">
+                <Card className="bg-white/80 backdrop-blur border border-gray-200/50 h-full hover:shadow-2xl hover:border-blue-200 transition-all duration-500 group rounded-3xl overflow-hidden">
                   <CardContent className="p-8">
-                    <div className="w-14 h-14 rounded-2xl bg-[#199BEC]/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
-                      <feature.icon className="h-7 w-7 text-[#199BEC]" />
+                    <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-100 to-purple-100 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                      <feature.icon className="h-8 w-8 text-blue-600" />
                     </div>
-                    <h3 className="text-xl font-bold text-[#191919] mb-4 font-inter">
+                    <h3 className="text-2xl font-semibold text-gray-900 mb-4 font-light">
                       {feature.title}
                     </h3>
-                    <p className="text-[#A8A8A8] leading-relaxed mb-6 font-inter">
+                    <p className="text-gray-600 leading-relaxed mb-6">
                       {feature.description}
                     </p>
                     <ul className="space-y-3">
                       {feature.features.map((item, idx) => (
-                        <li key={idx} className="flex items-center text-sm font-inter">
-                          <CheckCircle className="w-4 h-4 text-green-600 mr-3 flex-shrink-0" />
-                          <span className="text-[#191919] font-medium">{item}</span>
+                        <li key={idx} className="flex items-center text-sm">
+                          <CheckCircle className="w-4 h-4 text-emerald-500 mr-3 flex-shrink-0" />
+                          <span className="text-gray-700 font-medium">{item}</span>
                         </li>
                       ))}
                     </ul>
@@ -466,32 +467,33 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Enhanced CTA Section */}
-      <section className="py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-[#F5F1E9] via-[#FAFAFA] to-[#F5F1E9] relative overflow-hidden">
-          <div className="max-w-5xl mx-auto text-center relative">
+      {/* Premium CTA Section */}
+      <section className="py-32 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-blue-50/50 via-purple-50/30 to-pink-50/20 relative overflow-hidden">
+          <div className="max-w-6xl mx-auto text-center relative">
             <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
-            className="space-y-6 md:space-y-8"
+            className="space-y-8"
           >
-            <Badge className="bg-[#199BEC] text-white px-6 py-2 text-sm font-inter rounded-full">
+            <Badge className="bg-gray-900 text-white px-6 py-3 text-sm font-medium rounded-full">
               Get Started Today
             </Badge>
-            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-[#191919] font-inter leading-tight">
-              Ready to secure<br />your enterprise?
+            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-light text-gray-900 leading-tight tracking-tight">
+              Ready to secure<br />
+              <span className="font-semibold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">your enterprise?</span>
             </h2>
-            <p className="text-xl text-[#A8A8A8] max-w-3xl mx-auto font-inter leading-relaxed">
+            <p className="text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed font-light">
               Join thousands of organizations that trust Riscura to protect their business 
               and ensure compliance in an ever-changing risk landscape.
             </p>
             
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+            <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
               <Button 
                 onClick={handleGetStarted}
                 size="lg" 
-                className="px-12 py-4 text-lg font-semibold font-inter min-w-[220px] rounded-xl bg-[#199BEC] hover:bg-[#199BEC]/80"
+                className="px-12 py-4 text-lg font-medium min-w-[220px] rounded-full bg-gray-900 hover:bg-gray-800 text-white shadow-lg"
               >
                 Start free trial
                 <ChevronRight className="ml-2 h-5 w-5" />
@@ -500,69 +502,69 @@ export default function HomePage() {
                 onClick={handleRequestDemo}
                 variant="outline"
                 size="lg"
-                className="px-12 py-4 text-lg font-semibold font-inter min-w-[220px] rounded-xl"
+                className="px-12 py-4 text-lg font-medium min-w-[220px] rounded-full bg-white/80 backdrop-blur border-gray-200 hover:bg-white/90"
               >
                 Schedule demo
               </Button>
             </div>
 
             {/* Trust Elements */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 md:gap-8 max-w-2xl mx-auto">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 max-w-3xl mx-auto mt-16">
               <div className="text-center">
-                <div className="w-12 h-12 bg-[#199BEC]/10 rounded-xl flex items-center justify-center mx-auto mb-3">
-                  <Lock className="w-6 h-6 text-[#199BEC]" />
+                <div className="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                  <Lock className="w-8 h-8 text-blue-600" />
                 </div>
-                <p className="text-[#191919] font-semibold font-inter">Enterprise Security</p>
-                <p className="text-[#A8A8A8] text-sm font-inter">SOC 2 & ISO 27001</p>
+                <p className="text-gray-900 font-semibold text-lg">Enterprise Security</p>
+                <p className="text-gray-600 text-sm">SOC 2 & ISO 27001 Compliant</p>
               </div>
               <div className="text-center">
-                <div className="w-12 h-12 bg-[#199BEC]/10 rounded-xl flex items-center justify-center mx-auto mb-3">
-                  <Users className="w-6 h-6 text-[#199BEC]" />
+                <div className="w-16 h-16 bg-emerald-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                  <Users className="w-8 h-8 text-emerald-600" />
                 </div>
-                <p className="text-[#191919] font-semibold font-inter">24/7 Support</p>
-                <p className="text-[#A8A8A8] text-sm font-inter">Dedicated success team</p>
+                <p className="text-gray-900 font-semibold text-lg">24/7 Support</p>
+                <p className="text-gray-600 text-sm">Dedicated success team</p>
               </div>
               <div className="text-center">
-                <div className="w-12 h-12 bg-[#199BEC]/10 rounded-xl flex items-center justify-center mx-auto mb-3">
-                  <TrendingUp className="w-6 h-6 text-[#199BEC]" />
+                <div className="w-16 h-16 bg-purple-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                  <TrendingUp className="w-8 h-8 text-purple-600" />
                 </div>
-                <p className="text-[#191919] font-semibold font-inter">Proven ROI</p>
-                <p className="text-[#A8A8A8] text-sm font-inter">Significant efficiency gains</p>
+                <p className="text-gray-900 font-semibold text-lg">Proven ROI</p>
+                <p className="text-gray-600 text-sm">Measurable efficiency gains</p>
               </div>
             </div>
           </motion.div>
         </div>
       </section>
 
-      {/* Enhanced Footer */}
-      <footer className="bg-[#FAFAFA] border-t border-gray-200 py-16">
+      {/* Premium Footer */}
+      <footer className="bg-white border-t border-gray-100 py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <div className="flex items-center justify-center space-x-3 mb-6">
+            <div className="flex items-center justify-center space-x-3 mb-8">
               <Image
                 src="/images/logo/riscura.png"
                 alt="Riscura Logo"
-                width={40}
-                height={40}
+                width={48}
+                height={48}
                 className="object-contain"
               />
-              <span className="text-2xl font-bold text-[#191919] font-inter">Riscura</span>
+              <span className="text-3xl font-light text-gray-900">Riscura</span>
             </div>
-            <p className="text-[#A8A8A8] text-lg font-inter mb-6 max-w-md mx-auto">
+            <p className="text-gray-600 text-lg mb-8 max-w-md mx-auto font-light">
               Enterprise risk management platform powered by AI. Secure your business with intelligent automation.
             </p>
-            <div className="flex items-center justify-center space-x-6 mb-8">
-              <Badge variant="outline" className="border-gray-300 text-[#A8A8A8] bg-gray-50">
+            <div className="flex items-center justify-center space-x-8 mb-12">
+              <Badge variant="outline" className="border-gray-200 text-gray-600 bg-gray-50/50 px-4 py-2 rounded-full">
                 SOC 2 Type II
               </Badge>
-              <Badge variant="outline" className="border-gray-300 text-[#A8A8A8] bg-gray-50">
+              <Badge variant="outline" className="border-gray-200 text-gray-600 bg-gray-50/50 px-4 py-2 rounded-full">
                 ISO 27001
               </Badge>
-              <Badge variant="outline" className="border-gray-300 text-[#A8A8A8] bg-gray-50">
+              <Badge variant="outline" className="border-gray-200 text-gray-600 bg-gray-50/50 px-4 py-2 rounded-full">
                 GDPR Ready
               </Badge>
             </div>
-            <p className="text-[#A8A8A8] font-inter">
+            <p className="text-gray-500 font-light">
               © 2024 Riscura Inc. All rights reserved.
             </p>
           </div>
