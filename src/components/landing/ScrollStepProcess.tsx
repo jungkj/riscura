@@ -27,7 +27,7 @@ interface ProcessStep {
   content: React.ReactNode;
 }
 
-const steps: ProcessStep[] = [
+const processSteps: ProcessStep[] = [
   {
     id: 'upload',
     title: 'Document Upload',
@@ -95,7 +95,7 @@ const steps: ProcessStep[] = [
                   { name: 'Operational Risks', progress: 85, status: 'processing' },
                   { name: 'Compliance Gaps', progress: 60, status: 'processing' },
                   { name: 'Financial Risks', progress: 30, status: 'processing' }
-                ].map((item, index) => (
+                ].map((item) => (
                   <div key={item.name} className="flex items-center space-x-3">
                     <div className="w-3 h-3 rounded-full bg-[#199BEC]" />
                     <div className="flex-1">
@@ -122,7 +122,7 @@ const steps: ProcessStep[] = [
                   { name: 'Process Failure', level: 'High', score: '7.8/10', color: 'bg-orange-500' },
                   { name: 'Vendor Risk', level: 'Medium', score: '5.4/10', color: 'bg-yellow-500' },
                   { name: 'Regulatory Change', level: 'Low', score: '3.1/10', color: 'bg-green-500' }
-                ].map((risk, index) => (
+                ].map((risk) => (
                   <div key={risk.name} className="flex items-center justify-between p-3 bg-white rounded-lg border">
                     <div className="flex items-center space-x-3">
                       <div className={`w-3 h-3 rounded-full ${risk.color}`} />
@@ -217,11 +217,11 @@ export function ScrollStepProcess() {
     offset: ["start center", "end center"]
   });
 
-  const progress = useTransform(scrollYProgress, [0, 1], [0, steps.length - 1]);
+  const progress = useTransform(scrollYProgress, [0, 1], [0, processSteps.length - 1]);
 
   useEffect(() => {
     const unsubscribe = progress.onChange((value) => {
-      const newActiveStep = Math.min(Math.floor(value), steps.length - 1);
+      const newActiveStep = Math.min(Math.floor(value), processSteps.length - 1);
       if (newActiveStep !== activeStep && newActiveStep >= 0) {
         setActiveStep(newActiveStep);
       }
@@ -231,7 +231,7 @@ export function ScrollStepProcess() {
   }, [progress, activeStep]);
 
   useEffect(() => {
-    setStepRefs(new Array(steps.length).fill(null));
+    setStepRefs(new Array(processSteps.length).fill(null));
   }, []);
 
   const setStepRef = (index: number) => (ref: HTMLDivElement | null) => {
@@ -260,10 +260,9 @@ export function ScrollStepProcess() {
 
         <div ref={containerRef} className="relative">
           <div className="lg:grid lg:grid-cols-2 lg:gap-16 lg:items-start">
-            {/* Left Side - Steps Navigation */}
             <div className="lg:sticky lg:top-32">
               <div className="space-y-8">
-                {steps.map((step, index) => (
+                {processSteps.map((step, index) => (
                   <motion.div
                     key={step.id}
                     ref={setStepRef(index)}
@@ -278,7 +277,6 @@ export function ScrollStepProcess() {
                     }}
                     transition={{ duration: 0.3 }}
                   >
-                    {/* Step Number */}
                     <div className="flex items-start space-x-4">
                       <div className={`flex-shrink-0 w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-300 ${
                         activeStep === index 
@@ -321,8 +319,7 @@ export function ScrollStepProcess() {
                       </div>
                     </div>
 
-                    {/* Progress Bar */}
-                    {index < steps.length - 1 && (
+                    {index < processSteps.length - 1 && (
                       <div className="absolute left-10 top-20 w-0.5 h-16 bg-gray-200">
                         <motion.div
                           className="w-full bg-[#199BEC]"
@@ -339,12 +336,10 @@ export function ScrollStepProcess() {
               </div>
             </div>
 
-            {/* Right Side - Content Display */}
             <div className="mt-16 lg:mt-0">
               <div className="lg:sticky lg:top-32">
                 <Card className="bg-white border border-gray-200 shadow-2xl overflow-hidden">
                   <CardContent className="p-0">
-                    {/* Browser Chrome */}
                     <div className="bg-gray-50 px-6 py-3 border-b border-gray-200">
                       <div className="flex items-center justify-between">
                         <div className="flex items-center space-x-2">
@@ -356,7 +351,6 @@ export function ScrollStepProcess() {
                       </div>
                     </div>
 
-                    {/* Dynamic Content */}
                     <div className="min-h-[500px]">
                       <AnimatePresence mode="wait">
                         <motion.div
@@ -365,21 +359,21 @@ export function ScrollStepProcess() {
                           animate={{ opacity: 1, x: 0 }}
                           exit={{ opacity: 0, x: -20 }}
                           transition={{ duration: 0.4 }}
-                          className={`p-6 ${steps[activeStep].bgColor}`}
+                          className={`p-6 ${processSteps[activeStep].bgColor}`}
                         >
                           <div className="mb-6">
                             <div className="flex items-center space-x-3 mb-2">
-                              <div className={`w-8 h-8 rounded-lg bg-white border flex items-center justify-center`}>
-                                <steps[activeStep].icon className={`w-5 h-5 ${steps[activeStep].color}`} />
+                              <div className="w-8 h-8 rounded-lg bg-white border flex items-center justify-center">
+                                <processSteps[activeStep].icon className={`w-5 h-5 ${processSteps[activeStep].color}`} />
                               </div>
                               <div>
-                                <h4 className="text-zeroeval-h6 text-gray-900">{steps[activeStep].title}</h4>
-                                <p className="text-zeroeval-body-sm text-gray-600">{steps[activeStep].subtitle}</p>
+                                <h4 className="text-zeroeval-h6 text-gray-900">{processSteps[activeStep].title}</h4>
+                                <p className="text-zeroeval-body-sm text-gray-600">{processSteps[activeStep].subtitle}</p>
                               </div>
                             </div>
                           </div>
                           
-                          {steps[activeStep].content}
+                          {processSteps[activeStep].content}
                         </motion.div>
                       </AnimatePresence>
                     </div>
