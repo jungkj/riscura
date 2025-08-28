@@ -204,8 +204,7 @@ const steps: ProcessStep[] = [
         </div>
       </div>
     )
-  )
-}
+  }
 ];
 
 export function ScrollStepProcess() {
