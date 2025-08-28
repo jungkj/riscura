@@ -364,7 +364,9 @@ export function ScrollStepProcess() {
                           <div className="mb-6">
                             <div className="flex items-center space-x-3 mb-2">
                               <div className="w-8 h-8 rounded-lg bg-white border flex items-center justify-center">
-                                <processSteps[activeStep].icon className={`w-5 h-5 ${processSteps[activeStep].color}`} />
+                                {React.createElement(processSteps[activeStep].icon, { 
+                                  className: `w-5 h-5 ${processSteps[activeStep].color}` 
+                                })}
                               </div>
                               <div>
                                 <h4 className="text-zeroeval-h6 text-gray-900">{processSteps[activeStep].title}</h4>
