@@ -424,6 +424,138 @@ module.exports = {
           letterSpacing: '0'
         }],
         
+        // ZeroEval-inspired clean, modern typography
+        'zeroeval-xs': ['0.75rem', { 
+          lineHeight: '1.5', 
+          fontFamily: 'Inter', 
+          fontWeight: '400',
+          letterSpacing: '0'
+        }],
+        'zeroeval-sm': ['0.875rem', { 
+          lineHeight: '1.6', 
+          fontFamily: 'Inter', 
+          fontWeight: '400',
+          letterSpacing: '0'
+        }],
+        'zeroeval-base': ['1rem', { 
+          lineHeight: '1.7', 
+          fontFamily: 'Inter', 
+          fontWeight: '400',
+          letterSpacing: '0'
+        }],
+        'zeroeval-lg': ['1.125rem', { 
+          lineHeight: '1.7', 
+          fontFamily: 'Inter', 
+          fontWeight: '400',
+          letterSpacing: '-0.005em'
+        }],
+        'zeroeval-xl': ['1.25rem', { 
+          lineHeight: '1.6', 
+          fontFamily: 'Inter', 
+          fontWeight: '500',
+          letterSpacing: '-0.01em'
+        }],
+        'zeroeval-2xl': ['1.5rem', { 
+          lineHeight: '1.4', 
+          fontFamily: 'Inter', 
+          fontWeight: '500',
+          letterSpacing: '-0.015em'
+        }],
+        'zeroeval-3xl': ['1.875rem', { 
+          lineHeight: '1.3', 
+          fontFamily: 'Inter', 
+          fontWeight: '600',
+          letterSpacing: '-0.02em'
+        }],
+        'zeroeval-4xl': ['2.25rem', { 
+          lineHeight: '1.2', 
+          fontFamily: 'Inter', 
+          fontWeight: '600',
+          letterSpacing: '-0.025em'
+        }],
+        'zeroeval-5xl': ['3rem', { 
+          lineHeight: '1.1', 
+          fontFamily: 'Inter', 
+          fontWeight: '700',
+          letterSpacing: '-0.03em'
+        }],
+        'zeroeval-6xl': ['3.75rem', { 
+          lineHeight: '1.05', 
+          fontFamily: 'Inter', 
+          fontWeight: '700',
+          letterSpacing: '-0.035em'
+        }],
+        
+        // ZeroEval-style headings (clean, not too bold)
+        'zeroeval-h1': ['2.25rem', { 
+          lineHeight: '1.2', 
+          fontFamily: 'Inter', 
+          fontWeight: '600',
+          letterSpacing: '-0.025em'
+        }],
+        'zeroeval-h2': ['1.875rem', { 
+          lineHeight: '1.3', 
+          fontFamily: 'Inter', 
+          fontWeight: '600',
+          letterSpacing: '-0.02em'
+        }],
+        'zeroeval-h3': ['1.5rem', { 
+          lineHeight: '1.4', 
+          fontFamily: 'Inter', 
+          fontWeight: '500',
+          letterSpacing: '-0.015em'
+        }],
+        'zeroeval-h4': ['1.25rem', { 
+          lineHeight: '1.5', 
+          fontFamily: 'Inter', 
+          fontWeight: '500',
+          letterSpacing: '-0.01em'
+        }],
+        'zeroeval-h5': ['1.125rem', { 
+          lineHeight: '1.6', 
+          fontFamily: 'Inter', 
+          fontWeight: '500',
+          letterSpacing: '-0.005em'
+        }],
+        'zeroeval-h6': ['1rem', { 
+          lineHeight: '1.6', 
+          fontFamily: 'Inter', 
+          fontWeight: '500',
+          letterSpacing: '0'
+        }],
+        
+        // ZeroEval-style body and UI text
+        'zeroeval-body': ['1rem', { 
+          lineHeight: '1.7', 
+          fontFamily: 'Inter', 
+          fontWeight: '400',
+          letterSpacing: '0'
+        }],
+        'zeroeval-body-sm': ['0.875rem', { 
+          lineHeight: '1.6', 
+          fontFamily: 'Inter', 
+          fontWeight: '400',
+          letterSpacing: '0'
+        }],
+        'zeroeval-caption': ['0.75rem', { 
+          lineHeight: '1.5', 
+          fontFamily: 'Inter', 
+          fontWeight: '400',
+          letterSpacing: '0.01em'
+        }],
+        'zeroeval-button': ['0.875rem', { 
+          lineHeight: '1.4', 
+          fontFamily: 'Inter', 
+          fontWeight: '500',
+          letterSpacing: '0.01em'
+        }],
+        'zeroeval-nav': ['0.875rem', { 
+          lineHeight: '1.4', 
+          fontFamily: 'Inter', 
+          fontWeight: '400',
+          letterSpacing: '0'
+        }],
+        
         // Legacy enterprise classes (for backwards compatibility)
         'enterprise-xs': ['0.75rem', { lineHeight: '1.4', fontFamily: 'Inter', fontWeight: '500' }],
         'enterprise-sm': ['0.875rem', { lineHeight: '1.6', fontFamily: 'Inter', fontWeight: '500' }],
