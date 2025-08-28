@@ -26,6 +26,13 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    // Get the plan to determine trial days
+    const plan = await db.client.subscriptionPlan.findFirst({
+      where: { stripePriceId: priceId }
+    });
+
+    const trialDays = plan?.trialDays || 0;
+
     // Get user's organization
     const organization = await db.client.organization.findUnique({
       where: { id: user.organizationId }
@@ -77,11 +84,20 @@ export async function POST(req: NextRequest) {
         organizationId: organization.id,
         userId: user.id
       },
-      subscription_data: mode === 'subscription' ? {
-        trial_period_days: 14,
+      subscription_data: mode === 'subscription' && trialDays > 0 ? {
+        trial_period_days: trialDays,
         metadata: {
           organizationId: organization.id,
-          userId: user.id
+          userId: user.id,
+          planId: plan?.id,
+          planName: plan?.name
+        }
+      } : mode === 'subscription' ? {
+        metadata: {
+          organizationId: organization.id,
+          userId: user.id,
+          planId: plan?.id,
+          planName: plan?.name
         }
       } : undefined,
     });

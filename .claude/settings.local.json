@@ -61,7 +61,8 @@
       "Bash(where claude)",
       "Bash(cmd /c \"npx playwright install\")",
       "mcp__playwright__*",
-      "Bash(npm --version)"
+      "Bash(npm --version)",
+      "Bash(git fetch:*)"
     ],
     "deny": []
   },
