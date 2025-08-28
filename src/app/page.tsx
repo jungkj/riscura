@@ -103,7 +103,7 @@ export default function HomePage() {
             <motion.div
               className="absolute top-1/4 left-0 w-96 h-32 opacity-20"
               animate={{
-                x: [-100, window?.innerWidth ? window.innerWidth + 100 : 1400],
+                x: [-100, typeof window !== 'undefined' ? window.innerWidth + 100 : 1400],
               }}
               transition={{
                 duration: 60,
@@ -118,7 +118,7 @@ export default function HomePage() {
             <motion.div
               className="absolute top-1/3 right-0 w-64 h-24 opacity-30"
               animate={{
-                x: [window?.innerWidth ? window.innerWidth + 100 : 1400, -200],
+                x: [typeof window !== 'undefined' ? window.innerWidth + 100 : 1400, -200],
               }}
               transition={{
                 duration: 45,
@@ -133,7 +133,7 @@ export default function HomePage() {
             <motion.div
               className="absolute top-1/5 left-1/3 w-48 h-20 opacity-25"
               animate={{
-                x: [-150, window?.innerWidth ? window.innerWidth + 150 : 1500],
+                x: [-150, typeof window !== 'undefined' ? window.innerWidth + 150 : 1500],
               }}
               transition={{
                 duration: 30,
