@@ -67,7 +67,10 @@
       "mcp__playwright__playwright_navigate",
       "mcp__playwright__playwright_screenshot",
       "mcp__playwright__playwright_get_visible_html",
-      "Bash(git checkout:*)"
+      "Bash(git checkout:*)",
+      "mcp__playwright__playwright_console_logs",
+      "mcp__playwright__playwright_evaluate",
+      "mcp__playwright__playwright_close"
     ],
     "deny": []
   },

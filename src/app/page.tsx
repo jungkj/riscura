@@ -8,7 +8,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import Image from 'next/image';
 import { TimeSavingChart } from '@/components/charts/TimeSavingChart';
-import { StaticNav } from '@/components/ui/floating-navbar';
+import { FloatingNav, StaticNav } from '@/components/ui/floating-navbar';
 import { IntegrationsCarousel } from '@/components/landing/IntegrationsCarousel';
 import { cn } from '@/lib/utils';
 
@@ -35,78 +35,7 @@ import {
   Star
 } from 'lucide-react';
 
-// Premium Floating Navbar Component (Aceternity inspired)
-const PremiumFloatingNav = ({
-  navItems,
-  className,
-}: {
-  navItems: {
-    name: string;
-    link: string;
-    icon?: JSX.Element;
-  }[];
-  className?: string;
-}) => {
-  const { scrollYProgress } = useScroll();
-  const [visible, setVisible] = useState(false);
-
-  useMotionValueEvent(scrollYProgress, "change", (current) => {
-    if (typeof current === "number") {
-      let direction = current! - scrollYProgress.getPrevious()!;
-
-      if (scrollYProgress.get() < 0.05) {
-        setVisible(false);
-      } else {
-        if (direction < 0) {
-          setVisible(true);
-        } else {
-          setVisible(false);
-        }
-      }
-    }
-  });
-
-  return (
-    <AnimatePresence mode="wait">
-      <motion.div
-        initial={{
-          opacity: 1,
-          y: -100,
-        }}
-        animate={{
-          y: visible ? 0 : -100,
-          opacity: visible ? 1 : 0,
-        }}
-        transition={{
-          duration: 0.2,
-        }}
-        className={cn(
-          "flex max-w-fit fixed top-10 inset-x-0 mx-auto border border-white/[0.2] rounded-full bg-white/20 backdrop-blur-lg shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)] z-[5000] pr-2 pl-8 py-2 items-center justify-center space-x-4",
-          className
-        )}
-      >
-        {navItems.map((navItem: any, idx: number) => (
-          <a
-            key={`link=${idx}`}
-            href={navItem.link}
-            className={cn(
-              "relative dark:text-neutral-50 items-center flex space-x-1 text-neutral-600 dark:hover:text-neutral-300 hover:text-neutral-500"
-            )}
-          >
-            <span className="block sm:hidden">{navItem.icon}</span>
-            <span className="text-sm !cursor-pointer">{navItem.name}</span>
-          </a>
-        ))}
-        <Button className="border text-sm font-medium relative border-neutral-200 dark:border-white/[0.2] text-black dark:text-white px-4 py-2 rounded-full">
-          <span>Book Demo</span>
-          <span className="absolute inset-x-0 w-1/2 mx-auto -bottom-px bg-gradient-to-r from-transparent via-blue-500 to-transparent h-px" />
-        </Button>
-      </motion.div>
-    </AnimatePresence>
-  );
-};
-
-// Animated Background Component (Palace.so inspired)
+// Enhanced Animated Background Component (Palace.so inspired)
 const AnimatedBackground = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   
@@ -117,8 +46,12 @@ const AnimatedBackground = () => {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
     
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+    const updateCanvasSize = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    };
+    
+    updateCanvasSize();
     
     const particles: Array<{
       x: number;
@@ -130,16 +63,23 @@ const AnimatedBackground = () => {
       color: string;
     }> = [];
     
-    const colors = ['#e0f2fe', '#fce7f3', '#f0f9ff', '#ede9fe', '#ecfdf5'];
+    const colors = [
+      'rgba(224, 242, 254, 0.8)', // light blue
+      'rgba(252, 231, 243, 0.8)', // light pink
+      'rgba(240, 249, 255, 0.8)', // very light blue
+      'rgba(237, 233, 254, 0.8)', // light purple
+      'rgba(236, 253, 245, 0.8)'  // light green
+    ];
     
-    for (let i = 0; i < 50; i++) {
+    // Create more particles for better visibility
+    for (let i = 0; i < 80; i++) {
       particles.push({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
-        vx: (Math.random() - 0.5) * 0.5,
-        vy: (Math.random() - 0.5) * 0.5,
-        size: Math.random() * 3 + 1,
-        opacity: Math.random() * 0.5 + 0.1,
+        vx: (Math.random() - 0.5) * 0.8,
+        vy: (Math.random() - 0.5) * 0.8,
+        size: Math.random() * 4 + 2,
+        opacity: Math.random() * 0.7 + 0.3,
         color: colors[Math.floor(Math.random() * colors.length)]
       });
     }
@@ -151,9 +91,15 @@ const AnimatedBackground = () => {
         particle.x += particle.vx;
         particle.y += particle.vy;
         
-        if (particle.x < 0 || particle.x > canvas.width) particle.vx *= -1;
-        if (particle.y < 0 || particle.y > canvas.height) particle.vy *= -1;
+        // Bounce off edges
+        if (particle.x <= 0 || particle.x >= canvas.width) particle.vx *= -1;
+        if (particle.y <= 0 || particle.y >= canvas.height) particle.vy *= -1;
         
+        // Keep particles within bounds
+        particle.x = Math.max(0, Math.min(canvas.width, particle.x));
+        particle.y = Math.max(0, Math.min(canvas.height, particle.y));
+        
+        // Draw particle
         ctx.beginPath();
         ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
         ctx.fillStyle = particle.color;
@@ -166,19 +112,17 @@ const AnimatedBackground = () => {
     
     animate();
     
-    const handleResize = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
+    window.addEventListener('resize', updateCanvasSize);
+    return () => {
+      window.removeEventListener('resize', updateCanvasSize);
     };
-    
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
   }, []);
   
   return (
     <canvas
       ref={canvasRef}
-      className="absolute inset-0 pointer-events-none opacity-60"
+      className="absolute inset-0 pointer-events-none"
+      style={{ zIndex: 0 }}
     />
   );
 };
@@ -276,58 +220,60 @@ const DashboardShowcase = () => {
   );
 };
 
-// Step-by-step feature showcase (Runway inspired)
-const FeatureShowcase = () => {
+// Runway.com Style Feature Showcase with Folding Cards
+const RunwayFeatureShowcase = () => {
   const [activeStep, setActiveStep] = useState(0);
-  const targetRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   
   const steps = [
     {
-      icon: Upload,
-      title: "Upload & Analyze",
-      description: "Drag and drop your risk documents, policies, and controls. Our AI instantly extracts and processes risk data from any format.",
-      features: ["Document parsing", "Auto-categorization", "Risk extraction", "Smart validation"],
-      color: "from-blue-500 to-cyan-500",
-      bgColor: "bg-blue-50"
+      id: 'analyze',
+      icon: Sparkles,
+      title: "Analyze with AI",
+      subtitle: "Beta",
+      description: "Accelerate workflows, drill into variance, and deeply understand your business.",
+      cta: "Get a personalized sneak peek",
+      image: "/api/placeholder/600/400" // Replace with actual screenshot
     },
     {
-      icon: Brain,
-      title: "AI Intelligence",
-      description: "Advanced machine learning models analyze patterns, calculate risk scores, and identify potential vulnerabilities across your organization.",
-      features: ["Pattern recognition", "Risk scoring", "Predictive analysis", "Correlation mapping"],
-      color: "from-purple-500 to-pink-500",
-      bgColor: "bg-purple-50"
+      id: 'shape',
+      icon: Target,
+      title: "Shape data to your business logic",
+      subtitle: "",
+      description: "Create flexible, structured models built to scale. Define custom inputs, tie in dimensions, and reuse inputs across plans.",
+      cta: "",
+      image: "/api/placeholder/600/400" // Replace with actual screenshot
     },
     {
-      icon: BarChart3,
-      title: "Real-time Dashboard",
-      description: "Get actionable insights through beautiful visualizations, automated reports, and intelligent recommendations.",
-      features: ["Live monitoring", "Custom reports", "Risk alerts", "Compliance tracking"],
-      color: "from-emerald-500 to-teal-500",
-      bgColor: "bg-emerald-50"
+      id: 'plan',
+      icon: TrendingUp,
+      title: "Plan scenarios with confidence",
+      subtitle: "",
+      description: "Build multiple versions of the future. Compare scenarios side-by-side and understand the impact of your decisions.",
+      cta: "",
+      image: "/api/placeholder/600/400" // Replace with actual screenshot
     }
   ];
-  
+
   useEffect(() => {
     const timer = setInterval(() => {
       setActiveStep((prev) => (prev + 1) % steps.length);
-    }, 4000);
+    }, 5000);
     return () => clearInterval(timer);
   }, [steps.length]);
-  
+
   return (
-    <section ref={targetRef} className="py-32 px-4 sm:px-6 lg:px-8 bg-white relative overflow-hidden">
+    <section ref={containerRef} className="py-32 px-4 sm:px-6 lg:px-8 bg-white">
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
-          {/* Sticky Content */}
-          <div className="lg:sticky lg:top-32">
+          {/* Left side - Sticky content */}
+          <div className="lg:sticky lg:top-32 space-y-8">
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8 }}
               viewport={{ once: true }}
             >
-              <Badge className="bg-gray-900 text-white px-4 py-2 mb-6">How it works</Badge>
               <h2 className="text-4xl sm:text-5xl lg:text-6xl font-light text-gray-900 mb-8 leading-tight">
                 Turn complexity into
                 <br />
@@ -335,9 +281,10 @@ const FeatureShowcase = () => {
                   conviction
                 </span>
               </h2>
+              
               <div className="bg-white/80 backdrop-blur border border-gray-200 rounded-2xl p-6 shadow-lg">
                 <p className="text-lg text-gray-600 italic mb-4">
-                  "Incredibly flexible and powerful risk intelligence platform"
+                  "Incredibly flexible and fun risk management copilot"
                 </p>
                 <div className="flex items-center gap-2">
                   <div className="flex items-center gap-1">
@@ -346,57 +293,104 @@ const FeatureShowcase = () => {
                     ))}
                   </div>
                   <span className="text-sm text-gray-500">G2 Review</span>
+                  <ArrowRight className="w-4 h-4 text-gray-400" />
                 </div>
               </div>
             </motion.div>
           </div>
-          
-          {/* Features List */}
-          <div className="space-y-12">
+
+          {/* Right side - Feature cards */}
+          <div className="space-y-8">
             {steps.map((step, index) => (
               <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 30 }}
+                key={step.id}
+                initial={{ opacity: 0, y: 50 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: index * 0.2 }}
+                transition={{ duration: 0.6, delay: index * 0.2 }}
                 viewport={{ once: true }}
-                className={`relative rounded-3xl p-8 transition-all duration-500 ${
-                  activeStep === index 
-                    ? 'bg-white shadow-2xl border border-gray-200 scale-[1.02]' 
-                    : 'bg-gray-50/50 opacity-70'
-                }`}
+                className="relative"
               >
-                <div className="flex items-start gap-6">
-                  <div className={`w-16 h-16 rounded-2xl bg-gradient-to-r ${step.color} flex items-center justify-center flex-shrink-0`}>
-                    <step.icon className="w-8 h-8 text-white" />
-                  </div>
-                  <div className="flex-1">
-                    <h3 className="text-2xl font-semibold text-gray-900 mb-3">
-                      {step.title}
-                    </h3>
-                    <p className="text-gray-600 mb-6 leading-relaxed">
-                      {step.description}
-                    </p>
-                    <div className="grid grid-cols-2 gap-3">
-                      {step.features.map((feature, idx) => (
-                        <div key={idx} className="flex items-center gap-2">
-                          <CheckCircle className="w-4 h-4 text-emerald-500 flex-shrink-0" />
-                          <span className="text-sm text-gray-700">{feature}</span>
-                        </div>
-                      ))}
+                {/* Feature Card */}
+                <div 
+                  className={`rounded-3xl overflow-hidden transition-all duration-700 ${
+                    activeStep === index 
+                      ? 'shadow-2xl scale-105 bg-white border border-gray-200' 
+                      : 'shadow-lg scale-100 bg-gray-50/80 border border-gray-100'
+                  }`}
+                >
+                  {/* Card Header */}
+                  <div className="p-8 pb-4">
+                    <div className="flex items-start gap-4 mb-6">
+                      <div className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-colors duration-300 ${
+                        activeStep === index 
+                          ? 'bg-gradient-to-br from-blue-100 to-purple-100' 
+                          : 'bg-gray-100'
+                      }`}>
+                        <step.icon className={`w-6 h-6 transition-colors duration-300 ${
+                          activeStep === index ? 'text-blue-600' : 'text-gray-400'
+                        }`} />
+                      </div>
+                      <div className="flex-1">
+                        <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                          {step.title}
+                          {step.subtitle && (
+                            <span className="ml-2 inline-flex px-2 py-1 text-xs bg-blue-100 text-blue-600 rounded-full">
+                              {step.subtitle}
+                            </span>
+                          )}
+                        </h3>
+                        <p className="text-gray-600 mb-4">{step.description}</p>
+                        {step.cta && (
+                          <button className="text-blue-600 font-medium hover:text-blue-700 transition-colors">
+                            {step.cta}
+                          </button>
+                        )}
+                      </div>
                     </div>
                   </div>
-                </div>
-                
-                {/* Progress indicator */}
-                {activeStep === index && (
+
+                  {/* Folding Image Section */}
                   <motion.div
-                    initial={{ width: 0 }}
-                    animate={{ width: "100%" }}
-                    transition={{ duration: 4, ease: "linear" }}
-                    className="absolute bottom-0 left-0 h-1 bg-gradient-to-r from-blue-500 to-purple-500 rounded-b-3xl"
-                  />
-                )}
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ 
+                      height: activeStep === index ? 300 : 0,
+                      opacity: activeStep === index ? 1 : 0
+                    }}
+                    transition={{ 
+                      duration: 0.6, 
+                      ease: "easeInOut",
+                      opacity: { delay: activeStep === index ? 0.2 : 0 }
+                    }}
+                    className="overflow-hidden"
+                  >
+                    <div className="px-8 pb-8">
+                      <div className="bg-gradient-to-br from-blue-50 to-purple-50 rounded-2xl h-72 flex items-center justify-center border border-gray-200/50">
+                        {/* Placeholder for screenshot */}
+                        <div className="text-center space-y-4">
+                          <div className="w-16 h-16 bg-gradient-to-br from-blue-100 to-purple-100 rounded-xl flex items-center justify-center mx-auto">
+                            <step.icon className="w-8 h-8 text-blue-600" />
+                          </div>
+                          <div className="space-y-2">
+                            <h4 className="font-semibold text-gray-900">Dashboard Screenshot</h4>
+                            <p className="text-sm text-gray-600 max-w-sm">
+                              Replace with actual {step.title.toLowerCase()} dashboard screenshot
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </motion.div>
+
+                  {/* Active indicator */}
+                  {activeStep === index && (
+                    <motion.div
+                      initial={{ width: 0 }}
+                      animate={{ width: "100%" }}
+                      transition={{ duration: 5, ease: "linear" }}
+                      className="absolute bottom-0 left-0 h-1 bg-gradient-to-r from-blue-500 to-purple-500"
+                    />
+                  )}
+                </div>
               </motion.div>
             ))}
           </div>
@@ -425,21 +419,21 @@ export default function HomePage() {
   ];
 
   return (
-    <div className="min-h-screen font-inter bg-gradient-to-br from-slate-50 via-blue-50/30 to-purple-50/20 relative">
+    <div className="min-h-screen font-inter bg-gradient-to-br from-slate-50 via-blue-50/30 to-purple-50/20 relative overflow-x-hidden">
       {/* Animated Background */}
-      <div className="fixed inset-0 -z-10">
+      <div className="fixed inset-0 z-0">
         <AnimatedBackground />
-        <div className="absolute inset-0 bg-gradient-to-b from-white/80 via-white/40 to-white/60" />
+        <div className="absolute inset-0 bg-gradient-to-b from-white/70 via-white/50 to-white/80" />
       </div>
       
       {/* Static Navbar */}
       <StaticNav />
       
-      {/* Premium Floating Navbar */}
-      <PremiumFloatingNav navItems={navItems} />
+      {/* Floating Navbar */}
+      <FloatingNav navItems={navItems} />
 
       {/* Premium Hero Section */}
-      <section className="pt-32 pb-16 px-4 sm:px-6 lg:px-8 min-h-screen flex items-center justify-center relative">
+      <section className="relative z-10 pt-32 pb-16 px-4 sm:px-6 lg:px-8 min-h-screen flex items-center justify-center">
         <div className="max-w-7xl mx-auto w-full">
           <div className="text-center space-y-12">
             <PremiumHeadline />
@@ -475,8 +469,8 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Step-by-step Feature Showcase */}
-      <FeatureShowcase />
+      {/* Runway.com Style Feature Showcase */}
+      <RunwayFeatureShowcase />
 
       {/* Integrations Carousel */}
       <IntegrationsCarousel />
@@ -485,7 +479,7 @@ export default function HomePage() {
       <TimeSavingChart />
 
       {/* Premium Features Section */}
-      <section className="py-32 px-4 sm:px-6 lg:px-8 bg-white relative">
+      <section className="relative z-10 py-32 px-4 sm:px-6 lg:px-8 bg-white">
           <div className="max-w-7xl mx-auto">
             <div className="text-center mb-20">
               <motion.div
@@ -583,7 +577,7 @@ export default function HomePage() {
       </section>
 
       {/* Premium CTA Section */}
-      <section className="py-32 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-blue-50/50 via-purple-50/30 to-pink-50/20 relative overflow-hidden">
+      <section className="relative z-10 py-32 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-blue-50/50 via-purple-50/30 to-pink-50/20 overflow-hidden">
           <div className="max-w-6xl mx-auto text-center relative">
             <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -652,7 +646,7 @@ export default function HomePage() {
       </section>
 
       {/* Premium Footer */}
-      <footer className="bg-white border-t border-gray-100 py-20">
+      <footer className="relative z-10 bg-white border-t border-gray-100 py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <div className="flex items-center justify-center space-x-3 mb-8">
