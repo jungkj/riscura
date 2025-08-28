@@ -7,7 +7,20 @@
       "WebFetch(domain:ui.aceternity.com)",
       "Bash(git checkout:*)",
       "Bash(npm run dev:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(git log:*)",
+      "Bash(npm install)",
+      "Bash(where node)",
+      "Bash(C:Usersandy.jungAppDataLocalMicrosoftWinGetPackagesOpenJS.NodeJS_Microsoft.Winget.Source_8wekyb3d8bbwenode-v24.4.1-win-x64npm.cmd install)",
+      "Bash(echo $PATH)",
+      "Bash(node:*)",
+      "Bash(npx next:*)",
+      "WebFetch(domain:runway.com)",
+      "Bash(claude mcp:*)",
+      "WebFetch(domain:palace.so)",
+      "WebFetch(domain:zeroeval.com)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)"
     ],
     "deny": []
   },
