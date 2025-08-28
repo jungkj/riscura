@@ -243,7 +243,7 @@ export function ScrollStepProcess() {
   };
 
   return (
-    <section className="py-24 px-4 sm:px-6 lg:px-8 bg-white relative overflow-hidden">
+    <div className="py-24 px-4 sm:px-6 lg:px-8 bg-white relative overflow-hidden">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-16">
           <Badge className="bg-[#199BEC] text-white px-4 py-2 text-zeroeval-caption mb-4">
@@ -390,6 +390,6 @@ export function ScrollStepProcess() {
           </div>
         </div>
       </div>
-    </section>
+    </div>
   );
 }

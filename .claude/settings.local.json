@@ -20,7 +20,8 @@
       "WebFetch(domain:palace.so)",
       "WebFetch(domain:zeroeval.com)",
       "Bash(git commit:*)",
-      "Bash(git push:*)"
+      "Bash(git push:*)",
+      "Bash(npm run build:*)"
     ],
     "deny": []
   },
