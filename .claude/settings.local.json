@@ -25,7 +25,12 @@
       "Bash(git --version)",
       "Bash(git config:*)",
       "Bash(git remote:*)",
-      "Bash(npm run type-check:*)"
+      "Bash(npm run type-check:*)",
+      "Bash(npm install:*)",
+      "Bash(C:Usersandy.jungAppDataLocalMicrosoftWinGetPackagesOpenJS.NodeJS_Microsoft.Winget.Source_8wekyb3d8bbwenode-v24.4.1-win-x64npm.cmd install vanta three clsx tailwind-merge)",
+      "mcp__ide__executeCode",
+      "Bash(npm:*)",
+      "Bash(npx playwright test:*)"
     ],
     "deny": []
   },

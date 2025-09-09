@@ -148,3 +148,6 @@ test-*.xlsx
 
 # Specstory history (may contain sensitive data)
 .specstory/
+
+# Stagewise configuration
+stagewise.json

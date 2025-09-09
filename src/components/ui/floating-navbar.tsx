@@ -41,7 +41,7 @@ export const FloatingNav = ({
   });
 
   return (
-    <AnimatePresence>
+    <AnimatePresence mode="wait">
       {visible && (
         <motion.div
           initial={{
@@ -57,59 +57,57 @@ export const FloatingNav = ({
             y: -100,
           }}
           transition={{
-            duration: 0.3,
-            ease: "easeInOut",
+            duration: 0.2,
           }}
           className={cn(
-            "flex max-w-fit fixed top-4 inset-x-0 mx-auto border border-gray-200 rounded-full bg-white/90 backdrop-blur-md shadow-lg z-[5000] pr-2 pl-8 py-2 items-center justify-center space-x-4",
+            "flex max-w-fit fixed top-10 inset-x-0 mx-auto border border-transparent dark:border-white/[0.2] rounded-full dark:bg-black bg-white shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)] z-[5000] pr-2 pl-8 py-2 items-center justify-center space-x-4",
             className
           )}
         >
-        {/* Logo */}
-        <div className="flex items-center space-x-2">
-          <Image
-            src="/images/logo/riscura.png"
-            alt="Riscura Logo"
-            width={24}
-            height={24}
-            className="object-contain"
-          />
-          <span className="text-lg font-bold text-[#199BEC] font-inter">Riscura</span>
-        </div>
+          {/* Logo */}
+          <div className="flex items-center space-x-2">
+            <Image
+              src="/images/logo/riscura.png"
+              alt="Riscura Logo"
+              width={20}
+              height={20}
+              className="object-contain"
+            />
+            <span className="text-sm font-semibold text-[#199BEC] dark:text-white font-inter">Riscura</span>
+          </div>
 
-        {navItems.map((navItem: any, idx: number) => (
-          <button
-            key={`link-${idx}`}
-            onClick={() => router.push(navItem.link)}
-            className={cn(
-              "relative dark:text-neutral-50 items-center flex space-x-1 text-neutral-600 dark:hover:text-neutral-300 hover:text-neutral-500"
-            )}
-          >
-            <span className="block sm:hidden">
-              {navItem.icon}
-            </span>
-            <span className="hidden sm:block text-sm font-medium">
-              {navItem.name}
-            </span>
-          </button>
-        ))}
+          {navItems.map((navItem: any, idx: number) => (
+            <a
+              key={`link=${idx}`}
+              href={navItem.link}
+              className={cn(
+                "relative dark:text-neutral-50 items-center flex space-x-1 text-neutral-600 dark:hover:text-neutral-300 hover:text-neutral-500 px-4 py-2 rounded-full transition-colors duration-200"
+              )}
+            >
+              <span className="block sm:hidden">
+                {navItem.icon}
+              </span>
+              <span className="hidden sm:block text-sm font-medium">
+                {navItem.name}
+              </span>
+            </a>
+          ))}
 
-        {/* CTA Buttons */}
-        <div className="flex items-center space-x-2">
-          <Button 
-            variant="ghost"
-            onClick={() => router.push('/auth/login')}
-            className="text-sm px-3 py-1 h-8"
-          >
-            Login
-          </Button>
-          <Button 
+          {/* CTA Button - Book a Demo */}
+          <button 
             onClick={() => router.push('/auth/register')}
-            className="text-sm px-4 py-1 h-8 bg-[#199BEC] hover:bg-[#199BEC]/80"
+            className="border text-sm font-medium relative border-neutral-200 dark:border-white/[0.2] text-black dark:text-white px-4 py-2 rounded-full transition-all duration-200 hover:shadow-[0px_1px_0px_0px_#FFFFFF40_inset,0px_-1px_0px_0px_#FFFFFF40_inset] hover:dark:shadow-[0px_1px_0px_0px_var(--zinc-800)_inset,0px_-1px_0px_0px_var(--zinc-800)_inset]"
           >
-            Get Started
-          </Button>
-        </div>
+            <span>Book a Demo</span>
+          </button>
+
+          {/* Log In Button in Riscura Blue */}
+          <button
+            onClick={() => router.push('/auth/login')}
+            className="bg-[#199BEC] relative text-white text-sm font-medium px-4 py-2 rounded-full transition-all duration-200 hover:bg-[#199BEC]/90 hover:shadow-lg"
+          >
+            Log In
+          </button>
         </motion.div>
       )}
     </AnimatePresence>
@@ -138,25 +136,22 @@ export const StaticNav = () => {
           
           {/* Center Navigation Links */}
           <div className="hidden md:flex items-center space-x-8">
-            <button className="text-gray-600 hover:text-[#199BEC] font-medium transition-colors">Platform</button>
-            <button className="text-gray-600 hover:text-[#199BEC] font-medium transition-colors">Enterprise</button>
+            <button className="text-gray-600 hover:text-[#199BEC] font-medium transition-colors">About</button>
             <button className="text-gray-600 hover:text-[#199BEC] font-medium transition-colors">Pricing</button>
-            <button className="text-gray-600 hover:text-[#199BEC] font-medium transition-colors">Demo</button>
+            <button 
+              onClick={() => router.push('/auth/register')}
+              className="text-gray-600 hover:text-[#199BEC] font-medium transition-colors"
+            >
+              Book a Demo
+            </button>
           </div>
           
           <div className="flex items-center space-x-4">
             <Button 
-              variant="outline"
               onClick={() => router.push('/auth/login')}
-              className="px-4 py-2 text-sm border-[#199BEC] text-[#199BEC] hover:bg-[#199BEC] hover:text-white"
+              className="px-4 py-2 text-sm bg-[#199BEC] hover:bg-[#199BEC]/90 text-white"
             >
-              Login
-            </Button>
-            <Button 
-              onClick={() => router.push('/auth/register')}
-              className="px-4 py-2 text-sm bg-[#199BEC] hover:bg-[#199BEC]/80"
-            >
-              Get Started
+              Log In
             </Button>
           </div>
         </div>

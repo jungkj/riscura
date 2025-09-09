@@ -158,6 +158,12 @@
   * {
     @apply border-border;
   }
+  
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 6rem; /* Account for fixed navbar */
+  }
+  
   body {
     @apply bg-background text-foreground font-inter;
   }
