@@ -1,0 +1,59 @@
+<svg width="1920" height="1080" viewBox="0 0 1920 1080" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="skyGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#87CEEB;stop-opacity:1" />
+      <stop offset="25%" style="stop-color:#B0E0E6;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#E0F6FF;stop-opacity:1" />
+      <stop offset="75%" style="stop-color:#F0F8FF;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#FFFFFF;stop-opacity:1" />
+    </linearGradient>
+    <radialGradient id="cloudGradient1" cx="50%" cy="50%" r="80%">
+      <stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.9" />
+      <stop offset="50%" style="stop-color:#ffffff;stop-opacity:0.6" />
+      <stop offset="100%" style="stop-color:#ffffff;stop-opacity:0" />
+    </radialGradient>
+    <radialGradient id="cloudGradient2" cx="50%" cy="50%" r="70%">
+      <stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.8" />
+      <stop offset="60%" style="stop-color:#ffffff;stop-opacity:0.4" />
+      <stop offset="100%" style="stop-color:#ffffff;stop-opacity:0" />
+    </radialGradient>
+    <radialGradient id="sunGlow" cx="50%" cy="50%" r="40%">
+      <stop offset="0%" style="stop-color:#FFE4B5;stop-opacity:0.3" />
+      <stop offset="50%" style="stop-color:#F0E68C;stop-opacity:0.2" />
+      <stop offset="100%" style="stop-color:#F0E68C;stop-opacity:0" />
+    </radialGradient>
+  </defs>
+  
+  <!-- Base sky background -->
+  <rect width="1920" height="1080" fill="url(#skyGradient)" />
+  
+  <!-- Soft sun glow in upper area -->
+  <ellipse cx="1400" cy="200" rx="300" ry="200" fill="url(#sunGlow)" opacity="0.4" />
+  
+  <!-- Large cloud formations -->
+  <ellipse cx="200" cy="180" rx="180" ry="90" fill="url(#cloudGradient1)" opacity="0.8" />
+  <ellipse cx="320" cy="160" rx="140" ry="70" fill="url(#cloudGradient1)" opacity="0.7" />
+  
+  <ellipse cx="1100" cy="120" rx="220" ry="100" fill="url(#cloudGradient1)" opacity="0.6" />
+  <ellipse cx="1250" cy="140" rx="160" ry="80" fill="url(#cloudGradient1)" opacity="0.5" />
+  
+  <ellipse cx="700" cy="280" rx="190" ry="85" fill="url(#cloudGradient2)" opacity="0.7" />
+  <ellipse cx="820" cy="260" rx="140" ry="65" fill="url(#cloudGradient2)" opacity="0.6" />
+  
+  <ellipse cx="1600" cy="220" rx="170" ry="75" fill="url(#cloudGradient1)" opacity="0.5" />
+  <ellipse cx="1720" cy="200" rx="120" ry="60" fill="url(#cloudGradient1)" opacity="0.4" />
+  
+  <!-- Mid-level clouds -->
+  <ellipse cx="450" cy="350" rx="130" ry="60" fill="url(#cloudGradient2)" opacity="0.6" />
+  <ellipse cx="1350" cy="320" rx="150" ry="70" fill="url(#cloudGradient1)" opacity="0.5" />
+  <ellipse cx="950" cy="380" rx="110" ry="55" fill="url(#cloudGradient2)" opacity="0.4" />
+  
+  <!-- Lower atmospheric clouds -->
+  <ellipse cx="100" cy="450" rx="120" ry="50" fill="url(#cloudGradient2)" opacity="0.4" />
+  <ellipse cx="1800" cy="420" rx="140" ry="60" fill="url(#cloudGradient1)" opacity="0.3" />
+  <ellipse cx="600" cy="480" rx="100" ry="45" fill="url(#cloudGradient2)" opacity="0.5" />
+  
+  <!-- Subtle atmospheric layers -->
+  <ellipse cx="960" cy="100" rx="400" ry="80" fill="url(#cloudGradient1)" opacity="0.2" />
+  <ellipse cx="960" cy="540" rx="960" ry="200" fill="url(#cloudGradient2)" opacity="0.1" />
+</svg>

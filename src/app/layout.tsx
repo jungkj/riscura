@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from 'next';
-import { Inter } from 'next/font/google';
+import { Inter, Playfair_Display } from 'next/font/google';
 import './globals.css';
 import './production-fix.css';
 import '../styles/accessibility.css';
@@ -16,6 +16,14 @@ const inter = Inter({
   variable: '--font-inter',
   display: 'swap',
   weight: ['400', '500', '600', '700', '800'],
+});
+
+const playfairDisplay = Playfair_Display({
+  subsets: ['latin'],
+  variable: '--font-playfair',
+  display: 'swap',
+  weight: ['400', '500', '600', '700'],
+  preload: true,
 });
 
 export const viewport: Viewport = {
@@ -101,7 +109,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" style={{ backgroundColor: '#FFFFFF' }} className={inter.variable} suppressHydrationWarning>
+    <html lang="en" style={{ backgroundColor: '#FFFFFF' }} className={`${inter.variable} ${playfairDisplay.variable}`} suppressHydrationWarning>
       <head>
         <link rel="icon" href="/images/logo/riscura.png" sizes="any" />
         <link rel="manifest" href="/manifest.json" />

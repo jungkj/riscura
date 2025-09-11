@@ -1,16 +1,51 @@
 "use client";
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { motion, AnimatePresence, useScroll, useTransform, useMotionValueEvent } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
+import Script from 'next/script';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import Image from 'next/image';
 import { TimeSavingChart } from '@/components/charts/TimeSavingChart';
-import { FloatingNav, StaticNav } from '@/components/ui/floating-navbar';
+// Palace.so style navbar component
+function PalaceNavbar() {
+  const router = useRouter();
+
+  const handleRequestDemo = () => {
+    router.push('/auth/register');
+  };
+
+  return (
+    <header className="fixed top-0 left-0 right-0 z-50 px-6 sm:px-8 pt-6">
+      <div className="mx-auto w-full max-w-lg">
+        <div className="flex items-center justify-between rounded-full px-4 py-2 transition-colors bg-white/60 backdrop-blur border border-white/30">
+          <a className="flex items-center gap-2 text-sm text-[#272727] font-light" href="/">
+            <Image
+              src="/images/logo/riscura.png"
+              alt="Riscura logo"
+              width={19}
+              height={25}
+              className="object-contain"
+            />
+            <span className="font-medium">Riscura</span>
+          </a>
+          <button
+            onClick={handleRequestDemo}
+            className="rounded-full bg-[#282828] px-4 py-2 text-xs font-normal text-white shadow hover:bg-[#282828]/90 transition-all duration-200"
+          >
+            Request a demo
+          </button>
+        </div>
+      </div>
+    </header>
+  );
+}
 import { IntegrationsCarousel } from '@/components/landing/IntegrationsCarousel';
-import { cn } from '@/lib/utils';
+import { ContainerTextFlip } from '@/components/ui/container-text-flip';
+import { RunwayStyle3StepProcess } from '@/components/landing/RunwayStyle3StepProcess';
+import { VantaBackground } from '@/components/ui/vanta-background';
 
 // Icons
 import {
@@ -29,376 +64,10 @@ import {
   FileText,
   BarChart3,
   Sparkles,
-  AlertTriangle,
-  Play,
-  Pause,
-  Star
+  AlertTriangle
 } from 'lucide-react';
 
-// Enhanced Animated Background Component (Palace.so inspired)
-const AnimatedBackground = () => {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-    
-    const updateCanvasSize = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    };
-    
-    updateCanvasSize();
-    
-    const particles: Array<{
-      x: number;
-      y: number;
-      vx: number;
-      vy: number;
-      size: number;
-      opacity: number;
-      color: string;
-    }> = [];
-    
-    const colors = [
-      'rgba(224, 242, 254, 0.8)', // light blue
-      'rgba(252, 231, 243, 0.8)', // light pink
-      'rgba(240, 249, 255, 0.8)', // very light blue
-      'rgba(237, 233, 254, 0.8)', // light purple
-      'rgba(236, 253, 245, 0.8)'  // light green
-    ];
-    
-    // Create more particles for better visibility
-    for (let i = 0; i < 80; i++) {
-      particles.push({
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
-        vx: (Math.random() - 0.5) * 0.8,
-        vy: (Math.random() - 0.5) * 0.8,
-        size: Math.random() * 4 + 2,
-        opacity: Math.random() * 0.7 + 0.3,
-        color: colors[Math.floor(Math.random() * colors.length)]
-      });
-    }
-    
-    const animate = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      
-      particles.forEach(particle => {
-        particle.x += particle.vx;
-        particle.y += particle.vy;
-        
-        // Bounce off edges
-        if (particle.x <= 0 || particle.x >= canvas.width) particle.vx *= -1;
-        if (particle.y <= 0 || particle.y >= canvas.height) particle.vy *= -1;
-        
-        // Keep particles within bounds
-        particle.x = Math.max(0, Math.min(canvas.width, particle.x));
-        particle.y = Math.max(0, Math.min(canvas.height, particle.y));
-        
-        // Draw particle
-        ctx.beginPath();
-        ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
-        ctx.fillStyle = particle.color;
-        ctx.globalAlpha = particle.opacity;
-        ctx.fill();
-      });
-      
-      requestAnimationFrame(animate);
-    };
-    
-    animate();
-    
-    window.addEventListener('resize', updateCanvasSize);
-    return () => {
-      window.removeEventListener('resize', updateCanvasSize);
-    };
-  }, []);
-  
-  return (
-    <canvas
-      ref={canvasRef}
-      className="absolute inset-0 pointer-events-none"
-      style={{ zIndex: 0 }}
-    />
-  );
-};
 
-// Hero headline component with premium styling
-function PremiumHeadline() {
-  return (
-    <div className="space-y-4">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8 }}
-        className="text-center"
-      >
-        <h1 className="text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-light text-gray-900 leading-[0.9] tracking-tight">
-          <span className="font-thin">Your enterprise's</span>
-          <br />
-          <span className="font-semibold bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800 bg-clip-text text-transparent">
-            AI risk observer
-          </span>
-        </h1>
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-          className="mt-8 text-xl sm:text-2xl text-gray-600 max-w-4xl mx-auto leading-relaxed font-light"
-        >
-          One platform for enterprise risk management. Monitor, assess, and mitigate
-          <br />
-          business risks with AI-powered intelligence.
-        </motion.p>
-        
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.4 }}
-          className="mt-8 flex items-center justify-center"
-        >
-          <div className="inline-flex items-center gap-2 rounded-full px-4 py-2 bg-white/20 backdrop-blur border border-white/30">
-            <div className="flex items-center gap-1">
-              {[...Array(5)].map((_, i) => (
-                <Star key={i} className="w-4 h-4 text-amber-500 fill-current" />
-              ))}
-            </div>
-            <span className="text-sm text-gray-700">Trusted by Fortune 500</span>
-          </div>
-        </motion.div>
-      </motion.div>
-    </div>
-  );
-}
-
-// Premium Dashboard Showcase Component (Runway inspired)
-const DashboardShowcase = () => {
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 50 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 1, delay: 0.8 }}
-      className="mt-16 relative"
-    >
-      <div className="relative mx-auto max-w-6xl">
-        <div className="relative rounded-3xl overflow-hidden shadow-2xl bg-white/80 backdrop-blur border border-white/20">
-          {/* Browser Chrome */}
-          <div className="bg-gray-50/80 backdrop-blur px-6 py-3 border-b border-gray-200/50">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-2">
-                <div className="w-3 h-3 bg-red-500 rounded-full"></div>
-                <div className="w-3 h-3 bg-orange-500 rounded-full"></div>
-                <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-              </div>
-              <div className="text-sm text-gray-500 font-mono">riscura.com/dashboard</div>
-            </div>
-          </div>
-          
-          {/* Dashboard Content Area - Placeholder for screenshot */}
-          <div className="h-96 bg-gradient-to-br from-blue-50 to-purple-50 p-8 flex items-center justify-center">
-            <div className="text-center space-y-4">
-              <div className="w-20 h-20 bg-gradient-to-br from-blue-100 to-purple-100 rounded-2xl flex items-center justify-center mx-auto">
-                <BarChart3 className="w-10 h-10 text-blue-600" />
-              </div>
-              <h3 className="text-2xl font-semibold text-gray-900">Dashboard Preview</h3>
-              <p className="text-gray-600 max-w-md">
-                Replace this section with your actual dashboard screenshot to showcase your product
-              </p>
-              <div className="flex items-center justify-center gap-2 text-sm text-gray-500">
-                <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
-                <span>Live Demo Available</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </motion.div>
-  );
-};
-
-// Runway.com Style Feature Showcase with Folding Cards
-const RunwayFeatureShowcase = () => {
-  const [activeStep, setActiveStep] = useState(0);
-  const containerRef = useRef<HTMLDivElement>(null);
-  
-  const steps = [
-    {
-      id: 'analyze',
-      icon: Sparkles,
-      title: "Analyze with AI",
-      subtitle: "Beta",
-      description: "Accelerate workflows, drill into variance, and deeply understand your business.",
-      cta: "Get a personalized sneak peek",
-      image: "/api/placeholder/600/400" // Replace with actual screenshot
-    },
-    {
-      id: 'shape',
-      icon: Target,
-      title: "Shape data to your business logic",
-      subtitle: "",
-      description: "Create flexible, structured models built to scale. Define custom inputs, tie in dimensions, and reuse inputs across plans.",
-      cta: "",
-      image: "/api/placeholder/600/400" // Replace with actual screenshot
-    },
-    {
-      id: 'plan',
-      icon: TrendingUp,
-      title: "Plan scenarios with confidence",
-      subtitle: "",
-      description: "Build multiple versions of the future. Compare scenarios side-by-side and understand the impact of your decisions.",
-      cta: "",
-      image: "/api/placeholder/600/400" // Replace with actual screenshot
-    }
-  ];
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setActiveStep((prev) => (prev + 1) % steps.length);
-    }, 5000);
-    return () => clearInterval(timer);
-  }, [steps.length]);
-
-  return (
-    <section ref={containerRef} className="py-32 px-4 sm:px-6 lg:px-8 bg-white">
-      <div className="max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
-          {/* Left side - Sticky content */}
-          <div className="lg:sticky lg:top-32 space-y-8">
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8 }}
-              viewport={{ once: true }}
-            >
-              <h2 className="text-4xl sm:text-5xl lg:text-6xl font-light text-gray-900 mb-8 leading-tight">
-                Turn complexity into
-                <br />
-                <span className="font-semibold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                  conviction
-                </span>
-              </h2>
-              
-              <div className="bg-white/80 backdrop-blur border border-gray-200 rounded-2xl p-6 shadow-lg">
-                <p className="text-lg text-gray-600 italic mb-4">
-                  "Incredibly flexible and fun risk management copilot"
-                </p>
-                <div className="flex items-center gap-2">
-                  <div className="flex items-center gap-1">
-                    {[...Array(5)].map((_, i) => (
-                      <Star key={i} className="w-4 h-4 text-amber-500 fill-current" />
-                    ))}
-                  </div>
-                  <span className="text-sm text-gray-500">G2 Review</span>
-                  <ArrowRight className="w-4 h-4 text-gray-400" />
-                </div>
-              </div>
-            </motion.div>
-          </div>
-
-          {/* Right side - Feature cards */}
-          <div className="space-y-8">
-            {steps.map((step, index) => (
-              <motion.div
-                key={step.id}
-                initial={{ opacity: 0, y: 50 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.2 }}
-                viewport={{ once: true }}
-                className="relative"
-              >
-                {/* Feature Card */}
-                <div 
-                  className={`rounded-3xl overflow-hidden transition-all duration-700 ${
-                    activeStep === index 
-                      ? 'shadow-2xl scale-105 bg-white border border-gray-200' 
-                      : 'shadow-lg scale-100 bg-gray-50/80 border border-gray-100'
-                  }`}
-                >
-                  {/* Card Header */}
-                  <div className="p-8 pb-4">
-                    <div className="flex items-start gap-4 mb-6">
-                      <div className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-colors duration-300 ${
-                        activeStep === index 
-                          ? 'bg-gradient-to-br from-blue-100 to-purple-100' 
-                          : 'bg-gray-100'
-                      }`}>
-                        <step.icon className={`w-6 h-6 transition-colors duration-300 ${
-                          activeStep === index ? 'text-blue-600' : 'text-gray-400'
-                        }`} />
-                      </div>
-                      <div className="flex-1">
-                        <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                          {step.title}
-                          {step.subtitle && (
-                            <span className="ml-2 inline-flex px-2 py-1 text-xs bg-blue-100 text-blue-600 rounded-full">
-                              {step.subtitle}
-                            </span>
-                          )}
-                        </h3>
-                        <p className="text-gray-600 mb-4">{step.description}</p>
-                        {step.cta && (
-                          <button className="text-blue-600 font-medium hover:text-blue-700 transition-colors">
-                            {step.cta}
-                          </button>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Folding Image Section */}
-                  <motion.div
-                    initial={{ height: 0, opacity: 0 }}
-                    animate={{ 
-                      height: activeStep === index ? 300 : 0,
-                      opacity: activeStep === index ? 1 : 0
-                    }}
-                    transition={{ 
-                      duration: 0.6, 
-                      ease: "easeInOut",
-                      opacity: { delay: activeStep === index ? 0.2 : 0 }
-                    }}
-                    className="overflow-hidden"
-                  >
-                    <div className="px-8 pb-8">
-                      <div className="bg-gradient-to-br from-blue-50 to-purple-50 rounded-2xl h-72 flex items-center justify-center border border-gray-200/50">
-                        {/* Placeholder for screenshot */}
-                        <div className="text-center space-y-4">
-                          <div className="w-16 h-16 bg-gradient-to-br from-blue-100 to-purple-100 rounded-xl flex items-center justify-center mx-auto">
-                            <step.icon className="w-8 h-8 text-blue-600" />
-                          </div>
-                          <div className="space-y-2">
-                            <h4 className="font-semibold text-gray-900">Dashboard Screenshot</h4>
-                            <p className="text-sm text-gray-600 max-w-sm">
-                              Replace with actual {step.title.toLowerCase()} dashboard screenshot
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </motion.div>
-
-                  {/* Active indicator */}
-                  {activeStep === index && (
-                    <motion.div
-                      initial={{ width: 0 }}
-                      animate={{ width: "100%" }}
-                      transition={{ duration: 5, ease: "linear" }}
-                      className="absolute bottom-0 left-0 h-1 bg-gradient-to-r from-blue-500 to-purple-500"
-                    />
-                  )}
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-};
 
 export default function HomePage() {
   const router = useRouter();
@@ -411,97 +80,109 @@ export default function HomePage() {
     router.push('/auth/register');
   };
 
-  const navItems = [
-    { name: "Platform", link: "#platform" },
-    { name: "Enterprise", link: "#enterprise" },
-    { name: "Pricing", link: "#pricing" },
-    { name: "Demo", link: "#demo" },
-  ];
-
   return (
-    <div className="min-h-screen font-inter bg-gradient-to-br from-slate-50 via-blue-50/30 to-purple-50/20 relative overflow-x-hidden">
-      {/* Animated Background */}
-      <div className="fixed inset-0 z-0">
-        <AnimatedBackground />
-        <div className="absolute inset-0 bg-gradient-to-b from-white/70 via-white/50 to-white/80" />
-      </div>
+    <div className="min-h-screen font-inter" style={{ backgroundColor: '#FFFFFF' }}>
       
-      {/* Static Navbar */}
-      <StaticNav />
-      
-      {/* Floating Navbar */}
-      <FloatingNav navItems={navItems} />
+      {/* Palace.so Style Navbar */}
+      <PalaceNavbar />
 
-      {/* Premium Hero Section */}
-      <section className="relative z-10 pt-32 pb-16 px-4 sm:px-6 lg:px-8 min-h-screen flex items-center justify-center">
-        <div className="max-w-7xl mx-auto w-full">
-          <div className="text-center space-y-12">
-            <PremiumHeadline />
-            
-            {/* CTA Buttons */}
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.6 }}
-              className="flex flex-col sm:flex-row gap-6 justify-center items-center"
-            >
-              <Button 
-                onClick={handleGetStarted}
-                size="lg" 
-                className="px-12 py-4 text-lg rounded-full font-medium bg-gray-900 hover:bg-gray-800 text-white border-0 min-w-[200px] shadow-lg"
-              >
-                Get started
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </Button>
-              <Button 
-                onClick={handleRequestDemo}
-                variant="outline"
-                size="lg"
-                className="px-12 py-4 text-lg rounded-full font-medium min-w-[200px] bg-white/80 backdrop-blur border-gray-200 hover:bg-white/90"
-              >
-                Request demo
-              </Button>
-            </motion.div>
+      {/* Palace.so Exact Hero Section */}
+      <section className="relative w-full overflow-visible min-h-svh">
+        <VantaBackground className="absolute inset-0" />
 
-            {/* Premium Dashboard Showcase */}
-            <DashboardShowcase />
+        {/* Content Container - Exact Palace.so Layout */}
+        <div className="relative z-10 mx-auto flex max-w-5xl flex-col items-center px-6 pt-36 pb-12 text-center sm:pt-44 md:pt-48">
+          {/* Headline - Exact Palace.so Style */}
+          <h1 className="font-playfair text-4xl leading-tight text-[#272727] sm:text-5xl md:text-6xl">
+            <span className="font-thin">Your organization's</span>{' '}
+            <span className="font-semibold">AI risk observer</span>
+          </h1>
+          
+          {/* Description - Exact Palace.so Style */}
+          <p className="mt-4 max-w-3xl text-sm text-[#272727]/80 sm:text-base">
+            One platform for enterprise risk management to monitor and report on organizational risks.
+          </p>
+          <p className="mt-1 max-w-3xl text-sm text-[#272727]/80 sm:text-base">
+            Get complete risk visibility from the data you already collect.
+          </p>
+          
+          {/* Badge - Palace.so Style */}
+          <div className="mt-6 flex items-center justify-center">
+            <div className="inline-flex items-center gap-2 rounded-full px-4 py-2 text-black bg-white/20">
+              <span className="text-xs sm:text-sm">Powered by</span>
+              <span className="text-xs sm:text-sm font-normal">AI Intelligence</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Dashboard Screenshot - Exact Palace.so Layout */}
+        <div className="relative z-10 mx-auto -mb-24 mt-6 flex max-w-7xl justify-center px-6 sm:mt-8 md:mt-10">
+          <div className="relative w-full sm:translate-x-0 md:translate-x-6">
+            <Image
+              src="/images/dashboard-screenshot.svg"
+              alt="Riscura dashboard"
+              width={1200}
+              height={720}
+              className="rounded-xl"
+              sizes="(min-width: 1280px) 1200px, 100vw"
+              priority
+            />
           </div>
         </div>
       </section>
 
-      {/* Runway.com Style Feature Showcase */}
-      <RunwayFeatureShowcase />
 
-      {/* Integrations Carousel */}
+      {/* Integrations Carousel - moved right under hero section */}
       <IntegrationsCarousel />
+
+      {/* Runway-Style 3-Step Process */}
+      <RunwayStyle3StepProcess />
 
       {/* Time Savings Chart Section */}
       <TimeSavingChart />
 
-      {/* Premium Features Section */}
-      <section className="relative z-10 py-32 px-4 sm:px-6 lg:px-8 bg-white">
+      {/* Enhanced Features Section */}
+      <section className="py-24 px-4 sm:px-6 lg:px-8 bg-[#FAFAFA]">
           <div className="max-w-7xl mx-auto">
-            <div className="text-center mb-20">
+            <div className="text-center mb-16 md:mb-20">
               <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8 }}
-              viewport={{ once: true }}
-              className="space-y-8"
-            >
-              <Badge className="bg-gray-100 text-gray-700 px-6 py-3 text-sm font-medium rounded-full">
-                Enterprise Platform
-              </Badge>
-              <h2 className="text-4xl sm:text-5xl lg:text-6xl font-light text-gray-900 leading-tight tracking-tight">
-                Built for modern<br />
-                <span className="font-semibold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">enterprise security</span>
-              </h2>
-              <p className="text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed font-light">
-                Comprehensive risk management platform designed for Fortune 500 companies 
-                with enterprise-grade security, compliance, and AI-powered automation.
-              </p>
-            </motion.div>
-          </div>
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8 }}
+                viewport={{ once: true, amount: 0.2 }}
+                className="space-y-6 md:space-y-8"
+              >
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.6, delay: 0.2 }}
+                  viewport={{ once: true, amount: 0.2 }}
+                >
+                  <Badge className="bg-gray-900 text-white px-4 py-2 text-zeroeval-caption">
+                    Enterprise Platform
+                  </Badge>
+                </motion.div>
+                <motion.h2 
+                  className="text-zeroeval-4xl sm:text-zeroeval-5xl lg:text-zeroeval-6xl text-gray-900"
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8, delay: 0.3 }}
+                  viewport={{ once: true, amount: 0.2 }}
+                >
+                  Built for modern<br />enterprise security
+                </motion.h2>
+                <motion.p 
+                  className="text-zeroeval-xl text-gray-600 max-w-3xl mx-auto"
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8, delay: 0.4 }}
+                  viewport={{ once: true, amount: 0.2 }}
+                >
+                  Comprehensive risk management platform designed for Fortune 500 companies 
+                  with enterprise-grade security, compliance, and AI-powered automation.
+                </motion.p>
+              </motion.div>
+            </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
             {[
@@ -544,27 +225,37 @@ export default function HomePage() {
             ].map((feature, index) => (
               <motion.div
                 key={index}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                viewport={{ once: true }}
+                initial={{ opacity: 0, y: 40, scale: 0.9 }}
+                whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                transition={{ 
+                  duration: 0.7, 
+                  delay: index * 0.15,
+                  type: "spring",
+                  stiffness: 100,
+                  damping: 15
+                }}
+                viewport={{ once: true, amount: 0.2 }}
+                whileHover={{
+                  y: -8,
+                  transition: { duration: 0.3, ease: "easeOut" }
+                }}
               >
-                <Card className="bg-white/80 backdrop-blur border border-gray-200/50 h-full hover:shadow-2xl hover:border-blue-200 transition-all duration-500 group rounded-3xl overflow-hidden">
+                <Card className="bg-white border border-[#D8C3A5]/30 h-full hover:shadow-xl hover:border-[#D8C3A5]/60 transition-all duration-300 group rounded-2xl">
                   <CardContent className="p-8">
-                    <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-100 to-purple-100 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
-                      <feature.icon className="h-8 w-8 text-blue-600" />
+                    <div className="w-14 h-14 rounded-2xl bg-[#199BEC]/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                      <feature.icon className="h-7 w-7 text-[#199BEC]" />
                     </div>
-                    <h3 className="text-2xl font-semibold text-gray-900 mb-4 font-light">
+                    <h3 className="text-zeroeval-h5 text-gray-900 mb-4">
                       {feature.title}
                     </h3>
-                    <p className="text-gray-600 leading-relaxed mb-6">
+                    <p className="text-zeroeval-body text-gray-600 mb-6">
                       {feature.description}
                     </p>
                     <ul className="space-y-3">
                       {feature.features.map((item, idx) => (
-                        <li key={idx} className="flex items-center text-sm">
-                          <CheckCircle className="w-4 h-4 text-emerald-500 mr-3 flex-shrink-0" />
-                          <span className="text-gray-700 font-medium">{item}</span>
+                        <li key={idx} className="flex items-center text-zeroeval-body-sm">
+                          <CheckCircle className="w-4 h-4 text-green-600 mr-3 flex-shrink-0" />
+                          <span className="text-gray-900">{item}</span>
                         </li>
                       ))}
                     </ul>
@@ -576,104 +267,192 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Premium CTA Section */}
-      <section className="relative z-10 py-32 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-blue-50/50 via-purple-50/30 to-pink-50/20 overflow-hidden">
-          <div className="max-w-6xl mx-auto text-center relative">
+      {/* Enhanced CTA Section */}
+      <section className="py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-[#F5F1E9] via-[#FAFAFA] to-[#F5F1E9] relative overflow-hidden">
+          {/* Animated background elements */}
+          <div className="absolute inset-0 overflow-hidden pointer-events-none">
             <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-            className="space-y-8"
-          >
-            <Badge className="bg-gray-900 text-white px-6 py-3 text-sm font-medium rounded-full">
-              Get Started Today
-            </Badge>
-            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-light text-gray-900 leading-tight tracking-tight">
-              Ready to secure<br />
-              <span className="font-semibold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">your enterprise?</span>
-            </h2>
-            <p className="text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed font-light">
+              className="absolute top-20 left-20 w-32 h-32 bg-[#199BEC]/5 rounded-full"
+              animate={{
+                x: [0, 30, 0],
+                y: [0, -20, 0],
+              }}
+              transition={{
+                duration: 8,
+                repeat: Infinity,
+                ease: "easeInOut"
+              }}
+            />
+            <motion.div
+              className="absolute bottom-20 right-20 w-24 h-24 bg-[#199BEC]/10 rounded-full"
+              animate={{
+                x: [0, -25, 0],
+                y: [0, 15, 0],
+              }}
+              transition={{
+                duration: 6,
+                repeat: Infinity,
+                ease: "easeInOut"
+              }}
+            />
+          </div>
+          
+          <div className="max-w-5xl mx-auto text-center relative">
+            <motion.div
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+              viewport={{ once: true, amount: 0.3 }}
+              className="space-y-6 md:space-y-8"
+            >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              viewport={{ once: true, amount: 0.3 }}
+            >
+              <Badge className="bg-[#199BEC] text-white px-6 py-2 text-zeroeval-caption rounded-full">
+                Get Started Today
+              </Badge>
+            </motion.div>
+            
+            <motion.h2 
+              className="text-zeroeval-4xl sm:text-zeroeval-5xl lg:text-zeroeval-6xl text-gray-900"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.3 }}
+              viewport={{ once: true, amount: 0.3 }}
+            >
+              Ready to secure<br />your enterprise?
+            </motion.h2>
+            
+            <motion.p 
+              className="text-zeroeval-xl text-gray-600 max-w-3xl mx-auto"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.4 }}
+              viewport={{ once: true, amount: 0.3 }}
+            >
               Join thousands of organizations that trust Riscura to protect their business 
               and ensure compliance in an ever-changing risk landscape.
-            </p>
+            </motion.p>
             
-            <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
-              <Button 
-                onClick={handleGetStarted}
-                size="lg" 
-                className="px-12 py-4 text-lg font-medium min-w-[220px] rounded-full bg-gray-900 hover:bg-gray-800 text-white shadow-lg"
+            <motion.div 
+              className="flex flex-col sm:flex-row gap-4 justify-center items-center"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.5 }}
+              viewport={{ once: true, amount: 0.3 }}
+            >
+              <motion.div
+                whileHover={{ scale: 1.05, y: -2 }}
+                whileTap={{ scale: 0.98 }}
+                transition={{ duration: 0.2 }}
               >
-                Start free trial
-                <ChevronRight className="ml-2 h-5 w-5" />
-              </Button>
-              <Button 
-                onClick={handleRequestDemo}
-                variant="outline"
-                size="lg"
-                className="px-12 py-4 text-lg font-medium min-w-[220px] rounded-full bg-white/80 backdrop-blur border-gray-200 hover:bg-white/90"
+                <Button 
+                  onClick={handleGetStarted}
+                  size="lg" 
+                  className="px-12 py-4 text-zeroeval-button min-w-[220px] rounded-xl bg-[#199BEC] hover:bg-[#199BEC]/80 shadow-lg hover:shadow-xl transition-all duration-300"
+                >
+                  Start free trial
+                  <ChevronRight className="ml-2 h-5 w-5" />
+                </Button>
+              </motion.div>
+              <motion.div
+                whileHover={{ scale: 1.05, y: -2 }}
+                whileTap={{ scale: 0.98 }}
+                transition={{ duration: 0.2 }}
               >
-                Schedule demo
-              </Button>
-            </div>
+                <Button 
+                  onClick={handleRequestDemo}
+                  variant="outline"
+                  size="lg"
+                  className="px-12 py-4 text-zeroeval-button min-w-[220px] rounded-xl border-2 hover:shadow-lg transition-all duration-300"
+                >
+                  Schedule demo
+                </Button>
+              </motion.div>
+            </motion.div>
 
             {/* Trust Elements */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 max-w-3xl mx-auto mt-16">
-              <div className="text-center">
-                <div className="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                  <Lock className="w-8 h-8 text-blue-600" />
-                </div>
-                <p className="text-gray-900 font-semibold text-lg">Enterprise Security</p>
-                <p className="text-gray-600 text-sm">SOC 2 & ISO 27001 Compliant</p>
-              </div>
-              <div className="text-center">
-                <div className="w-16 h-16 bg-emerald-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                  <Users className="w-8 h-8 text-emerald-600" />
-                </div>
-                <p className="text-gray-900 font-semibold text-lg">24/7 Support</p>
-                <p className="text-gray-600 text-sm">Dedicated success team</p>
-              </div>
-              <div className="text-center">
-                <div className="w-16 h-16 bg-purple-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                  <TrendingUp className="w-8 h-8 text-purple-600" />
-                </div>
-                <p className="text-gray-900 font-semibold text-lg">Proven ROI</p>
-                <p className="text-gray-600 text-sm">Measurable efficiency gains</p>
-              </div>
-            </div>
+            <motion.div 
+              className="grid grid-cols-1 sm:grid-cols-3 gap-6 md:gap-8 max-w-2xl mx-auto"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.6 }}
+              viewport={{ once: true, amount: 0.3 }}
+            >
+              {[
+                { icon: Lock, title: "Enterprise Security", subtitle: "SOC 2 & ISO 27001" },
+                { icon: Users, title: "24/7 Support", subtitle: "Dedicated success team" },
+                { icon: TrendingUp, title: "Proven ROI", subtitle: "Significant efficiency gains" }
+              ].map((item, index) => (
+                <motion.div 
+                  key={index}
+                  className="text-center"
+                  initial={{ opacity: 0, y: 20, scale: 0.9 }}
+                  whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                  transition={{ 
+                    duration: 0.6, 
+                    delay: 0.7 + (index * 0.1),
+                    type: "spring",
+                    stiffness: 100,
+                    damping: 15
+                  }}
+                  viewport={{ once: true, amount: 0.3 }}
+                  whileHover={{ 
+                    y: -5,
+                    transition: { duration: 0.2 }
+                  }}
+                >
+                  <motion.div 
+                    className="w-12 h-12 bg-[#199BEC]/10 rounded-xl flex items-center justify-center mx-auto mb-3"
+                    whileHover={{ 
+                      scale: 1.1,
+                      backgroundColor: "rgba(25, 155, 236, 0.2)"
+                    }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <item.icon className="w-6 h-6 text-[#199BEC]" />
+                  </motion.div>
+                  <p className="text-gray-900 text-zeroeval-body-sm font-medium">{item.title}</p>
+                  <p className="text-gray-600 text-zeroeval-caption">{item.subtitle}</p>
+                </motion.div>
+              ))}
+            </motion.div>
           </motion.div>
         </div>
       </section>
 
-      {/* Premium Footer */}
-      <footer className="relative z-10 bg-white border-t border-gray-100 py-20">
+      {/* Enhanced Footer */}
+      <footer className="bg-[#FAFAFA] border-t border-[#D8C3A5]/30 py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <div className="flex items-center justify-center space-x-3 mb-8">
+            <div className="flex items-center justify-center space-x-3 mb-6">
               <Image
                 src="/images/logo/riscura.png"
                 alt="Riscura Logo"
-                width={48}
-                height={48}
+                width={40}
+                height={40}
                 className="object-contain"
               />
-              <span className="text-3xl font-light text-gray-900">Riscura</span>
+              <span className="text-zeroeval-h4 text-gray-900">Riscura</span>
             </div>
-            <p className="text-gray-600 text-lg mb-8 max-w-md mx-auto font-light">
+            <p className="text-zeroeval-body text-gray-600 mb-6 max-w-md mx-auto">
               Enterprise risk management platform powered by AI. Secure your business with intelligent automation.
             </p>
-            <div className="flex items-center justify-center space-x-8 mb-12">
-              <Badge variant="outline" className="border-gray-200 text-gray-600 bg-gray-50/50 px-4 py-2 rounded-full">
+            <div className="flex items-center justify-center space-x-6 mb-8">
+              <Badge variant="outline" className="border-gray-300 text-gray-600 bg-gray-50">
                 SOC 2 Type II
               </Badge>
-              <Badge variant="outline" className="border-gray-200 text-gray-600 bg-gray-50/50 px-4 py-2 rounded-full">
+              <Badge variant="outline" className="border-gray-300 text-gray-600 bg-gray-50">
                 ISO 27001
               </Badge>
-              <Badge variant="outline" className="border-gray-200 text-gray-600 bg-gray-50/50 px-4 py-2 rounded-full">
+              <Badge variant="outline" className="border-gray-300 text-gray-600 bg-gray-50">
                 GDPR Ready
               </Badge>
             </div>
-            <p className="text-gray-500 font-light">
+            <p className="text-zeroeval-body-sm text-gray-600">
               © 2024 Riscura Inc. All rights reserved.
             </p>
           </div>

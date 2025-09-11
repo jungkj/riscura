@@ -1,0 +1,110 @@
+<svg width="1200" height="720" viewBox="0 0 1200 720" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#f8fafc;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#f1f5f9;stop-opacity:1" />
+    </linearGradient>
+    <filter id="cardShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="#00000010"/>
+    </filter>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="1200" height="720" fill="url(#bgGradient)" rx="12"/>
+  
+  <!-- Header -->
+  <rect x="0" y="0" width="1200" height="80" fill="#ffffff" rx="12"/>
+  <text x="32" y="45" font-family="Inter, sans-serif" font-size="24" font-weight="600" fill="#1f2937">Risk Dashboard</text>
+  <text x="32" y="65" font-family="Inter, sans-serif" font-size="14" fill="#6b7280">Real-time risk intelligence for your organization</text>
+  
+  <!-- Live Badge -->
+  <rect x="1050" y="25" width="120" height="30" fill="#199BEC" rx="15"/>
+  <text x="1110" y="43" font-family="Inter, sans-serif" font-size="12" font-weight="500" fill="#ffffff" text-anchor="middle">Live</text>
+  
+  <!-- Stats Cards Row -->
+  <g filter="url(#cardShadow)">
+    <!-- Critical -->
+    <rect x="32" y="120" width="270" height="120" fill="#ffffff" rx="8"/>
+    <text x="52" y="150" font-family="Inter, sans-serif" font-size="14" fill="#6b7280">Critical Risks</text>
+    <text x="52" y="185" font-family="Inter, sans-serif" font-size="36" font-weight="700" fill="#dc2626">23</text>
+    <circle cx="270" cy="150" r="6" fill="#dc2626"/>
+    
+    <!-- High -->
+    <rect x="322" y="120" width="270" height="120" fill="#ffffff" rx="8"/>
+    <text x="342" y="150" font-family="Inter, sans-serif" font-size="14" fill="#6b7280">High Risks</text>
+    <text x="342" y="185" font-family="Inter, sans-serif" font-size="36" font-weight="700" fill="#ea580c">45</text>
+    <circle cx="560" cy="150" r="6" fill="#ea580c"/>
+    
+    <!-- Medium -->
+    <rect x="612" y="120" width="270" height="120" fill="#ffffff" rx="8"/>
+    <text x="632" y="150" font-family="Inter, sans-serif" font-size="14" fill="#6b7280">Medium Risks</text>
+    <text x="632" y="185" font-family="Inter, sans-serif" font-size="36" font-weight="700" fill="#ca8a04">78</text>
+    <circle cx="850" cy="150" r="6" fill="#ca8a04"/>
+    
+    <!-- Low -->
+    <rect x="902" y="120" width="270" height="120" fill="#ffffff" rx="8"/>
+    <text x="922" y="150" font-family="Inter, sans-serif" font-size="14" fill="#6b7280">Low Risks</text>
+    <text x="922" y="185" font-family="Inter, sans-serif" font-size="36" font-weight="700" fill="#16a34a">124</text>
+    <circle cx="1140" cy="150" r="6" fill="#16a34a"/>
+  </g>
+  
+  <!-- Chart Section -->
+  <g filter="url(#cardShadow)">
+    <rect x="32" y="270" width="560" height="420" fill="#ffffff" rx="8"/>
+    <text x="52" y="305" font-family="Inter, sans-serif" font-size="18" font-weight="600" fill="#1f2937">Risk Distribution</text>
+    
+    <!-- Chart bars -->
+    <rect x="80" y="360" width="40" height="60" fill="#dc2626" rx="4"/>
+    <rect x="140" y="340" width="40" height="80" fill="#ea580c" rx="4"/>
+    <rect x="200" y="300" width="40" height="120" fill="#ca8a04" rx="4"/>
+    <rect x="260" y="260" width="40" height="160" fill="#16a34a" rx="4"/>
+    
+    <!-- Chart lines -->
+    <line x1="80" y1="450" x2="520" y2="450" stroke="#e5e7eb" stroke-width="1"/>
+    <line x1="80" y1="400" x2="520" y2="400" stroke="#e5e7eb" stroke-width="1"/>
+    <line x1="80" y1="350" x2="520" y2="350" stroke="#e5e7eb" stroke-width="1"/>
+    <line x1="80" y1="300" x2="520" y2="300" stroke="#e5e7eb" stroke-width="1"/>
+    
+    <!-- Trend line -->
+    <path d="M 350 380 Q 400 360 450 340 Q 500 320 520 300" stroke="#199BEC" stroke-width="3" fill="none"/>
+    <circle cx="520" cy="300" r="4" fill="#199BEC"/>
+  </g>
+  
+  <!-- Activity Feed -->
+  <g filter="url(#cardShadow)">
+    <rect x="612" y="270" width="560" height="420" fill="#ffffff" rx="8"/>
+    <text x="632" y="305" font-family="Inter, sans-serif" font-size="18" font-weight="600" fill="#1f2937">Recent Activity</text>
+    
+    <!-- Activity items -->
+    <circle cx="650" cy="340" r="4" fill="#dc2626"/>
+    <text x="670" y="345" font-family="Inter, sans-serif" font-size="14" fill="#1f2937">New critical risk identified in IT infrastructure</text>
+    <text x="670" y="360" font-family="Inter, sans-serif" font-size="12" fill="#6b7280">2 min ago</text>
+    
+    <circle cx="650" cy="390" r="4" fill="#16a34a"/>
+    <text x="670" y="395" font-family="Inter, sans-serif" font-size="14" fill="#1f2937">Quarterly compliance report generated</text>
+    <text x="670" y="410" font-family="Inter, sans-serif" font-size="12" fill="#6b7280">1 hour ago</text>
+    
+    <circle cx="650" cy="440" r="4" fill="#199BEC"/>
+    <text x="670" y="445" font-family="Inter, sans-serif" font-size="14" fill="#1f2937">15 risks mitigated and controls updated</text>
+    <text x="670" y="460" font-family="Inter, sans-serif" font-size="12" fill="#6b7280">3 hours ago</text>
+    
+    <circle cx="650" cy="490" r="4" fill="#ca8a04"/>
+    <text x="670" y="495" font-family="Inter, sans-serif" font-size="14" fill="#1f2937">Risk assessment scheduled for next week</text>
+    <text x="670" y="510" font-family="Inter, sans-serif" font-size="12" fill="#6b7280">1 day ago</text>
+  </g>
+  
+  <!-- Bottom Stats -->
+  <g filter="url(#cardShadow)">
+    <rect x="32" y="600" width="180" height="80" fill="#ffffff" rx="8"/>
+    <text x="52" y="630" font-family="Inter, sans-serif" font-size="24" font-weight="700" fill="#199BEC">87%</text>
+    <text x="52" y="650" font-family="Inter, sans-serif" font-size="14" fill="#6b7280">Risk Coverage</text>
+    
+    <rect x="232" y="600" width="180" height="80" fill="#ffffff" rx="8"/>
+    <text x="252" y="630" font-family="Inter, sans-serif" font-size="24" font-weight="700" fill="#16a34a">95%</text>
+    <text x="252" y="650" font-family="Inter, sans-serif" font-size="14" fill="#6b7280">Compliance</text>
+    
+    <rect x="432" y="600" width="180" height="80" fill="#ffffff" rx="8"/>
+    <text x="452" y="630" font-family="Inter, sans-serif" font-size="24" font-weight="700" fill="#dc2626">23</text>
+    <text x="452" y="650" font-family="Inter, sans-serif" font-size="14" fill="#6b7280">Urgent Items</text>
+  </g>
+</svg>

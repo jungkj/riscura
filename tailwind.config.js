@@ -242,10 +242,11 @@ module.exports = {
         "shimmer": "shimmer 2s linear infinite",
       },
       fontFamily: {
-        sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
-        inter: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
-        display: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
-        body: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        sans: ['var(--font-inter)', 'Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        inter: ['var(--font-inter)', 'Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        playfair: ['var(--font-playfair)', 'Playfair Display', 'serif'],
+        display: ['var(--font-inter)', 'Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        body: ['var(--font-inter)', 'Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
       },
       fontWeight: {
         // Standard Inter weights for enterprise

@@ -70,7 +70,18 @@
       "Bash(git checkout:*)",
       "mcp__playwright__playwright_console_logs",
       "mcp__playwright__playwright_evaluate",
-      "mcp__playwright__playwright_close"
+      "mcp__playwright__playwright_close",
+      "Bash(C:Usersandy.jungAppDataLocalMicrosoftWinGetPackagesOpenJS.NodeJS_Microsoft.Winget.Source_8wekyb3d8bbwenode-v24.4.1-win-x64npm.cmd install vanta three clsx tailwind-merge)",
+      "mcp__ide__executeCode",
+      "Bash(npm:*)",
+      "Bash(npx playwright test:*)",
+      "mcp__playwright__playwright_navigate",
+      "mcp__playwright__playwright_screenshot",
+      "mcp__playwright__playwright_get_visible_html",
+      "mcp__playwright__playwright_console_logs",
+      "mcp__playwright__playwright_evaluate",
+      "Bash(curl:*)",
+      "Bash(git stash push:*)"
     ],
     "deny": []
   },
