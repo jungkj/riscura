@@ -122,7 +122,7 @@ Organizations using Riscura's automated RCSA process report:
 For the technically curious, here's how we made it work:
 
 ### AI-Powered Excel Parsing
-```typescript
+\`\`\`typescript
 // Simplified example of our Excel processing engine
 const processRCSATemplate = async (file: File) => {
   const workbook = await parseExcelFile(file);
@@ -138,7 +138,7 @@ const processRCSATemplate = async (file: File) => {
     }))
   );
 };
-```
+\`\`\`
 
 ### Intelligent Risk Categorization
 Our NLP models, trained on thousands of risk assessments, can automatically categorize risks with 94% accuracy—better than most human reviewers.
