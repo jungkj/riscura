@@ -29,13 +29,13 @@ export function VantaBackground({ className = "" }: VantaBackgroundProps) {
           gyroControls: false,
           minHeight: 200.0,
           minWidth: 200.0,
-          highlightColor: 0xb8c5d1,
-          midtoneColor: 0xd5dfe5,
-          lowlightColor: 0xe8eef3,
-          baseColor: 0xffffff,
-          blurFactor: 0.6,
-          speed: 1.5,
-          zoom: 1.2
+          highlightColor: 0x4A90E2,
+          midtoneColor: 0x6B9BD8,
+          lowlightColor: 0x8BB1E8,
+          baseColor: 0xA8C8F0,
+          blurFactor: 0.8,
+          speed: 0.8,
+          zoom: 0.9
         });
       }
     };
@@ -64,17 +64,13 @@ export function VantaBackground({ className = "" }: VantaBackgroundProps) {
 
   return (
     <div className={className}>
-      {/* Palace.so background image - exact structure */}
-      <div className="absolute inset-0 -z-20 overflow-hidden pointer-events-none">
-        <Image
-          src="/images/hero-background.png"
-          alt="Background"
-          fill
-          className="object-cover object-center transition-opacity duration-500 opacity-100"
-          sizes="100vw"
-          priority
-        />
-      </div>
+      {/* Palace.so blue gradient base */}
+      <div 
+        className="absolute inset-0 -z-20 overflow-hidden pointer-events-none"
+        style={{
+          background: 'linear-gradient(135deg, #4A90E2 0%, #6B9BD8 25%, #8BB1E8 50%, #A8C8F0 75%, #C5D9F1 100%)'
+        }}
+      />
 
       {/* Vanta.js fog effect - exact Palace.so setup */}
       {isMounted && (
@@ -83,12 +79,12 @@ export function VantaBackground({ className = "" }: VantaBackgroundProps) {
         </div>
       )}
 
-      {/* Gradient overlay - exact Palace.so style */}
+      {/* Palace.so style fade overlay */}
       {isMounted && (
         <div 
           className="absolute inset-0 z-0 pointer-events-none"
           style={{
-            background: 'linear-gradient(to bottom, rgba(255,255,255,1) 0%, rgba(255,255,255,1) 22%, rgba(255,255,255,0) 65%)'
+            background: 'linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(255,255,255,0.1) 40%, rgba(255,255,255,0.8) 90%, rgba(255,255,255,1) 100%)'
           }}
         />
       )}
