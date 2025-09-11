@@ -415,4 +415,5 @@ const RunwayStyle3StepProcess = () => {
   );
 };
 
+export default RunwayStyle3StepProcess;
 export { RunwayStyle3StepProcess };

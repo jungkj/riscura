@@ -29,13 +29,13 @@ export function VantaBackground({ className = "" }: VantaBackgroundProps) {
           gyroControls: false,
           minHeight: 200.0,
           minWidth: 200.0,
-          highlightColor: 0x4A90E2,
-          midtoneColor: 0x6B9BD8,
-          lowlightColor: 0x8BB1E8,
-          baseColor: 0xA8C8F0,
-          blurFactor: 0.8,
-          speed: 0.8,
-          zoom: 0.9
+          highlightColor: 0x2563eb,
+          midtoneColor: 0x3b82f6,
+          lowlightColor: 0x60a5fa,
+          baseColor: 0x93c5fd,
+          blurFactor: 0.72,
+          speed: 0.5,
+          zoom: 0.75
         });
       }
     };
@@ -64,11 +64,11 @@ export function VantaBackground({ className = "" }: VantaBackgroundProps) {
 
   return (
     <div className={className}>
-      {/* Palace.so blue gradient base */}
+      {/* Palace.so exact blue gradient base */}
       <div 
         className="absolute inset-0 -z-20 overflow-hidden pointer-events-none"
         style={{
-          background: 'linear-gradient(135deg, #4A90E2 0%, #6B9BD8 25%, #8BB1E8 50%, #A8C8F0 75%, #C5D9F1 100%)'
+          background: 'linear-gradient(180deg, #2563eb 0%, #3b82f6 20%, #60a5fa 40%, #93c5fd 70%, #dbeafe 100%)'
         }}
       />
 
@@ -79,12 +79,12 @@ export function VantaBackground({ className = "" }: VantaBackgroundProps) {
         </div>
       )}
 
-      {/* Palace.so style fade overlay */}
+      {/* Palace.so exact white fade overlay */}
       {isMounted && (
         <div 
           className="absolute inset-0 z-0 pointer-events-none"
           style={{
-            background: 'linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(255,255,255,0.1) 40%, rgba(255,255,255,0.8) 90%, rgba(255,255,255,1) 100%)'
+            background: 'linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(255,255,255,0.05) 30%, rgba(255,255,255,0.4) 70%, rgba(255,255,255,0.9) 95%, rgba(255,255,255,1) 100%)'
           }}
         />
       )}

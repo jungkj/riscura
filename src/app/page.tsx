@@ -13,14 +13,21 @@ import { TimeSavingChart } from '@/components/charts/TimeSavingChart';
 function PalaceNavbar() {
   const router = useRouter();
 
-  const handleRequestDemo = () => {
-    router.push('/auth/register');
+  const handleLogin = () => {
+    router.push('/auth/login');
+  };
+
+  const scrollToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
   };
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 px-6 sm:px-8 pt-6">
-      <div className="mx-auto w-full max-w-lg">
-        <div className="flex items-center justify-between rounded-full px-4 py-2 transition-colors bg-white/60 backdrop-blur border border-white/30">
+      <div className="mx-auto w-full max-w-4xl">
+        <div className="flex items-center justify-between rounded-full px-6 py-3 transition-colors bg-white/60 backdrop-blur border border-white/30">
           <a className="flex items-center gap-2 text-sm text-[#272727] font-light" href="/">
             <Image
               src="/images/logo/riscura.png"
@@ -31,12 +38,44 @@ function PalaceNavbar() {
             />
             <span className="font-medium">Riscura</span>
           </a>
-          <button
-            onClick={handleRequestDemo}
-            className="rounded-full bg-[#282828] px-4 py-2 text-xs font-normal text-white shadow hover:bg-[#282828]/90 transition-all duration-200"
-          >
-            Request a demo
-          </button>
+          
+          {/* Navigation Links */}
+          <nav className="hidden md:flex items-center space-x-6">
+            <button
+              onClick={() => scrollToSection('about')}
+              className="text-sm text-[#272727] hover:text-[#199BEC] transition-colors font-light"
+            >
+              About
+            </button>
+            <button
+              onClick={() => scrollToSection('features')}
+              className="text-sm text-[#272727] hover:text-[#199BEC] transition-colors font-light"
+            >
+              Features
+            </button>
+            <a
+              href="/blog"
+              className="text-sm text-[#272727] hover:text-[#199BEC] transition-colors font-light"
+            >
+              Blog
+            </a>
+            <button
+              onClick={handleLogin}
+              className="rounded-full bg-[#282828] px-4 py-2 text-xs font-normal text-white shadow hover:bg-[#282828]/90 transition-all duration-200"
+            >
+              Login
+            </button>
+          </nav>
+
+          {/* Mobile Menu Button */}
+          <div className="md:hidden">
+            <button
+              onClick={handleLogin}
+              className="rounded-full bg-[#282828] px-4 py-2 text-xs font-normal text-white shadow hover:bg-[#282828]/90 transition-all duration-200"
+            >
+              Login
+            </button>
+          </div>
         </div>
       </div>
     </header>
@@ -141,8 +180,108 @@ export default function HomePage() {
       {/* Time Savings Chart Section */}
       <TimeSavingChart />
 
+      {/* About Section */}
+      <section id="about" className="py-24 px-4 sm:px-6 lg:px-8 bg-white">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16 md:mb-20">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+              viewport={{ once: true, amount: 0.2 }}
+              className="space-y-6 md:space-y-8"
+            >
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.6, delay: 0.2 }}
+                viewport={{ once: true, amount: 0.2 }}
+              >
+                <Badge className="bg-[#199BEC] text-white px-4 py-2 text-sm">
+                  About Riscura
+                </Badge>
+              </motion.div>
+              <motion.h2 
+                className="text-4xl sm:text-5xl lg:text-6xl text-gray-900 font-light leading-tight"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.3 }}
+                viewport={{ once: true, amount: 0.2 }}
+              >
+                Transforming enterprise
+                <br />
+                <span className="font-normal">risk management</span>
+              </motion.h2>
+              <motion.p 
+                className="text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.4 }}
+                viewport={{ once: true, amount: 0.2 }}
+              >
+                Founded by risk management experts who experienced the pain of manual processes firsthand, 
+                Riscura was built to solve the inefficiencies that plague enterprise risk teams. We've automated 
+                what used to take weeks into minutes, turning spreadsheet chaos into intelligent insights.
+              </motion.p>
+            </motion.div>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8 }}
+              viewport={{ once: true, amount: 0.3 }}
+              className="space-y-8"
+            >
+              <div>
+                <h3 className="text-2xl font-semibold text-gray-900 mb-4">Our Mission</h3>
+                <p className="text-gray-600 leading-relaxed">
+                  To eliminate the manual burden of risk management and compliance, empowering organizations 
+                  to make data-driven decisions with confidence. We believe risk management should be strategic, 
+                  not administrative.
+                </p>
+              </div>
+              <div>
+                <h3 className="text-2xl font-semibold text-gray-900 mb-4">Why We Built Riscura</h3>
+                <p className="text-gray-600 leading-relaxed">
+                  After years of watching talented risk professionals spend 80% of their time on spreadsheets 
+                  instead of strategy, we knew there had to be a better way. Riscura transforms manual processes 
+                  into automated workflows, giving you back time to focus on what matters most.
+                </p>
+              </div>
+            </motion.div>
+            
+            <motion.div
+              initial={{ opacity: 0, x: 30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8 }}
+              viewport={{ once: true, amount: 0.3 }}
+              className="grid grid-cols-2 gap-8"
+            >
+              <div className="text-center">
+                <div className="text-4xl font-bold text-[#199BEC] mb-2">500+</div>
+                <div className="text-gray-600">Organizations Trust Us</div>
+              </div>
+              <div className="text-center">
+                <div className="text-4xl font-bold text-[#199BEC] mb-2">85%</div>
+                <div className="text-gray-600">Time Savings Achieved</div>
+              </div>
+              <div className="text-center">
+                <div className="text-4xl font-bold text-[#199BEC] mb-2">24/7</div>
+                <div className="text-gray-600">AI-Powered Monitoring</div>
+              </div>
+              <div className="text-center">
+                <div className="text-4xl font-bold text-[#199BEC] mb-2">SOC2</div>
+                <div className="text-gray-600">Enterprise Security</div>
+              </div>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
       {/* Enhanced Features Section */}
-      <section className="py-24 px-4 sm:px-6 lg:px-8 bg-[#FAFAFA]">
+      <section id="features" className="py-24 px-4 sm:px-6 lg:px-8 bg-[#FAFAFA]">
           <div className="max-w-7xl mx-auto">
             <div className="text-center mb-16 md:mb-20">
               <motion.div
