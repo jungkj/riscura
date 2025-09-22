@@ -10,6 +10,8 @@ import Image from 'next/image';
 import { TimeSavingChart } from '@/components/charts/TimeSavingChart';
 import { FloatingNav, StaticNav } from '@/components/ui/floating-navbar';
 import { IntegrationsCarousel } from '@/components/landing/IntegrationsCarousel';
+import VantaFogBackground from '@/components/landing/VantaFogBackground';
+import RunwayProcessSection from '@/components/landing/RunwayProcessSection';
 import { cn } from '@/lib/utils';
 
 // Icons
@@ -35,8 +37,8 @@ import {
   Star
 } from 'lucide-react';
 
-// Enhanced Animated Background Component (Palace.so inspired)
-const AnimatedBackground = () => {
+// Legacy Animated Background Component (replaced with VantaFogBackground)
+const AnimatedBackgroundLegacy = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   
   useEffect(() => {
@@ -127,7 +129,7 @@ const AnimatedBackground = () => {
   );
 };
 
-// Hero headline component with premium styling
+// Hero headline component with premium Palace.so-inspired styling
 function PremiumHeadline() {
   return (
     <div className="space-y-4">
@@ -137,10 +139,10 @@ function PremiumHeadline() {
         transition={{ duration: 0.8 }}
         className="text-center"
       >
-        <h1 className="text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-light text-gray-900 leading-[0.9] tracking-tight">
-          <span className="font-thin">Your enterprise's</span>
+        <h1 className="font-playfair text-5xl sm:text-6xl lg:text-7xl xl:text-8xl leading-[0.9] tracking-tight text-[#272727]">
+          <span className="font-light">Your enterprise's</span>
           <br />
-          <span className="font-semibold bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800 bg-clip-text text-transparent">
+          <span className="font-semibold text-gradient-primary">
             AI risk observer
           </span>
         </h1>
@@ -148,7 +150,7 @@ function PremiumHeadline() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="mt-8 text-xl sm:text-2xl text-gray-600 max-w-4xl mx-auto leading-relaxed font-light"
+          className="mt-8 text-xl sm:text-2xl text-[#272727]/80 max-w-4xl mx-auto leading-relaxed font-inter"
         >
           One platform for enterprise risk management. Monitor, assess, and mitigate
           <br />
@@ -198,17 +200,25 @@ const DashboardShowcase = () => {
             </div>
           </div>
           
-          {/* Dashboard Content Area - Placeholder for screenshot */}
-          <div className="h-96 bg-gradient-to-br from-blue-50 to-purple-50 p-8 flex items-center justify-center">
-            <div className="text-center space-y-4">
-              <div className="w-20 h-20 bg-gradient-to-br from-blue-100 to-purple-100 rounded-2xl flex items-center justify-center mx-auto">
+          {/* Dashboard Content Area - Premium gradient background */}
+          <div className="h-96 bg-gradient-to-br from-blue-50/50 via-purple-50/30 to-pink-50/20 p-8 flex items-center justify-center relative overflow-hidden">
+            {/* Animated gradient orbs */}
+            <div className="absolute top-0 left-0 w-64 h-64 bg-blue-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse" />
+            <div className="absolute bottom-0 right-0 w-64 h-64 bg-purple-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse" style={{ animationDelay: '2s' }} />
+
+            <div className="text-center space-y-4 relative z-10">
+              <motion.div
+                className="w-20 h-20 bg-gradient-to-br from-blue-100 to-purple-100 rounded-2xl flex items-center justify-center mx-auto"
+                animate={{ rotate: 360 }}
+                transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+              >
                 <BarChart3 className="w-10 h-10 text-blue-600" />
-              </div>
-              <h3 className="text-2xl font-semibold text-gray-900">Dashboard Preview</h3>
-              <p className="text-gray-600 max-w-md">
-                Replace this section with your actual dashboard screenshot to showcase your product
+              </motion.div>
+              <h3 className="text-2xl font-semibold text-[#272727] font-inter">Dashboard Preview</h3>
+              <p className="text-[#272727]/70 max-w-md">
+                Experience our AI-powered risk management platform in action
               </p>
-              <div className="flex items-center justify-center gap-2 text-sm text-gray-500">
+              <div className="flex items-center justify-center gap-2 text-sm text-[#272727]/50">
                 <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
                 <span>Live Demo Available</span>
               </div>
@@ -220,8 +230,8 @@ const DashboardShowcase = () => {
   );
 };
 
-// Runway.com Style Feature Showcase with Folding Cards
-const RunwayFeatureShowcase = () => {
+// Legacy Runway Feature Showcase (replaced with RunwayProcessSection)
+const RunwayFeatureShowcaseLegacy = () => {
   const [activeStep, setActiveStep] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
   
@@ -419,12 +429,9 @@ export default function HomePage() {
   ];
 
   return (
-    <div className="min-h-screen font-inter bg-gradient-to-br from-slate-50 via-blue-50/30 to-purple-50/20 relative overflow-x-hidden">
-      {/* Animated Background */}
-      <div className="fixed inset-0 z-0">
-        <AnimatedBackground />
-        <div className="absolute inset-0 bg-gradient-to-b from-white/70 via-white/50 to-white/80" />
-      </div>
+    <div className="min-h-screen font-inter bg-white relative overflow-x-hidden">
+      {/* Vanta.js Fog Background (Palace.so inspired) */}
+      <VantaFogBackground />
       
       {/* Static Navbar */}
       <StaticNav />
@@ -434,7 +441,9 @@ export default function HomePage() {
 
       {/* Premium Hero Section */}
       <section className="relative z-10 pt-32 pb-16 px-4 sm:px-6 lg:px-8 min-h-screen flex items-center justify-center">
-        <div className="max-w-7xl mx-auto w-full">
+        {/* Subtle grain overlay */}
+        <div className="grain-overlay" />
+        <div className="max-w-7xl mx-auto w-full relative z-10">
           <div className="text-center space-y-12">
             <PremiumHeadline />
             
@@ -445,19 +454,19 @@ export default function HomePage() {
               transition={{ duration: 0.8, delay: 0.6 }}
               className="flex flex-col sm:flex-row gap-6 justify-center items-center"
             >
-              <Button 
+              <Button
                 onClick={handleGetStarted}
-                size="lg" 
-                className="px-12 py-4 text-lg rounded-full font-medium bg-gray-900 hover:bg-gray-800 text-white border-0 min-w-[200px] shadow-lg"
+                size="lg"
+                className="btn-premium px-12 py-4 text-lg rounded-full font-medium bg-[#272727] hover:bg-gray-800 text-white border-0 min-w-[200px]"
               >
                 Get started
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
-              <Button 
+              <Button
                 onClick={handleRequestDemo}
                 variant="outline"
                 size="lg"
-                className="px-12 py-4 text-lg rounded-full font-medium min-w-[200px] bg-white/80 backdrop-blur border-gray-200 hover:bg-white/90"
+                className="btn-premium px-12 py-4 text-lg rounded-full font-medium min-w-[200px] bg-white/80 backdrop-blur border-[#272727]/20 hover:bg-white/90 text-[#272727]"
               >
                 Request demo
               </Button>
@@ -469,8 +478,8 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Runway.com Style Feature Showcase */}
-      <RunwayFeatureShowcase />
+      {/* Runway.com Style Process Section with Sticky Scroll */}
+      <RunwayProcessSection />
 
       {/* Integrations Carousel */}
       <IntegrationsCarousel />
@@ -489,15 +498,15 @@ export default function HomePage() {
               viewport={{ once: true }}
               className="space-y-8"
             >
-              <Badge className="bg-gray-100 text-gray-700 px-6 py-3 text-sm font-medium rounded-full">
+              <Badge className="bg-gray-100 text-[#272727] px-6 py-3 text-sm font-medium rounded-full">
                 Enterprise Platform
               </Badge>
-              <h2 className="text-4xl sm:text-5xl lg:text-6xl font-light text-gray-900 leading-tight tracking-tight">
+              <h2 className="font-playfair text-4xl sm:text-5xl lg:text-6xl font-light text-[#272727] leading-tight tracking-tight">
                 Built for modern<br />
-                <span className="font-semibold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">enterprise security</span>
+                <span className="font-semibold text-gradient-primary">enterprise security</span>
               </h2>
-              <p className="text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed font-light">
-                Comprehensive risk management platform designed for Fortune 500 companies 
+              <p className="text-xl text-[#272727]/70 max-w-4xl mx-auto leading-relaxed font-inter">
+                Comprehensive risk management platform designed for Fortune 500 companies
                 with enterprise-grade security, compliance, and AI-powered automation.
               </p>
             </motion.div>
@@ -549,12 +558,12 @@ export default function HomePage() {
                 transition={{ duration: 0.6, delay: index * 0.1 }}
                 viewport={{ once: true }}
               >
-                <Card className="bg-white/80 backdrop-blur border border-gray-200/50 h-full hover:shadow-2xl hover:border-blue-200 transition-all duration-500 group rounded-3xl overflow-hidden">
+                <Card className="card-premium bg-white/90 backdrop-blur border border-[#272727]/10 h-full hover:border-blue-200 transition-all duration-500 group rounded-3xl overflow-hidden">
                   <CardContent className="p-8">
                     <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-100 to-purple-100 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
                       <feature.icon className="h-8 w-8 text-blue-600" />
                     </div>
-                    <h3 className="text-2xl font-semibold text-gray-900 mb-4 font-light">
+                    <h3 className="text-2xl font-semibold text-[#272727] mb-4 font-inter">
                       {feature.title}
                     </h3>
                     <p className="text-gray-600 leading-relaxed mb-6">
@@ -586,32 +595,32 @@ export default function HomePage() {
             viewport={{ once: true }}
             className="space-y-8"
           >
-            <Badge className="bg-gray-900 text-white px-6 py-3 text-sm font-medium rounded-full">
+            <Badge className="bg-[#272727] text-white px-6 py-3 text-sm font-medium rounded-full">
               Get Started Today
             </Badge>
-            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-light text-gray-900 leading-tight tracking-tight">
+            <h2 className="font-playfair text-4xl sm:text-5xl lg:text-6xl font-light text-[#272727] leading-tight tracking-tight">
               Ready to secure<br />
-              <span className="font-semibold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">your enterprise?</span>
+              <span className="font-semibold text-gradient-primary">your enterprise?</span>
             </h2>
-            <p className="text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed font-light">
-              Join thousands of organizations that trust Riscura to protect their business 
+            <p className="text-xl text-[#272727]/70 max-w-4xl mx-auto leading-relaxed font-inter">
+              Join thousands of organizations that trust Riscura to protect their business
               and ensure compliance in an ever-changing risk landscape.
             </p>
             
             <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
-              <Button 
+              <Button
                 onClick={handleGetStarted}
-                size="lg" 
-                className="px-12 py-4 text-lg font-medium min-w-[220px] rounded-full bg-gray-900 hover:bg-gray-800 text-white shadow-lg"
+                size="lg"
+                className="btn-premium px-12 py-4 text-lg font-medium min-w-[220px] rounded-full bg-[#272727] hover:bg-gray-800 text-white"
               >
                 Start free trial
                 <ChevronRight className="ml-2 h-5 w-5" />
               </Button>
-              <Button 
+              <Button
                 onClick={handleRequestDemo}
                 variant="outline"
                 size="lg"
-                className="px-12 py-4 text-lg font-medium min-w-[220px] rounded-full bg-white/80 backdrop-blur border-gray-200 hover:bg-white/90"
+                className="btn-premium px-12 py-4 text-lg font-medium min-w-[220px] rounded-full bg-white/80 backdrop-blur border-[#272727]/20 hover:bg-white/90 text-[#272727]"
               >
                 Schedule demo
               </Button>
@@ -657,23 +666,23 @@ export default function HomePage() {
                 height={48}
                 className="object-contain"
               />
-              <span className="text-3xl font-light text-gray-900">Riscura</span>
+              <span className="font-playfair text-3xl font-light text-[#272727]">Riscura</span>
             </div>
-            <p className="text-gray-600 text-lg mb-8 max-w-md mx-auto font-light">
+            <p className="text-[#272727]/70 text-lg mb-8 max-w-md mx-auto font-inter">
               Enterprise risk management platform powered by AI. Secure your business with intelligent automation.
             </p>
             <div className="flex items-center justify-center space-x-8 mb-12">
-              <Badge variant="outline" className="border-gray-200 text-gray-600 bg-gray-50/50 px-4 py-2 rounded-full">
+              <Badge variant="outline" className="border-[#272727]/20 text-[#272727]/70 bg-gray-50/50 px-4 py-2 rounded-full">
                 SOC 2 Type II
               </Badge>
-              <Badge variant="outline" className="border-gray-200 text-gray-600 bg-gray-50/50 px-4 py-2 rounded-full">
+              <Badge variant="outline" className="border-[#272727]/20 text-[#272727]/70 bg-gray-50/50 px-4 py-2 rounded-full">
                 ISO 27001
               </Badge>
-              <Badge variant="outline" className="border-gray-200 text-gray-600 bg-gray-50/50 px-4 py-2 rounded-full">
+              <Badge variant="outline" className="border-[#272727]/20 text-[#272727]/70 bg-gray-50/50 px-4 py-2 rounded-full">
                 GDPR Ready
               </Badge>
             </div>
-            <p className="text-gray-500 font-light">
+            <p className="text-[#272727]/50 font-inter">
               © 2024 Riscura Inc. All rights reserved.
             </p>
           </div>

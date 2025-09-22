@@ -1,9 +1,27 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@300;400;500;600;700;900&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root {
+    /* Font families */
+    --font-playfair: 'Playfair Display', serif;
+    --font-inter: 'Inter', sans-serif;
+
+    /* Premium shadow system */
+    --shadow-button:
+      0px 2px 4px 0px rgba(0, 0, 0, 0.06) inset,
+      0px 4px 8px 0px rgba(0, 0, 0, 0.04),
+      0px 1px 2px 0px rgba(0, 0, 0, 0.12);
+    --shadow-card:
+      0px 4px 8px 0px rgba(0, 0, 0, 0.04),
+      0px 0px 0px 1px rgba(0, 0, 0, 0.06);
+    --shadow-elevated:
+      0px 10px 25px -5px rgba(0, 0, 0, 0.1),
+      0px 10px 10px -5px rgba(0, 0, 0, 0.04);
+
     /* Riscura Bold Black Lines & White Background Theme */
     --background: 255 255 255; /* White Background #FFFFFF */
     --foreground: 25 25 25; /* Bold Black Text #191919 */
@@ -692,4 +710,97 @@ input[type="checkbox"]:focus {
 /* Smooth transitions for all interactive elements */
 .smooth-transition {
   @apply transition-all duration-200 ease-in-out;
+}
+
+/* Premium Typography Classes */
+.font-playfair {
+  font-family: var(--font-playfair);
+}
+
+.font-inter {
+  font-family: var(--font-inter);
+}
+
+/* Grain texture overlay */
+.grain-overlay {
+  position: absolute;
+  inset: 0;
+  opacity: 0.03;
+  z-index: 1;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg width='200' height='200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+}
+
+/* Premium button styles */
+.btn-premium {
+  box-shadow: var(--shadow-button);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-premium:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-elevated);
+}
+
+/* Premium card styles */
+.card-premium {
+  box-shadow: var(--shadow-card);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card-premium:hover {
+  box-shadow: var(--shadow-elevated);
+}
+
+/* Sticky scroll section styles */
+.sticky-scroll-container {
+  @apply grid grid-cols-1 lg:grid-cols-2 gap-16;
+}
+
+.sticky-column {
+  @apply lg:sticky lg:top-32 lg:h-fit;
+}
+
+.scroll-item {
+  transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.scroll-item-active {
+  opacity: 1 !important;
+}
+
+.scroll-item-inactive {
+  opacity: 0.4;
+}
+
+/* Animated card reveal */
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-slide-up {
+  animation: slideUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+/* Text gradient effects */
+.text-gradient-primary {
+  @apply bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800 bg-clip-text text-transparent;
+}
+
+.text-gradient-premium {
+  @apply bg-gradient-to-r from-gray-700 via-gray-900 to-black bg-clip-text text-transparent;
+}
+
+/* Premium backdrop filters */
+.backdrop-premium {
+  backdrop-filter: blur(10px) saturate(150%);
+  -webkit-backdrop-filter: blur(10px) saturate(150%);
+  background-color: rgba(255, 255, 255, 0.8);
 } 
